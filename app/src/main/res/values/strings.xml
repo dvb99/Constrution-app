@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ConstructionSite</string>
+
+    <string name="username_hint"><font size="18">Username</font></string>
+    <string name="password_hint"><font size="18">Password</font></string>
+    <string name="login"><font size="22">Log In</font></string>
+
+    <string name="title_activity_onetimeopening">onetimeopening</string>
+    <string name="admin">Admin</string>
+    <string name="supervisor">Supervisor</string>
+
+</resources>
