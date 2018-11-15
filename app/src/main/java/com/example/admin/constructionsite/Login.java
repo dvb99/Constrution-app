@@ -53,7 +53,7 @@ public class Login extends AppCompatActivity {
                             if (Adminfirebase.getUsername().equals(username.getText().toString())) {
                                 if (Adminfirebase.getPassword().equals(password.getText().toString())) {
                                     Toast.makeText(Login.this, "Welcome Admin", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(Login.this, adminfirstpage.class);
+                                    Intent intent = new Intent(Login.this, MainActivity.class);
                                     startActivity(intent);
                                 } else {
                                     Toast.makeText(Login.this, "Wrong password", Toast.LENGTH_SHORT).show();
@@ -69,7 +69,7 @@ public class Login extends AppCompatActivity {
                             if (Supervisorfirebase.getUsername().equals(username.getText().toString())) {
                                 if (Supervisorfirebase.getPassword().equals(password.getText().toString())) {
                                     Toast.makeText(Login.this, "Welcome Supervisor", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(Login.this, supervisorfirstpage.class);
+                                    Intent intent = new Intent(Login.this, MainActivity.class);
                                     startActivity(intent);
                                 } else {
                                     Toast.makeText(Login.this, "Wrong password", Toast.LENGTH_SHORT).show();
