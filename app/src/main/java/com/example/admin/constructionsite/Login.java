@@ -1,12 +1,11 @@
 package com.example.admin.constructionsite;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -53,7 +52,7 @@ public class Login extends AppCompatActivity {
                             if (Adminfirebase.getUsername().equals(username.getText().toString())) {
                                 if (Adminfirebase.getPassword().equals(password.getText().toString())) {
                                     Toast.makeText(Login.this, "Welcome Admin", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(Login.this, MainActivity.class);
+                                    Intent intent = new Intent(Login.this, AdminActivity.class);
                                     startActivity(intent);
                                 } else {
                                     Toast.makeText(Login.this, "Wrong password", Toast.LENGTH_SHORT).show();
@@ -69,7 +68,7 @@ public class Login extends AppCompatActivity {
                             if (Supervisorfirebase.getUsername().equals(username.getText().toString())) {
                                 if (Supervisorfirebase.getPassword().equals(password.getText().toString())) {
                                     Toast.makeText(Login.this, "Welcome Supervisor", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(Login.this, MainActivity.class);
+                                    Intent intent = new Intent(Login.this, SupervisorActivity.class);
                                     startActivity(intent);
                                 } else {
                                     Toast.makeText(Login.this, "Wrong password", Toast.LENGTH_SHORT).show();
@@ -90,5 +89,6 @@ public class Login extends AppCompatActivity {
                 });
             }
         });
+        getSupportActionBar().setTitle("LogIn" );
     }
 }
