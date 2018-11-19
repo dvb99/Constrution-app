@@ -10,7 +10,7 @@ public class SupervisorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_supervisor);
+        setContentView(R.layout.afterloginthislayout);
 
         ArrayList<firstpage> words = new ArrayList<>();
         words.add(new firstpage("Labor"));
@@ -20,7 +20,7 @@ public class SupervisorActivity extends AppCompatActivity {
         words.add(new firstpage("Requirement"));
         words.add(new firstpage("Emergency"));
         firstpageadapter adapter = new firstpageadapter(this, words, R.color.blue_200);
-        GridView gridView =  findViewById(R.id.supervisor_main);
+        GridView gridView =  findViewById(R.id.firstopening);
         gridView.setAdapter(adapter);
     }
 }

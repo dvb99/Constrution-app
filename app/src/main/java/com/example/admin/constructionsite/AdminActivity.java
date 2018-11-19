@@ -11,7 +11,7 @@ public class AdminActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_supervisor);
+        setContentView(R.layout.afterloginthislayout);
 
         ArrayList<firstpage> words = new ArrayList<>();
         words.add(new firstpage("Pipeline"));
@@ -19,7 +19,7 @@ public class AdminActivity extends AppCompatActivity {
         words.add(new firstpage("Road Pavement"));
         words.add(new firstpage("Building"));
         firstpageadapter adapter = new firstpageadapter(this, words, R.color.pink_200);
-        GridView gridView = findViewById(R.id.supervisor_main);
+        GridView gridView = findViewById(R.id.firstopening);
         gridView.setAdapter(adapter);
 
 
