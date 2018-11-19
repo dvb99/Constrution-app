@@ -1,4 +1,4 @@
-package com.example.admin.constructionsite;
+package com.example.admin.constructionsite.Login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,13 +10,16 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.example.admin.constructionsite.R;
+import com.example.admin.constructionsite.firstpageafterLogin.AdminActivity;
+import com.example.admin.constructionsite.firstpageafterLogin.SupervisorActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class Login extends AppCompatActivity {
+public class login extends AppCompatActivity {
 
     Button button;
     EditText username, password;
@@ -51,15 +54,15 @@ public class Login extends AppCompatActivity {
                             User Adminfirebase = dataSnapshot.child("Admin").getValue(User.class);
                             if (Adminfirebase.getUsername().equals(username.getText().toString())) {
                                 if (Adminfirebase.getPassword().equals(password.getText().toString())) {
-                                    Toast.makeText(Login.this, "Welcome Admin", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(Login.this, AdminActivity.class);
+                                    Toast.makeText(login.this, "Welcome Admin", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(login.this, AdminActivity.class);
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(Login.this, "Wrong password", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(login.this, "Wrong password", Toast.LENGTH_SHORT).show();
 
                                 }
                             } else {
-                                Toast.makeText(Login.this, "You are not registered Admin ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(login.this, "You are not registered Admin ", Toast.LENGTH_SHORT).show();
 
                             }
                         }
@@ -67,15 +70,15 @@ public class Login extends AppCompatActivity {
                             User Supervisorfirebase = dataSnapshot.child("Supervisor").getValue(User.class);
                             if (Supervisorfirebase.getUsername().equals(username.getText().toString())) {
                                 if (Supervisorfirebase.getPassword().equals(password.getText().toString())) {
-                                    Toast.makeText(Login.this, "Welcome Supervisor", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(Login.this, SupervisorActivity.class);
+                                    Toast.makeText(login.this, "Welcome Supervisor", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(login.this, SupervisorActivity.class);
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(Login.this, "Wrong password", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(login.this, "Wrong password", Toast.LENGTH_SHORT).show();
 
                                 }
                             } else {
-                                Toast.makeText(Login.this, "You are not registered Supervisor ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(login.this, "You are not registered Supervisor ", Toast.LENGTH_SHORT).show();
 
                             }
                         }

@@ -1,4 +1,4 @@
-package com.example.admin.constructionsite;
+package com.example.admin.constructionsite.firstpageafterLogin;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.example.admin.constructionsite.R;
 
 import java.util.ArrayList;
 

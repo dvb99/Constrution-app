@@ -1,8 +1,10 @@
-package com.example.admin.constructionsite;
+package com.example.admin.constructionsite.firstpageafterLogin;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.GridView;
+
+import com.example.admin.constructionsite.R;
 
 import java.util.ArrayList;
 
