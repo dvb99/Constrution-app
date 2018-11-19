@@ -9,4 +9,10 @@
     <string name="admin">Admin</string>
     <string name="supervisor">Supervisor</string>
 
+    <string name="navigation_drawer_open">Drawer Open</string>
+    <string name="navigation_drawer_close">Drawer Closed</string>
+    <string name="addsite">Add Site</string>
+    <string name="deletesite">Delete Site</string>
+    <string name="locate">Locate</string>
+
 </resources>

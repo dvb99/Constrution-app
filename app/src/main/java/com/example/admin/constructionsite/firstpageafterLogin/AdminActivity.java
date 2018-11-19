@@ -2,10 +2,16 @@ package com.example.admin.constructionsite.firstpageafterLogin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.example.admin.constructionsite.ArrayListOfObjects;
 import com.example.admin.constructionsite.R;
@@ -16,10 +22,14 @@ import java.util.ArrayList;
 
 public class AdminActivity extends AppCompatActivity {
 
+    private DrawerLayout dl;
+    private ActionBarDrawerToggle t;
+    private NavigationView nv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.afterloginthislayout);
+        setContentView(R.layout.activity_specificforadminnow);
 
         final ArrayList<firstpage> words = new ArrayList<>();
         words.add(new firstpage("Pipeline"));
@@ -38,9 +48,9 @@ public class AdminActivity extends AppCompatActivity {
 
                 switch (k1.getTitle()) {
                     case "Pipeline": {
-                        ArrayListOfObjects.pipeline.add(new SiteObject("Pipeline","Ganesh","Miraj","Kore"));
-                        ArrayListOfObjects.pipeline.add(new SiteObject("Pipeline","Erica","Sangli","Patil"));
-                        ArrayListOfObjects.pipeline.add(new SiteObject("Pipeline","Grand Hayat","Mumbai","Mohite"));
+                        ArrayListOfObjects.pipeline.add(new SiteObject("Pipeline", "Ganesh", "Miraj", "Kore"));
+                        ArrayListOfObjects.pipeline.add(new SiteObject("Pipeline", "Erica", "Sangli", "Patil"));
+                        ArrayListOfObjects.pipeline.add(new SiteObject("Pipeline", "Grand Hayat", "Mumbai", "Mohite"));
                         startActivity(new Intent(AdminActivity.this, pagewillbefloodedwithpipeline.class));
                     }
                 }
@@ -48,6 +58,47 @@ public class AdminActivity extends AppCompatActivity {
 
             }
         });
+
+        dl =  findViewById(R.id.activity_main);
+        t = new ActionBarDrawerToggle(this, dl, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+        dl.addDrawerListener(t);
+        t.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        nv =  findViewById(R.id.nv);
+        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.addsite:
+                        Toast.makeText(AdminActivity.this, "SITE ADDED", Toast.LENGTH_SHORT).show();
+                    case R.id.deletesite:
+                        Toast.makeText(AdminActivity.this, "SITE DELETED", Toast.LENGTH_SHORT).show();
+                    case R.id.locate:
+                        Toast.makeText(AdminActivity.this, "LOCATING USER", Toast.LENGTH_SHORT).show();
+                    default:
+                        return true;
+                }
+
+
+            }
+        });
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (t.onOptionsItemSelected(item))
+            return true;
+
+        return super.onOptionsItemSelected(item);
     }
 }
+
+
 

@@ -12,7 +12,7 @@ public class SupervisorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.afterloginthislayout);
+        setContentView(R.layout.afterlogin_thislayout_specific_for_supervisor);
 
         ArrayList<firstpage> words = new ArrayList<>();
         words.add(new firstpage("Labor"));
