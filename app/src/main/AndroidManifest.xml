@@ -30,6 +30,9 @@
         <activity
             android:name="com.example.admin.constructionsite.secondpagepofadmin.pagewillbefloodedwithpipeline">
         </activity>
+        <activity
+            android:name=".AddSite">
+        </activity>
     </application>
 
 </manifest>

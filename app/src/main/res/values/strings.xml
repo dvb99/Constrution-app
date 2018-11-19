@@ -14,5 +14,9 @@
     <string name="addsite">Add Site</string>
     <string name="deletesite">Delete Site</string>
     <string name="locate">Locate</string>
+    <string name="constructiontype">ConstructionType</string>
+    <string name="nameofsite">SiteName</string>
+    <string name="nameofarea">AreaName</string>
+    <string name="nameofsupervisor">SupervisorName</string>
 
 </resources>

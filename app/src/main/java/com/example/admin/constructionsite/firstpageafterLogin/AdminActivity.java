@@ -13,9 +13,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.example.admin.constructionsite.ArrayListOfObjects;
+import com.example.admin.constructionsite.AddSite;
 import com.example.admin.constructionsite.R;
-import com.example.admin.constructionsite.secondpagepofadmin.SiteObject;
 import com.example.admin.constructionsite.secondpagepofadmin.pagewillbefloodedwithpipeline;
 
 import java.util.ArrayList;
@@ -48,9 +47,6 @@ public class AdminActivity extends AppCompatActivity {
 
                 switch (k1.getTitle()) {
                     case "Pipeline": {
-                        ArrayListOfObjects.pipeline.add(new SiteObject("Pipeline", "Ganesh", "Miraj", "Kore"));
-                        ArrayListOfObjects.pipeline.add(new SiteObject("Pipeline", "Erica", "Sangli", "Patil"));
-                        ArrayListOfObjects.pipeline.add(new SiteObject("Pipeline", "Grand Hayat", "Mumbai", "Mohite"));
                         startActivity(new Intent(AdminActivity.this, pagewillbefloodedwithpipeline.class));
                     }
                 }
@@ -74,7 +70,8 @@ public class AdminActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.addsite:
-                        Toast.makeText(AdminActivity.this, "SITE ADDED", Toast.LENGTH_SHORT).show();
+                         startActivity(new Intent(AdminActivity.this, AddSite.class));
+                        //Toast.makeText(AdminActivity.this, "SITE ADDED", Toast.LENGTH_SHORT).show();
                     case R.id.deletesite:
                         Toast.makeText(AdminActivity.this, "SITE DELETED", Toast.LENGTH_SHORT).show();
                     case R.id.locate:
