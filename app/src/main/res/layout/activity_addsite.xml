@@ -16,12 +16,12 @@
             android:layout_weight="1"
             android:text="@string/constructiontype"/>
 
-        <EditText
+        <Spinner
+            android:id="@+id/simpleSpinner"
             android:layout_width="0dp"
+            android:layout_weight="4"
             android:layout_height="wrap_content"
-            android:hint="Enter Pipeline as category"
-            android:id="@+id/category"
-            android:layout_weight="4"/>
+            />
 
     </LinearLayout>
 

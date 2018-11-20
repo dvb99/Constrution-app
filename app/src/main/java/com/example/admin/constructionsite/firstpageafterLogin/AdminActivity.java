@@ -71,16 +71,19 @@ public class AdminActivity extends AppCompatActivity {
                 switch (id) {
                     case R.id.addsite:
                          startActivity(new Intent(AdminActivity.this, AddSite.class));
+                         break;
                         //Toast.makeText(AdminActivity.this, "SITE ADDED", Toast.LENGTH_SHORT).show();
                     case R.id.deletesite:
                         Toast.makeText(AdminActivity.this, "SITE DELETED", Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.locate:
                         Toast.makeText(AdminActivity.this, "LOCATING USER", Toast.LENGTH_SHORT).show();
-                    default:
-                        return true;
+                        break;
+//                    default:
+//                        return true;
                 }
 
-
+                return true;
             }
         });
 
