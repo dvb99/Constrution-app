@@ -8,13 +8,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CustomAdapter extends BaseAdapter {
+public class CustomSpinnerAdapter extends BaseAdapter {
     Context context;
     int flags[];
     String[] countryNames;
     LayoutInflater inflter;
 
-    public CustomAdapter(Context applicationContext, int[] flags, String[] countryNames) {
+    public CustomSpinnerAdapter(Context applicationContext, int[] flags, String[] countryNames) {
         this.context = applicationContext;
         this.flags = flags;
         this.countryNames = countryNames;

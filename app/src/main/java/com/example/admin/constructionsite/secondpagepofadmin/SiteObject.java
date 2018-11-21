@@ -6,6 +6,14 @@ public class SiteObject {
     private String Area;
     private String SupervisorName;
 
+    public SiteObject() {
+    }
+
+    public SiteObject(String nameOfSite, String area, String supervisorName) {
+        NameOfSite = nameOfSite;
+        Area = area;
+        SupervisorName = supervisorName;
+    }
 
     public SiteObject(String categoryName, String nameOfSite, String area, String supervisorName) {
         CategoryName = categoryName;
