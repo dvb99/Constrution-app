@@ -18,18 +18,43 @@ package com.example.admin.constructionsite.firstpageafterLogin;
 
 public class firstpage {
 
-    private String title;
+    private String cardtitle;
+    private int mimageid;
+    private int mcolor;
 
-    public firstpage(String title) {
-        this.title = title;
+    public firstpage(String cardtitle) {
+        this.cardtitle = cardtitle;
     }
 
-    public String getTitle() {
-        return title;
+    public firstpage(String cardtitle, int mimageid, int mcolor) {
+        this.cardtitle = cardtitle;
+        this.mimageid = mimageid;
+        this.mcolor = mcolor;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public int getMimageid() {
+
+        return mimageid;
+    }
+
+    public void setMimageid(int mimageid) {
+        this.mimageid = mimageid;
+    }
+
+    public String getCardtitle() {
+        return cardtitle;
+    }
+
+    public void setCardtitle(String cardtitle) {
+        this.cardtitle = cardtitle;
+    }
+
+    public int getMcolor() {
+        return mcolor;
+    }
+
+    public void setMcolor(int mcolor) {
+        this.mcolor = mcolor;
     }
 
 

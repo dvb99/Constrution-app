@@ -21,7 +21,7 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
     String selected;
 
     String[] siteTypes = {"PipeLine", "WaterTank", "RoadPavement", "BuildingConstruction"};
-    int construtionPhoto[] = {R.drawable.pipeline, R.drawable.watertankconstructioncopy, R.drawable.roadpavementcopy, R.drawable.buildingconstructioncopy};
+    int construtionPhoto[] = {R.drawable.pipelinecopy, R.drawable.watertankconstructioncopy, R.drawable.roadpavementcopy, R.drawable.buildingconstructioncopy};
 
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();

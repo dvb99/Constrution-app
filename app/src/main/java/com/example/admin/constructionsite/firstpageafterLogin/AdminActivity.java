@@ -1,6 +1,7 @@
 package com.example.admin.constructionsite.firstpageafterLogin;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -31,10 +32,10 @@ public class AdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_specificforadminnow);
 
         final ArrayList<firstpage> words = new ArrayList<>();
-        words.add(new firstpage("Pipeline"));
-        words.add(new firstpage("Water Tank"));
-        words.add(new firstpage("Road Pavement"));
-        words.add(new firstpage("Building"));
+        words.add(new firstpage("Pipeline",R.drawable.pipelinecopy, Color.parseColor("#fde0dc")));
+        words.add(new firstpage("Water Tank",R.drawable.watertankconstructioncopy,Color.parseColor("#a6baff")));
+        words.add(new firstpage("Road Pavement",R.drawable.roadpavementcopy,Color.parseColor("#e040fb")));
+        words.add(new firstpage("Building",R.drawable.buildingconstructioncopy, Color.parseColor("#ffff00")));
         firstpageadapter adapter = new firstpageadapter(this, words, R.color.pink_200);
         GridView gridView = findViewById(R.id.firstopening);
         gridView.setAdapter(adapter);
@@ -45,7 +46,7 @@ public class AdminActivity extends AppCompatActivity {
 
                 firstpage k1 = words.get(position);
 
-                switch (k1.getTitle()) {
+                switch (k1.getCardtitle()) {
                     case "Pipeline": {
                         startActivity(new Intent(AdminActivity.this, pagewillbefloodedwithpipeline.class));
                     }
@@ -60,9 +61,7 @@ public class AdminActivity extends AppCompatActivity {
 
         dl.addDrawerListener(t);
         t.syncState();
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         nv =  findViewById(R.id.nv);
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

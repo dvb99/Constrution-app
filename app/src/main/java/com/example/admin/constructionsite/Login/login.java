@@ -57,6 +57,7 @@ public class login extends AppCompatActivity {
                                     Toast.makeText(login.this, "Welcome Admin", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(login.this, AdminActivity.class);
                                     startActivity(intent);
+                                    finish();
                                 } else {
                                     Toast.makeText(login.this, "Wrong password", Toast.LENGTH_SHORT).show();
 
@@ -73,6 +74,7 @@ public class login extends AppCompatActivity {
                                     Toast.makeText(login.this, "Welcome Supervisor", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(login.this, SupervisorActivity.class);
                                     startActivity(intent);
+                                    finish();
                                 } else {
                                     Toast.makeText(login.this, "Wrong password", Toast.LENGTH_SHORT).show();
 
@@ -93,5 +95,6 @@ public class login extends AppCompatActivity {
             }
         });
         getSupportActionBar().setTitle("LogIn" );
+
     }
 }
