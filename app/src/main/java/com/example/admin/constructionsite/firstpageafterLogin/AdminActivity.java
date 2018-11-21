@@ -34,9 +34,9 @@ public class AdminActivity extends AppCompatActivity {
         final ArrayList<firstpage> words = new ArrayList<>();
         words.add(new firstpage("Pipeline",R.drawable.pipelinecopy, Color.parseColor("#fde0dc")));
         words.add(new firstpage("Water Tank",R.drawable.watertankconstructioncopy,Color.parseColor("#a6baff")));
-        words.add(new firstpage("Road Pavement",R.drawable.roadpavementcopy,Color.parseColor("#e040fb")));
-        words.add(new firstpage("Building",R.drawable.buildingconstructioncopy, Color.parseColor("#ffff00")));
-        firstpageadapter adapter = new firstpageadapter(this, words, R.color.pink_200);
+        words.add(new firstpage("Road Pavement",R.drawable.roadpavementcopy,Color.parseColor("#42bd41")));
+        words.add(new firstpage("Building",R.drawable.buildingconstructioncopy, Color.parseColor("#fdd835")));
+        firstpageadapter adapter = new firstpageadapter(this, words);
         GridView gridView = findViewById(R.id.firstopening);
         gridView.setAdapter(adapter);
 

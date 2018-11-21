@@ -15,12 +15,10 @@ import java.util.ArrayList;
 public class firstpageadapter extends ArrayAdapter<firstpage> {
 
 
-    private int mColorResourceId;
 
 
-    public firstpageadapter(Context context, ArrayList<firstpage> words, int colorResourceId) {
+    public firstpageadapter(Context context, ArrayList<firstpage> words) {
         super(context, 0, words);
-        mColorResourceId = colorResourceId;
     }
 
     @Override
