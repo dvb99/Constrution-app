@@ -1,8 +1,10 @@
 package com.example.admin.constructionsite.Login;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -19,8 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class login extends AppCompatActivity {
+import java.util.HashMap;
 
+public class login extends AppCompatActivity {
     Button button;
     EditText username, password;
     RadioButton adminradiobutton, supervisorradiobutton;
@@ -35,10 +38,10 @@ public class login extends AppCompatActivity {
         password = findViewById(R.id.password);
 
         // Figure out if the user has checked admin Radiobutton
-        adminradiobutton =  findViewById(R.id.admin);
+        adminradiobutton = findViewById(R.id.admin);
 
         // Figure out if the user has checked supervisor RadioButton
-        supervisorradiobutton =  findViewById(R.id.supervisor);
+        supervisorradiobutton = findViewById(R.id.supervisor);
 
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -46,31 +49,69 @@ public class login extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final HashMap hashMap = new HashMap();
                 tableuser.addValueEventListener(new ValueEventListener() {
+
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+//                  for(DataSnapshot ds : dataSnapshot.getChildren()) {
+//                  String user1 = ds.child("password").getValue(String.class);
+//                  String pass1 = ds.child("username").getValue(String.class);
+//                  }
                         if (adminradiobutton.isChecked()) {
-                            User Adminfirebase = dataSnapshot.child("Admin").getValue(User.class);
-                            if (Adminfirebase.getUsername().equals(username.getText().toString())) {
-                                if (Adminfirebase.getPassword().equals(password.getText().toString())) {
+
+//                            firebase database User Admin's part has 0 child (i.e Only 1 Admin) USE BELOW FOR LOOP
+//                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                            (1) I can paste below if condition in multiple child's loop also but it takes time to evaluate
+//                                hence I am not adding it.
+//                            (2) condition of null check is for not allowing null entry to get added into hashmap.
+//                                if (ds.child("username").getValue(String.class)!=null&&ds.child("password").getValue(String.class)!=null) {
+//                                    hashMap.put(ds.child("username").getValue(String.class), ds.child("password").getValue(String.class));
+//                                }
+//                        }
+//                            firebase database User Admin's part has multiple child (i.e multiple Admin) USE BELOW FOR LOOP
+                            for (DataSnapshot ds : dataSnapshot.child("Admin").getChildren()) {
+                                hashMap.put(ds.child("username").getValue(String.class), ds.child("password").getValue(String.class));
+                            }
+
+
+                            if (hashMap.containsKey(username.getText().toString())) {
+                                if (hashMap.containsValue((password.getText().toString()))) {
                                     Toast.makeText(login.this, "Welcome Admin", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(login.this, AdminActivity.class);
                                     startActivity(intent);
                                     finish();
                                 } else {
                                     Toast.makeText(login.this, "Wrong password", Toast.LENGTH_SHORT).show();
-
                                 }
                             } else {
                                 Toast.makeText(login.this, "You are not registered Admin ", Toast.LENGTH_SHORT).show();
-
                             }
                         }
                         if (supervisorradiobutton.isChecked()) {
-                            User Supervisorfirebase = dataSnapshot.child("Supervisor").getValue(User.class);
-                            if (Supervisorfirebase.getUsername().equals(username.getText().toString())) {
-                                if (Supervisorfirebase.getPassword().equals(password.getText().toString())) {
+
+
+//                            firebase database User Supervisor's part has 0 child (i.e Only 1 supervisor) USE BELOW FOR LOOP
+//                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                             (1) I can paste below if condition in multiple child's loop also but it takes time to evaluate
+//                                 hence I am not adding it.
+//                             (2) condition of null check is for not allowing null entry to get added into hashmap.
+//                                if (ds.child("username").getValue(String.class) != null && ds.child("password").getValue(String.class) != null) {
+//                                    hashMap.put(ds.child("username").getValue(String.class), ds.child("password").getValue(String.class));
+//                                }
+//                            }
+
+//                            firebase database User Supervisor's part has multiple child (i.e multiple Supervisor) USE BELOW FOR LOOP
+                            for (DataSnapshot ds : dataSnapshot.child("Supervisor").getChildren()) {
+                                hashMap.put(ds.child("username").getValue(String.class), ds.child("password").getValue(String.class));
+                            }
+
+
+
+                            if (hashMap.containsKey(username.getText().toString())) {
+                                if (hashMap.containsValue(password.getText().toString())) {
                                     Toast.makeText(login.this, "Welcome Supervisor", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(login.this, SupervisorActivity.class);
                                     startActivity(intent);
@@ -87,6 +128,8 @@ public class login extends AppCompatActivity {
                     }
 
 
+
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -94,7 +137,7 @@ public class login extends AppCompatActivity {
                 });
             }
         });
-        getSupportActionBar().setTitle("LogIn" );
+        getSupportActionBar().setTitle("LogIn");
 
     }
 }
