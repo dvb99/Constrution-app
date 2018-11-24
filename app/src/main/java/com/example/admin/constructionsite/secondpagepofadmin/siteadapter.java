@@ -11,13 +11,12 @@ import com.example.admin.constructionsite.R;
 
 import java.util.ArrayList;
 
-public class pipelinepageadapter extends ArrayAdapter<SiteObject> {
+public class siteadapter extends ArrayAdapter<SiteObject> {
 
 
     private int mColorResourceId;
 
-
-    public pipelinepageadapter(Context context, ArrayList<SiteObject> words, int colorResourceId) {
+    public siteadapter(Context context, ArrayList<SiteObject> words, int colorResourceId) {
         super(context, 0, words);
         mColorResourceId = colorResourceId;
     }

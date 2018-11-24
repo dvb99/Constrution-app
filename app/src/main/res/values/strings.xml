@@ -18,5 +18,7 @@
     <string name="nameofsite">SiteName</string>
     <string name="nameofarea">AreaName</string>
     <string name="nameofsupervisor">SupervisorName</string>
+    <string name="createnewsite">Create</string>
+    <string name="setsupervisorPassword">Set Supervisor Password</string>
 
 </resources>

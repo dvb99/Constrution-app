@@ -12,45 +12,46 @@ import com.example.admin.constructionsite.R;
 
 import java.util.ArrayList;
 
-public class firstpageadapter extends ArrayAdapter<firstpage> {
+public class firstpageadapter extends ArrayAdapter<Card> {
 
 
 
 
-    public firstpageadapter(Context context, ArrayList<firstpage> words) {
-        super(context, 0, words);
+    public firstpageadapter(Context context, ArrayList<Card> cardArrayList) {
+        super(context, 0, cardArrayList);
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Check if an existing view is being reused, otherwise inflate the view
-        View listItemView = convertView;
-        if (listItemView == null) {
-            listItemView = LayoutInflater.from(getContext()).inflate(
+        View cardview = convertView;
+        if (cardview == null) {
+            cardview = LayoutInflater.from(getContext()).inflate(
                     R.layout.list_item, parent, false);
         }
 
 
-        firstpage currentWord = getItem(position);
+        Card currentcard = getItem(position);
 
 
-        TextView miwokTextView = listItemView.findViewById(R.id.txtforcard);
+        TextView cardtextview = cardview.findViewById(R.id.txtforcard);
 
-        miwokTextView.setText(currentWord.getCardtitle());
+        cardtextview.setText(currentcard.getCdtitle());
 
-        ImageView imageView = listItemView.findViewById(R.id.imgforcard);
-        imageView.setImageResource(currentWord.getMimageid());
+        ImageView imageView = cardview.findViewById(R.id.imgforcard);
+        imageView.setImageResource(currentcard.getCdimageid());
 
 
         // Set the theme color for the list item
-        View textContainer = listItemView.findViewById(R.id.linearlayoutforcard);
+        View textContainer = cardview.findViewById(R.id.linearlayoutforcard);
         // Find the color that the resource ID maps to
        // int color = ContextCompat.getColor(getContext(), mColorResourceId);
         // Set the background color of the text container View
-        textContainer.setBackgroundColor(currentWord.getMcolor());
+        textContainer.setBackgroundColor(currentcard.getCdcolor());
 
         // Return the whole list item layout (containing 2 TextViews) so that it can be shown in
         // the ListView.
-        return listItemView;
+        return cardview;
     }
 }

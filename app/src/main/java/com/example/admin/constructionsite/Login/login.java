@@ -63,23 +63,23 @@ public class login extends AppCompatActivity {
                         if (adminradiobutton.isChecked()) {
 
 //                            firebase database User Admin's part has 0 child (i.e Only 1 Admin) USE BELOW FOR LOOP
-//                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
 //                            (1) I can paste below if condition in multiple child's loop also but it takes time to evaluate
 //                                hence I am not adding it.
 //                            (2) condition of null check is for not allowing null entry to get added into hashmap.
-//                                if (ds.child("username").getValue(String.class)!=null&&ds.child("password").getValue(String.class)!=null) {
-//                                    hashMap.put(ds.child("username").getValue(String.class), ds.child("password").getValue(String.class));
-//                                }
-//                        }
+                                if (ds.child("username").getValue(String.class)!=null&&ds.child("password").getValue(String.class)!=null) {
+                                    hashMap.put(ds.child("username").getValue(String.class), ds.child("password").getValue(String.class));
+                                }
+                        }
 //                            firebase database User Admin's part has multiple child (i.e multiple Admin) USE BELOW FOR LOOP
-                            for (DataSnapshot ds : dataSnapshot.child("Admin").getChildren()) {
-                                hashMap.put(ds.child("username").getValue(String.class), ds.child("password").getValue(String.class));
-                            }
+//                            for (DataSnapshot ds : dataSnapshot.child("Admin").getChildren()) {
+//                                hashMap.put(ds.child("username").getValue(String.class), ds.child("password").getValue(String.class));
+//                            }
 
 
                             if (hashMap.containsKey(username.getText().toString())) {
                                 if (hashMap.containsValue((password.getText().toString()))) {
-                                    Toast.makeText(login.this, "Welcome Admin", Toast.LENGTH_SHORT).show();
+                                   // Toast.makeText(login.this, "Welcome Admin", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(login.this, AdminActivity.class);
                                     startActivity(intent);
                                     finish();

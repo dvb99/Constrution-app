@@ -10,20 +10,20 @@ import android.widget.TextView;
 
 public class CustomSpinnerAdapter extends BaseAdapter {
     Context context;
-    int flags[];
-    String[] countryNames;
+    int constructionimages[];
+    String[] sitetyp;
     LayoutInflater inflter;
 
-    public CustomSpinnerAdapter(Context applicationContext, int[] flags, String[] countryNames) {
+    public CustomSpinnerAdapter(Context applicationContext, int[] constructionimages, String[] sitetyp) {
         this.context = applicationContext;
-        this.flags = flags;
-        this.countryNames = countryNames;
+        this.constructionimages = constructionimages;
+        this.sitetyp = sitetyp;
         inflter = (LayoutInflater.from(applicationContext));
     }
 
     @Override
     public int getCount() {
-        return flags.length;
+        return constructionimages.length;
     }
 
     @Override
@@ -45,8 +45,8 @@ public class CustomSpinnerAdapter extends BaseAdapter {
         }
         ImageView icon =  listItemView.findViewById(R.id.imageView);
         TextView names =  listItemView.findViewById(R.id.textView);
-        icon.setImageResource(flags[position]);
-        names.setText(countryNames[position]);
+        icon.setImageResource(constructionimages[position]);
+        names.setText(sitetyp[position]);
         return listItemView;
     }
 

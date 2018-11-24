@@ -1,6 +1,8 @@
 package com.example.admin.constructionsite.secondpagepofadmin;
 
-public class SiteObject {
+import java.io.Serializable;
+
+public class SiteObject implements Serializable {
     private String CategoryName;
     private String NameOfSite;
     private String Area;

@@ -5,19 +5,21 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
-import com.example.admin.constructionsite.ArrayListOfObjects;
 import com.example.admin.constructionsite.R;
 
-public class pagewillbefloodedwithpipeline extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class correspondingAllSites extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.floodedwithsite);
+        ArrayList<SiteObject> siteList = (ArrayList<SiteObject>) getIntent().getSerializableExtra("showThisKindOfSites");
 
-        pipelinepageadapter adapter = new pipelinepageadapter(this, ArrayListOfObjects.pipeline, Color.YELLOW);
-        ListView gridView = findViewById(R.id.list);
-        gridView.setAdapter(adapter);
+        siteadapter adapter = new siteadapter(this, siteList, Color.YELLOW);
+        ListView listView = findViewById(R.id.list);
+        listView.setAdapter(adapter);
 
     }
 }

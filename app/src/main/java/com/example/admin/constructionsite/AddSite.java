@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.admin.constructionsite.Login.User;
 import com.example.admin.constructionsite.secondpagepofadmin.SiteObject;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,12 +21,18 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
 
     String selected;
 
-    String[] siteTypes = {"PipeLine", "WaterTank", "RoadPavement", "BuildingConstruction"};
+    String[] siteTypes = {"Pipeline", "Watertank", "Roadpavement", "Buildingconstru"};
     int construtionPhoto[] = {R.drawable.pipelinecopy, R.drawable.watertankconstructioncopy, R.drawable.roadpavementcopy, R.drawable.buildingconstructioncopy};
 
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    final DatabaseReference tableuser = database.getReference("ConstructionSite");
+    FirebaseDatabase databaseforConstructionSite = FirebaseDatabase.getInstance();
+    final DatabaseReference tableuserCS = databaseforConstructionSite.getReference("ConstructionSite");
+
+    FirebaseDatabase databaseforUser = FirebaseDatabase.getInstance();
+    final DatabaseReference tableuserUs = databaseforUser.getReference("User").child("Supervisor");
+
+    FirebaseDatabase databaseforPeople = FirebaseDatabase.getInstance();
+    final DatabaseReference tableuserPpl = databaseforPeople.getReference("People");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +47,19 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
         spin.setAdapter(customSpinnerAdapter);
 
     }
+
     public void createobj(View v)
     {
         final EditText t2 = findViewById(R.id.Nameofsite);
         final EditText t3 = findViewById(R.id.Areaofsite);
         final EditText t4 = findViewById(R.id.Supervisorofsite);
+        final EditText forsupervisorpassword = findViewById(R.id.Supervisorpassword);
 
-        tableuser.addValueEventListener(new ValueEventListener() {
+        tableuserCS.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 SiteObject sb = new SiteObject(t2.getText().toString(), t3.getText().toString(), t4.getText().toString());
-                tableuser.child(selected).setValue(sb);
-
+                tableuserCS.child(selected).child(t4.getText().toString()).setValue(sb);
             }
 
             @Override
@@ -59,6 +67,37 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
                 Toast.makeText(AddSite.this, "Failed to Add site", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+        tableuserUs.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User us = new User(t4.getText().toString(), forsupervisorpassword.getText().toString());
+                tableuserUs.child(t4.getText().toString()).setValue(us);
+                Toast.makeText(AddSite.this, "Supervisor Added", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+
+        tableuserPpl.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserWithChat userWithChat = new UserWithChat("Hellow Admin message from supervisor");
+                tableuserPpl.child(t4.getText().toString()).setValue(userWithChat);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
         Toast.makeText(AddSite.this, "Site ADDED", Toast.LENGTH_SHORT).show();
         finish();
@@ -68,7 +107,6 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
         selected = siteTypes[position];
-        Toast.makeText(getApplicationContext(), siteTypes[position], Toast.LENGTH_LONG).show();
     }
 
     //Performing action onNothing selected
