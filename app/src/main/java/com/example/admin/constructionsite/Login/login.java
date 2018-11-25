@@ -26,6 +26,7 @@ import java.util.HashMap;
 public class login extends AppCompatActivity {
     Button button;
     EditText username, password;
+     static public String usname;
     RadioButton adminradiobutton, supervisorradiobutton;
 
     @Override
@@ -92,6 +93,7 @@ public class login extends AppCompatActivity {
                         }
                         if (supervisorradiobutton.isChecked()) {
 
+                          usname=  username.getText().toString();
 
 //                            firebase database User Supervisor's part has 0 child (i.e Only 1 supervisor) USE BELOW FOR LOOP
 //                            for (DataSnapshot ds : dataSnapshot.getChildren()) {

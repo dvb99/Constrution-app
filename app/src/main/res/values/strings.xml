@@ -19,6 +19,14 @@
     <string name="nameofarea">AreaName</string>
     <string name="nameofsupervisor">SupervisorName</string>
     <string name="createnewsite">Create</string>
-    <string name="setsupervisorPassword">Set Supervisor Password</string>
+    <string name="setsupervisorPassword"><font size="16">SupervisorPassword</font></string>
+    <string name="todaysmanpower">Manpower used today</string>
+    <string name="sendtoAdmin">Send To Admin</string>
+    <string name="numofPeople">People</string>
+    <string name="hint_to_set_supervisor_username"><font size="15">set username for supervisor</font></string>
+    <string name="hint_to_set_supervisor_password"><font size="15">set password for supervisor</font></string>
+    <string name="hint_to_add_name_of_site"><font size="15">Enter Name Of Site</font></string>
+    <string name="hint_to_add_area_of_site"><font size="15">Enter Area Of Site</font></string>
+    <string name="has_not_updated_count_yet"><font size="12">Supervisor has not updated count yet</font></string>
 
 </resources>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Labor">
+
+    <TextView
+        android:id="@+id/txtlbr1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:layout_margin="10dp"
+        android:background="@color/red_50" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="10"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="@string/todaysmanpower"
+            android:padding="5dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/manpowerused"
+            android:inputType="number"
+            android:hint="@string/numofPeople"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:textColor="@color/red_900"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"/>
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/btnforsend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:visibility="invisible"
+        android:layout_gravity="center"
+        android:onClick="send"
+        android:text="@string/sendtoAdmin"/>
+</LinearLayout>

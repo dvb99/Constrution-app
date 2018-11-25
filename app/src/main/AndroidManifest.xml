@@ -13,11 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity"
+            android:name=".firstpageafterLogin.AdminActivity"
             android:label="@string/admin">
         </activity>
         <activity
-            android:name="com.example.admin.constructionsite.firstpageafterLogin.SupervisorActivity"
+            android:name=".firstpageafterLogin.SupervisorActivity"
             android:label="@string/supervisor">
         </activity>
         <activity
@@ -28,22 +28,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.admin.constructionsite.secondpagepofadmin.correspondingAllSites"
-            android:parentActivityName="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity">
+            android:name=".secondpagepofadmin.correspondingAllSites"
+            android:parentActivityName=".firstpageafterLogin.AdminActivity">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity"/>
+                android:value="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity" />
         </activity>
         <activity
             android:name=".AddSite"
             android:label="@string/createnewsite"
-            android:parentActivityName="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity">
+            android:parentActivityName=".firstpageafterLogin.AdminActivity">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity"/>>
+                android:value="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity" />
         </activity>
+        <activity android:name=".Labor"/>
     </application>
 
 </manifest>

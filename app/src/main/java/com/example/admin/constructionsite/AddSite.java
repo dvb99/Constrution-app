@@ -31,9 +31,6 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
     FirebaseDatabase databaseforUser = FirebaseDatabase.getInstance();
     final DatabaseReference tableuserUs = databaseforUser.getReference("User").child("Supervisor");
 
-    FirebaseDatabase databaseforPeople = FirebaseDatabase.getInstance();
-    final DatabaseReference tableuserPpl = databaseforPeople.getReference("People");
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,22 +79,6 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
-
-        tableuserPpl.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserWithChat userWithChat = new UserWithChat("Hellow Admin message from supervisor");
-                tableuserPpl.child(t4.getText().toString()).setValue(userWithChat);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
 
         Toast.makeText(AddSite.this, "Site ADDED", Toast.LENGTH_SHORT).show();
         finish();

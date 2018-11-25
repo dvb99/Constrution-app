@@ -3,24 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/SubmitButton"
+    android:id="@+id/create_new_site"
     android:orientation="vertical"
     tools:context=".AddSite">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_weight="1"
             android:text="@string/constructiontype"/>
 
         <Spinner
             android:id="@+id/simpleSpinner"
-            android:layout_width="0dp"
-            android:layout_weight="4"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
             />
 
     </LinearLayout>
@@ -28,18 +31,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="@string/nameofsite"/>
 
         <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Enter Name of Site"
-            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint="@string/hint_to_add_name_of_site"
+            android:inputType="text"
+            android:layout_weight="1"
+            android:gravity="center"
             android:id="@+id/Nameofsite"
             />
 
@@ -49,18 +56,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="@string/nameofarea"/>
 
         <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Enter Name of Area"
-            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint="@string/hint_to_add_area_of_site"
+            android:inputType="text"
+            android:layout_weight="1"
+            android:gravity="center"
             android:id="@+id/Areaofsite"
             />
 
@@ -69,18 +80,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="@string/nameofsupervisor"/>
 
         <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Enter Name of Supervisor"
-            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint="@string/hint_to_set_supervisor_username"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:inputType="text"
             android:id="@+id/Supervisorofsite"
             />
 
@@ -89,18 +104,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text="@string/setsupervisorPassword"/>
 
         <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Enter Name of Supervisor"
-            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:hint="@string/hint_to_set_supervisor_password"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:inputType="text"
             android:id="@+id/Supervisorpassword"
             />
 
@@ -109,7 +128,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit"
+        android:layout_gravity="center"
+        android:text="@string/createnewsite"
         android:onClick="createobj"
         android:gravity="center"/>
 
