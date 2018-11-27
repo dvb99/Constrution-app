@@ -68,6 +68,8 @@ public class AdminActivity extends AppCompatActivity {
                         tableuser.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                //this 1 below line surpassed the problem (1st time opening of pipeline sites after a site has been created form create area) beautifully.
+                                pipeline.clear();
                                 for (DataSnapshot ds : dataSnapshot.child("Pipeline").getChildren()) {
                                     if (ds.child("area").getValue(String.class) != null && ds.child("nameOfSite").getValue(String.class) != null && ds.child("supervisorName").getValue(String.class) != null) {
                                         pipeline.add(new SiteObject(ds.child("area").getValue(String.class), ds.child("nameOfSite").getValue(String.class), ds.child("supervisorName").getValue(String.class)));
@@ -91,6 +93,8 @@ public class AdminActivity extends AppCompatActivity {
                         tableuser.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                //this 1 below line surpassed the problem (1st time opening of watertank sites after a site has been created form create area) beautifully.
+                                watertank.clear();
                                 for (DataSnapshot ds : dataSnapshot.child("Watertank").getChildren()) {
                                     if (ds.child("area").getValue(String.class) != null && ds.child("nameOfSite").getValue(String.class) != null && ds.child("supervisorName").getValue(String.class) != null) {
                                         watertank.add(new SiteObject(ds.child("area").getValue(String.class), ds.child("nameOfSite").getValue(String.class), ds.child("supervisorName").getValue(String.class)));
@@ -114,6 +118,8 @@ public class AdminActivity extends AppCompatActivity {
                         tableuser.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                //this 1 below line surpassed the problem (1st time opening roadpavement sites after a site has been created form create area) beautifully.
+                                roadpavement.clear();
                                 for (DataSnapshot ds : dataSnapshot.child("Roadpavement").getChildren()) {
                                     if (ds.child("area").getValue(String.class) != null && ds.child("nameOfSite").getValue(String.class) != null && ds.child("supervisorName").getValue(String.class) != null) {
                                         roadpavement.add(new SiteObject(ds.child("area").getValue(String.class), ds.child("nameOfSite").getValue(String.class), ds.child("supervisorName").getValue(String.class)));
@@ -137,6 +143,8 @@ public class AdminActivity extends AppCompatActivity {
                         tableuser.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                //this 1 below line surpassed the problem (1st time opening of buildingconstru sites after a site has been created form create area) beautifully.
+                                buildingconstru.clear();
                                 for (DataSnapshot ds : dataSnapshot.child("Buildingconstru").getChildren()) {
                                     if (ds.child("area").getValue(String.class) != null && ds.child("nameOfSite").getValue(String.class) != null && ds.child("supervisorName").getValue(String.class) != null) {
                                         buildingconstru.add(new SiteObject(ds.child("area").getValue(String.class), ds.child("nameOfSite").getValue(String.class), ds.child("supervisorName").getValue(String.class)));
@@ -165,6 +173,8 @@ public class AdminActivity extends AppCompatActivity {
 
         });
 
+
+
         dl = findViewById(R.id.activity_main);
         t = new ActionBarDrawerToggle(this, dl, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
@@ -179,17 +189,27 @@ public class AdminActivity extends AppCompatActivity {
                 switch (id) {
                     case R.id.addsite:
                         startActivity(new Intent(AdminActivity.this, AddSite.class));
+                        // Close the drawer as soon as possible
+                        dl.closeDrawers();
                         break;
                     //Toast.makeText(AdminActivity.this, "SITE ADDED", Toast.LENGTH_SHORT).show();
                     case R.id.deletesite:
                         Toast.makeText(AdminActivity.this, "SITE DELETED", Toast.LENGTH_SHORT).show();
+                        // Close the drawer as soon as possible
+                        dl.closeDrawers();
                         break;
                     case R.id.locate:
                         Toast.makeText(AdminActivity.this, "LOCATING USER", Toast.LENGTH_SHORT).show();
+                        // Close the drawer as soon as possible
+                        dl.closeDrawers();
                         break;
 //                    default:
 //                        return true;
                 }
+
+                dl.closeDrawers();
+
+
 
                 return true;
             }

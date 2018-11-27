@@ -29,6 +29,7 @@
         </activity>
         <activity
             android:name=".secondpagepofadmin.correspondingAllSites"
+            android:launchMode="singleTask"
             android:parentActivityName=".firstpageafterLogin.AdminActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->

@@ -2,6 +2,7 @@ package com.example.admin.constructionsite;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.admin.constructionsite.Login.User;
 import com.example.admin.constructionsite.secondpagepofadmin.SiteObject;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +28,7 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
 
 
     FirebaseDatabase databaseforConstructionSite = FirebaseDatabase.getInstance();
-    final DatabaseReference tableuserCS = databaseforConstructionSite.getReference("ConstructionSite");
+    final DatabaseReference tableuserCS = databaseforConstructionSite.getReference();
 
     FirebaseDatabase databaseforUser = FirebaseDatabase.getInstance();
     final DatabaseReference tableuserUs = databaseforUser.getReference("User").child("Supervisor");
@@ -52,19 +54,35 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
         final EditText t4 = findViewById(R.id.Supervisorofsite);
         final EditText forsupervisorpassword = findViewById(R.id.Supervisorpassword);
 
-        tableuserCS.addValueEventListener(new ValueEventListener() {
+        tableuserCS.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 SiteObject sb = new SiteObject(t2.getText().toString(), t3.getText().toString(), t4.getText().toString());
-                tableuserCS.child(selected).child(t4.getText().toString()).setValue(sb);
+                tableuserCS.child("ConstructionSite").child(selected).child(t4.getText().toString()).setValue(sb);
+                }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                SiteObject sb = new SiteObject(t2.getText().toString(), t3.getText().toString(), t4.getText().toString());
+                tableuserCS.child("ConstructionSite").child(selected).child(t4.getText().toString()).setValue(sb);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
                 Toast.makeText(AddSite.this, "Failed to Add site", Toast.LENGTH_SHORT).show();
             }
         });
-
 
         tableuserUs.addValueEventListener(new ValueEventListener() {
             @Override
