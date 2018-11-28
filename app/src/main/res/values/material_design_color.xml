@@ -265,6 +265,7 @@
     <color name="grey_900">#212121</color>
     <color name="grey_black_1000">#000000</color>
     <color name="grey_white_1000">#ffffff</color>
+    <color name="trasparent">#80ffffff</color>
 
     <color name="blue_grey_50">#eceff1</color>
     <color name="blue_grey_100">#cfd8dc</color>
