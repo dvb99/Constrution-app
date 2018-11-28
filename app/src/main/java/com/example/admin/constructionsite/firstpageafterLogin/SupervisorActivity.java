@@ -25,7 +25,6 @@ public class SupervisorActivity extends AppCompatActivity {
         cardTile.add(new Card("Equipment", R.drawable.equipmentcopy, Color.parseColor("#a6baff")));
         cardTile.add(new Card("Tasks", R.drawable.taskcopy, Color.parseColor("#42bd41")));
         cardTile.add(new Card("Requirement", R.drawable.requirementcopy, Color.parseColor("#fdd835")));
-        cardTile.add(new Card("Stock", R.drawable.stockcopy, Color.parseColor("#ffb74d")));
         cardTile.add(new Card("Report", R.drawable.reportcardcopy, Color.parseColor("#90a4ae")));
         firstpageadapter adapter = new firstpageadapter(this, cardTile);
         GridView gridView = findViewById(R.id.firstopening);
