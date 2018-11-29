@@ -21,7 +21,7 @@
             android:label="@string/supervisor">
         </activity>
         <activity
-            android:name="com.example.admin.constructionsite.Login.login">
+            android:name=".Login.login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -47,7 +47,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity" />
         </activity>
-        <activity android:name=".Labor"/>
+        <activity android:name=".Labor" />
+        <activity android:name=".sitereport"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@ import android.widget.GridView;
 
 import com.example.admin.constructionsite.Labor;
 import com.example.admin.constructionsite.R;
+import com.example.admin.constructionsite.sitereport;
 
 import java.util.ArrayList;
 
@@ -43,6 +44,11 @@ public class SupervisorActivity extends AppCompatActivity {
 
 
 
+                    }
+                    case "Report":
+                    {
+                        Intent intent = new Intent(SupervisorActivity.this, sitereport.class);
+                        startActivity(intent);
                     }
 
                 }

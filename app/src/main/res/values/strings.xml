@@ -15,9 +15,9 @@
     <string name="deletesite">Delete Site</string>
     <string name="locate">Locate</string>
     <string name="constructiontype">ConstructionType</string>
-    <string name="nameofsite">SiteName</string>
-    <string name="nameofarea">AreaName</string>
-    <string name="nameofsupervisor">SupervisorName</string>
+    <string name="nameofsite">Site Name</string>
+    <string name="areaofsite">Site Location</string>
+    <string name="nameofsupervisor">Supervisor Name</string>
     <string name="createnewsite">Create</string>
     <string name="setsupervisorPassword"><font size="16">SupervisorPassword</font></string>
     <string name="todaysmanpower">Manpower used today</string>
@@ -28,5 +28,11 @@
     <string name="hint_to_add_name_of_site"><font size="15">Enter Name Of Site</font></string>
     <string name="hint_to_add_area_of_site"><font size="15">Enter Area Of Site</font></string>
     <string name="has_not_updated_count_yet"><font size="12">Supervisor has not updated count yet</font></string>
+    <string name="sitereport"><font size="18">Site Report</font></string>
+    <string name="reporttitle"><font size="13">Report Title</font></string>
+    <string name="hint_for_report_title"><font size="15">Enter Report Title</font></string>
+    <string name="reportdiscription"><font size="13">Report Description</font></string>
+    <string name="hint_for_report_discription"><font size="15">Enter Description</font></string>
+
 
 </resources>
