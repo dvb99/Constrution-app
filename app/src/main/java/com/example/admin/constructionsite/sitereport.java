@@ -1,5 +1,6 @@
 package com.example.admin.constructionsite;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -12,18 +13,19 @@ import java.util.ArrayList;
 
 public class sitereport extends AppCompatActivity {
 
-    BoomMenuButton bmb ;
-    ArrayList<Integer> imageresourceid ;
-    ArrayList<String> stringresourceid ;
+    BoomMenuButton bmb;
+    ArrayList<Integer> imageresourceid;
+    ArrayList<String> stringresourceid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sitereport);
 
-         bmb = (BoomMenuButton) findViewById(R.id.bmb);
-         imageresourceid =new ArrayList<>();
-         stringresourceid =new ArrayList<>();
-         setdata();
+        bmb = (BoomMenuButton) findViewById(R.id.bmb);
+        imageresourceid = new ArrayList<>();
+        stringresourceid = new ArrayList<>();
+        setdata();
 
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             HamButton.Builder builder = new HamButton.Builder()
@@ -33,7 +35,12 @@ public class sitereport extends AppCompatActivity {
                     .listener(new OnBMClickListener() {
                         @Override
                         public void onBoomButtonClick(int index) {
-                            Toast.makeText(sitereport.this, index+"", Toast.LENGTH_SHORT).show();
+                            switch (index) {
+                                case 0:
+                                    startActivity(new Intent(sitereport.this, MyCameraActivity.class));
+                                    Toast.makeText(sitereport.this, index + "", Toast.LENGTH_SHORT).show();
+
+                            }
 
                         }
                     });
@@ -43,15 +50,17 @@ public class sitereport extends AppCompatActivity {
 
 
     }
-    public  void setdata()
-    {
-        imageresourceid.add(R.drawable.ic_take_a_photo_grey_600_24dp);
-        imageresourceid.add(R.drawable.ic_insert_photo_light_green_a700_24dp);
+
+    public void setdata() {
+        imageresourceid.add(R.drawable.ic_add_a_photo_pink_a400_24dp);
         imageresourceid.add(R.drawable.report);
+        imageresourceid.add(R.drawable.ic_picture_as_pdf_light_green_a700_24dp);
         imageresourceid.add(R.drawable.ic_send_purple_a200_24dp);
-        stringresourceid.add("Take a photo");
-        stringresourceid.add("Add photo to report");
+        stringresourceid.add("Take today's progress photo");
         stringresourceid.add("Create a report");
+        stringresourceid.add("View report");
         stringresourceid.add("Send to Admin");
     }
+
+
 }

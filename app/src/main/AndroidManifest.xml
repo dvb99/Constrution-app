@@ -3,6 +3,10 @@
     package="com.example.admin.constructionsite">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -14,17 +18,15 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".firstpageafterLogin.AdminActivity"
-            android:label="@string/admin">
-        </activity>
+            android:label="@string/admin"/>
         <activity
             android:name=".firstpageafterLogin.SupervisorActivity"
-            android:label="@string/supervisor">
-        </activity>
-        <activity
-            android:name=".Login.login">
+            android:label="@string/supervisor"/>
+        <activity android:name=".Login.login">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -48,8 +50,10 @@
                 android:value="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity" />
         </activity>
         <activity android:name=".Labor" />
-        <activity android:name=".sitereport"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity
+            android:name=".sitereport"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".MyCameraActivity"/>
     </application>
 
 </manifest>
