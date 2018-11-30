@@ -41,6 +41,7 @@ public class SupervisorActivity extends AppCompatActivity {
                         Intent intent = new Intent(SupervisorActivity.this, Labor.class);
                         intent.putExtra("forlabor", "1");
                         startActivity(intent);
+                        break;
 
 
 
@@ -49,6 +50,7 @@ public class SupervisorActivity extends AppCompatActivity {
                     {
                         Intent intent = new Intent(SupervisorActivity.this, sitereport.class);
                         startActivity(intent);
+                        break;
                     }
 
                 }
