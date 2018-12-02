@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
+import com.example.admin.constructionsite.Equipment;
 import com.example.admin.constructionsite.Labor;
 import com.example.admin.constructionsite.R;
 
@@ -36,8 +37,16 @@ public class correspondingAllSites extends AppCompatActivity implements
                     Intent intent = new Intent(correspondingAllSites.this, Labor.class);
                 intent.putExtra("forlabor", supervisorName);
                 startActivity(intent);
-
+                break;
                 }
+                case 2:
+                {
+                    Intent intent = new Intent(correspondingAllSites.this, Equipment.class);
+                    intent.putExtra("forequip", supervisorName);
+                    startActivity(intent);
+                    break;
+                }
+
             }
 
         }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.example.admin.constructionsite.Equipment;
 import com.example.admin.constructionsite.Labor;
 import com.example.admin.constructionsite.R;
 import com.example.admin.constructionsite.sitereport;
@@ -42,9 +43,12 @@ public class SupervisorActivity extends AppCompatActivity {
                         intent.putExtra("forlabor", "1");
                         startActivity(intent);
                         break;
-
-
-
+                        }
+                    case "Equipment":{
+                        Intent intent = new Intent(SupervisorActivity.this, Equipment.class);
+                        intent.putExtra("forequip", "2");
+                        startActivity(intent);
+                        break;
                     }
                     case "Report":
                     {

@@ -33,6 +33,7 @@
     <string name="hint_for_report_title"><font size="15">Enter Report Title</font></string>
     <string name="reportdiscription"><font size="13">Report Description</font></string>
     <string name="hint_for_report_discription"><font size="15">Enter Description</font></string>
+    <string name="add_another_vehicle"><font size="15">Add another vehicle</font></string>
 
 
 </resources>

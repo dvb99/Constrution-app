@@ -21,10 +21,14 @@ import java.util.Date;
 public class Labor extends AppCompatActivity  {
 
     Date currentDate = new Date();
+//    Date tomorrow = new Date(currentDate.getTime() + (1000 * 60 * 60 * 24));
+//    String dateLong = DateFormat.getDateInstance(DateFormat.MEDIUM).format(tomorrow);
     String dateLong = DateFormat.getDateInstance(DateFormat.MEDIUM).format(currentDate);
-    static int flag = 0;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference tableuser = database.getReference();
+    String supervisor_name;
+    TextView date_with_count;
+    EditText manpower;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,7 @@ public class Labor extends AppCompatActivity  {
 
         final View sndbtn = findViewById(R.id.btnforsend);
 
-        final String supervisor_name =  getIntent().getStringExtra("forlabor");
+        supervisor_name =  getIntent().getStringExtra("forlabor");
         if (supervisor_name.equals("1")) {
             // call is from SupervisorActivity
             sndbtn.setVisibility(View.VISIBLE);
@@ -47,17 +51,17 @@ public class Labor extends AppCompatActivity  {
 
             // I will try to customize this Textview R.id.txtlbr1 in the form of Listview
             // so that each list Item will show particular day and it's correspondind Worker count.
-            final TextView date_with_count = findViewById(R.id.txtlbr1);
+            date_with_count = findViewById(R.id.txtlbr1);
 
 
-            final EditText manpower =  findViewById(R.id.manpowerused);
+            manpower =  findViewById(R.id.manpowerused);
 
 
             tableuser.child("People").child(supervisor_name).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
-                        String today_labor_count = dataSnapshot.child(dateLong).getValue().toString();
+                        String today_labor_count = dataSnapshot.child(dateLong).child("LaborCount").getValue().toString();
                         String showtxtviewlbr =dataSnapshot.child(dateLong).getKey() + "   " + today_labor_count;
                         date_with_count.setText(showtxtviewlbr);
                         manpower.setText(today_labor_count);
@@ -84,18 +88,30 @@ public class Labor extends AppCompatActivity  {
 
     public void send (View v)
     {
-        if (flag == 0) {
+        tableuser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-            EditText edit_text =  findViewById(R.id.manpowerused);
-            tableuser.child("People").child(login.usname).child(dateLong).setValue(edit_text.getText().toString());
-            flag++;
-            Toast.makeText(this, "Sent", Toast.LENGTH_SHORT).show();
+                   if(null==dataSnapshot.child("People").child(login.usname).child(dateLong).child("LaborCount").getValue()) {
+                       EditText edit_text =  findViewById(R.id.manpowerused);
+                       tableuser.child("People").child(login.usname).child(dateLong).child("LaborCount").setValue(edit_text.getText().toString());
+                       Toast.makeText(Labor.this, "Sent Labor count Successfully", Toast.LENGTH_SHORT).show();
 
-        }
-        else {
-            Toast.makeText(this, "can't send Number of Labor again", Toast.LENGTH_SHORT).show();
+                   }
+//                  I will display 1 alert box telling once you send data , it won't be changed again for today's date.
+//                hence removing Toast.
+//                   else
+//                   {
+//                       Toast.makeText(Labor.this, "Can't send Labor Count again", Toast.LENGTH_SHORT).show();
+//                   }
 
-        }
+                   }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         finish();
 
