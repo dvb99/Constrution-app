@@ -17,30 +17,30 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="10"
+        android:layout_height="0dp"
+        android:layout_weight="8"
         android:layout_margin="10dp">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:text="@string/todaysmanpower"
             android:padding="5dp"
             android:gravity="center"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
         <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:id="@+id/manpowerused"
             android:inputType="number"
             android:hint="@string/numofPeople"
             android:gravity="center"
-            android:layout_width="0dp"
             android:textColor="@color/red_900"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp" />
 
     </LinearLayout>
     <Button
@@ -51,6 +51,5 @@
         android:layout_marginBottom="5dp"
         android:visibility="invisible"
         android:layout_gravity="center"
-        android:onClick="send"
         android:text="@string/sendtoAdmin"/>
 </LinearLayout>

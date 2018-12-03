@@ -11,6 +11,7 @@ import android.widget.GridView;
 import com.example.admin.constructionsite.Equipment;
 import com.example.admin.constructionsite.Labor;
 import com.example.admin.constructionsite.R;
+import com.example.admin.constructionsite.ToDoList;
 import com.example.admin.constructionsite.sitereport;
 
 import java.util.ArrayList;
@@ -50,6 +51,13 @@ public class SupervisorActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     }
+                    case "Tasks":{
+                        Intent intent = new Intent(SupervisorActivity.this, ToDoList.class);
+                        intent.putExtra("todolist", "3");
+                        startActivity(intent);
+                        break;
+                    }
+
                     case "Report":
                     {
                         Intent intent = new Intent(SupervisorActivity.this, sitereport.class);

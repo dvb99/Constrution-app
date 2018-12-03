@@ -55,6 +55,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".MyCameraActivity" />
         <activity android:name=".Equipment"/>
+        <activity android:name=".ToDoList"/>
     </application>
 
 </manifest>

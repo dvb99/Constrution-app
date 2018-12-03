@@ -36,11 +36,41 @@ public class Labor extends AppCompatActivity  {
         setContentView(R.layout.activity_labor);
 
         final View sndbtn = findViewById(R.id.btnforsend);
-
+        date_with_count = findViewById(R.id.txtlbr1);
         supervisor_name =  getIntent().getStringExtra("forlabor");
         if (supervisor_name.equals("1")) {
             // call is from SupervisorActivity
             sndbtn.setVisibility(View.VISIBLE);
+
+            sndbtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    send();
+
+                }
+            });
+
+            //Supervisor will see what he has sent as today's
+            //Labor count
+            tableuser.child("People").child(login.usname).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        String today_labor_count = dataSnapshot.child(dateLong).child("LaborCount").getValue().toString();
+                        String showtxtviewlbr =dataSnapshot.child(dateLong).getKey() + "   " + today_labor_count;
+                        date_with_count.setText(showtxtviewlbr);
+
+                    } catch (NullPointerException e) {
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
         }
         else
         {
@@ -51,7 +81,6 @@ public class Labor extends AppCompatActivity  {
 
             // I will try to customize this Textview R.id.txtlbr1 in the form of Listview
             // so that each list Item will show particular day and it's correspondind Worker count.
-            date_with_count = findViewById(R.id.txtlbr1);
 
 
             manpower =  findViewById(R.id.manpowerused);
@@ -86,7 +115,7 @@ public class Labor extends AppCompatActivity  {
 
     }
 
-    public void send (View v)
+    public void send ()
     {
         tableuser.addValueEventListener(new ValueEventListener() {
             @Override

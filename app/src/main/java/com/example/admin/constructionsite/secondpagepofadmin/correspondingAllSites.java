@@ -8,6 +8,7 @@ import android.widget.ListView;
 import com.example.admin.constructionsite.Equipment;
 import com.example.admin.constructionsite.Labor;
 import com.example.admin.constructionsite.R;
+import com.example.admin.constructionsite.ToDoList;
 
 import java.util.ArrayList;
 
@@ -43,6 +44,13 @@ public class correspondingAllSites extends AppCompatActivity implements
                 {
                     Intent intent = new Intent(correspondingAllSites.this, Equipment.class);
                     intent.putExtra("forequip", supervisorName);
+                    startActivity(intent);
+                    break;
+                }
+                case 3:
+                {
+                    Intent intent = new Intent(correspondingAllSites.this, ToDoList.class);
+                    intent.putExtra("todolist", supervisorName);
                     startActivity(intent);
                     break;
                 }
