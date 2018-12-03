@@ -20,11 +20,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.util.Date;
 
-public class ToDoList extends AppCompatActivity {
-
+public class Requirement extends AppCompatActivity {
 
     Date currentDate = new Date();
-//    Date tomorrow = new Date(currentDate.getTime() + (1000 * 60 * 60 * 24));
+    //    Date tomorrow = new Date(currentDate.getTime() + (1000 * 60 * 60 * 24));
 //    String dateLong = DateFormat.getDateInstance(DateFormat.MEDIUM).format(tomorrow);
     String dateLong = DateFormat.getDateInstance(DateFormat.MEDIUM).format(currentDate);
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -32,8 +31,7 @@ public class ToDoList extends AppCompatActivity {
     private EditText edttxt;
     private TextView txtview;
     private Button btncommunicate;
-    String tosupervisor;
-
+    String toadmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,34 +41,13 @@ public class ToDoList extends AppCompatActivity {
         edttxt = findViewById(R.id.chattype);
         btncommunicate=findViewById(R.id.btnchatsend);
         txtview = findViewById(R.id.chatshow);
-        tosupervisor = getIntent().getStringExtra("todolist");
-        if (tosupervisor.equals("3")) {
-            // call is from SupervisorActivity
-            tableuser.child("People").child(login.usname).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    try {
-                        String today_task = dataSnapshot.child(dateLong).child("Today's Task").getValue().toString();
-                        txtview.setText(today_task);
 
-
-                    } catch (NullPointerException e) {
-                        Toast.makeText(ToDoList.this, "No specific task from Admin", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-
-        } else {
-            //call is from admin's second page
+        toadmin = getIntent().getStringExtra("anyrequirement");
+        if(toadmin.equals("4"))
+        {
+            //call is from supervisor activity
             ll.setVisibility(View.VISIBLE);
-            getSupportActionBar().setTitle("To" + tosupervisor);
+            getSupportActionBar().setTitle("To " + "admin");
 
             btncommunicate.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -80,9 +57,9 @@ public class ToDoList extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                            if (null == dataSnapshot.child("People").child(tosupervisor).child(dateLong).child("Today's Task").getValue()) {
-                                tableuser.child("People").child(tosupervisor).child(dateLong).child("Today's Task").setValue(edttxt.getText().toString());
-                                Toast.makeText(ToDoList.this, "Today's work submitted", Toast.LENGTH_SHORT).show();
+                            if (null == dataSnapshot.child("People").child(login.usname).child(dateLong).child("Today's Requirement").getValue()) {
+                                tableuser.child("People").child(login.usname).child(dateLong).child("Today's Requirement").setValue(edttxt.getText().toString());
+                                Toast.makeText(Requirement.this, "Please send these materials", Toast.LENGTH_SHORT).show();
 
                             }
 //                  I will display 1 alert box telling once you send data , it won't be changed again for today's date.
@@ -104,14 +81,15 @@ public class ToDoList extends AppCompatActivity {
 
 
             });
-            // below code added because after sending task to supervisor
-            // admin can see what he has told supervisor to do for that day.
-            tableuser.child("People").child(tosupervisor).addValueEventListener(new ValueEventListener() {
+
+            // below code added because after sending com.example.admin.constructionsite.requirement to admin
+            // supervisor can see what are the things he has asked to admin do for that day.
+            tableuser.child("People").child(login.usname).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
-                        String today_task = dataSnapshot.child(dateLong).child("Today's Task").getValue().toString();
-                        txtview.setText(today_task);
+                        String today_requirement = dataSnapshot.child(dateLong).child("Today's Requirement").getValue().toString();
+                        txtview.setText(today_requirement);
 
 
                     } catch (NullPointerException e) {
@@ -127,7 +105,34 @@ public class ToDoList extends AppCompatActivity {
 
 
         }
+        else
+        {
+            //call is from admin's second page
+            getSupportActionBar().setTitle("From" + toadmin);
+
+            tableuser.child("People").child(toadmin).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        String today_requirement = dataSnapshot.child(dateLong).child("Today's Requirement").getValue().toString();
+                        txtview.setText(today_requirement);
+
+
+                    } catch (NullPointerException e) {
+                        Toast.makeText(Requirement.this, "No requirement from "+toadmin+" today", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
 
     }
-
 }
