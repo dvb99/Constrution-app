@@ -1,6 +1,7 @@
 package com.example.admin.constructionsite;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -49,8 +50,9 @@ public class Equipment extends AppCompatActivity {
         sv = new ScrollView(this);
         sv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         layoutparent = new LinearLayout(this);
-        layoutparent.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        layoutparent.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         layoutparent.setOrientation(LinearLayout.VERTICAL);
+        layoutparent.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
         final View v = new View(this);
 
 
@@ -169,25 +171,30 @@ public class Equipment extends AppCompatActivity {
         LinearLayout layoutchild1 = new LinearLayout(this);
         layoutchild1.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         layoutchild1.setOrientation(LinearLayout.VERTICAL);
+        layoutchild1.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
 
+
+        //first child
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(16,10,0,5);
 
 
         LinearLayout layoutchild11 = new LinearLayout(this);
         layoutchild11.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        layoutchild11.setOrientation(LinearLayout.HORIZONTAL);
+        layoutchild11.setOrientation(LinearLayout.VERTICAL);
 
         TextView txteqipmentType = new TextView(this);
         txteqipmentType.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        txteqipmentType.setText("Equipment Type");
-        txteqipmentType.setTextSize(18);
+        txteqipmentType.setText(R.string.vehicle);
         txteqipmentType.setTextColor(Color.BLACK);
+        txteqipmentType.setTypeface(null, Typeface.BOLD);
+        txteqipmentType.setLayoutParams(params);
         layoutchild11.addView(txteqipmentType);
 
         edtxteqipmentType = new EditText(this);
-        edtxteqipmentType.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        edtxteqipmentType.setHint("Enter equipment used with NumberPlate");
-        edtxteqipmentType.setTextSize(18);
+        edtxteqipmentType.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         edtxteqipmentType.setTextColor(Color.RED);
+        edtxteqipmentType.setHint(R.string.hint_to_add_vehicle_used);
         edtxteqipmentType.setGravity(1);
         layoutchild11.addView(edtxteqipmentType);
         layoutchild1.addView(layoutchild11);
@@ -195,19 +202,19 @@ public class Equipment extends AppCompatActivity {
 
         LinearLayout layoutchild12 = new LinearLayout(this);
         layoutchild12.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        layoutchild12.setOrientation(LinearLayout.HORIZONTAL);
+        layoutchild12.setOrientation(LinearLayout.VERTICAL);
 
         TextView txtviewinitialreading = new TextView(this);
         txtviewinitialreading.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        txtviewinitialreading.setText("Initial Reading");
-        txtviewinitialreading.setTextSize(18);
+        txtviewinitialreading.setText(R.string.initialreading);
         txtviewinitialreading.setTextColor(Color.BLACK);
+        txtviewinitialreading.setTypeface(null, Typeface.BOLD);
+        txtviewinitialreading.setLayoutParams(params);
         layoutchild12.addView(txtviewinitialreading);
 
         edtxtininitialReading = new EditText(this);
-        edtxtininitialReading.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        edtxtininitialReading.setHint("Enter Initial Reading");
-        edtxtininitialReading.setTextSize(18);
+        edtxtininitialReading.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        edtxtininitialReading.setHint(R.string.hint_to_add_initial_reading);
         edtxtininitialReading.setTextColor(Color.RED);
         edtxtininitialReading.setGravity(1);
         layoutchild12.addView(edtxtininitialReading);
@@ -216,19 +223,19 @@ public class Equipment extends AppCompatActivity {
 
         LinearLayout layoutchild13 = new LinearLayout(this);
         layoutchild13.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        layoutchild13.setOrientation(LinearLayout.HORIZONTAL);
+        layoutchild13.setOrientation(LinearLayout.VERTICAL);
 
         TextView txtviewfinalreading = new TextView(this);
         txtviewfinalreading.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        txtviewfinalreading.setText("Final Reading");
-        txtviewfinalreading.setTextSize(18);
+        txtviewfinalreading.setText(R.string.finalreading);
         txtviewfinalreading.setTextColor(Color.BLACK);
+        txtviewfinalreading.setTypeface(null, Typeface.BOLD);
+        txtviewfinalreading.setLayoutParams(params);
         layoutchild13.addView(txtviewfinalreading);
 
         edtxtfinalReading = new EditText(this);
-        edtxtfinalReading.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        edtxtfinalReading.setHint("Enter Final Reading");
-        edtxtfinalReading.setTextSize(18);
+        edtxtfinalReading.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        edtxtfinalReading.setHint(R.string.hint_to_add_final_reading);
         edtxtfinalReading.setTextColor(Color.RED);
         edtxtfinalReading.setGravity(1);
         layoutchild13.addView(edtxtfinalReading);

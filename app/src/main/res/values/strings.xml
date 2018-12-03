@@ -35,6 +35,12 @@
     <string name="hint_for_report_discription"><font size="15">Enter Description</font></string>
     <string name="add_another_vehicle"><font size="13">Add vehicle</font></string>
     <string name="start_the_chat"><font size="13">Let\'s start the chat</font></string>
+    <string name="vehicle"><font size="13">Vehicle</font></string>
+    <string name="hint_to_add_vehicle_used"><font size="15">Enter vehicle used with NumberPlate</font></string>
+    <string name="initialreading"><font size="13">Initial Reading</font></string>
+    <string name="hint_to_add_initial_reading"><font size="15">Enter initial reading</font></string>
+    <string name="finalreading"><font size="13">Final Reading</font></string>
+    <string name="hint_to_add_final_reading"><font size="15">Enter final reading</font></string>
 
 
 </resources>
