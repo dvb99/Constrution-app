@@ -1,12 +1,15 @@
 package com.example.admin.constructionsite;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,6 +29,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Equipment extends AppCompatActivity {
+    Date currentDate = new Date();
+//    Date tomorrow = new Date(currentDate.getTime() + (1000 * 60 * 60 * 24));
+//    String dateLong = DateFormat.getDateInstance(DateFormat.MEDIUM).format(tomorrow);
+    String dateLong = DateFormat.getDateInstance(DateFormat.MEDIUM).format(currentDate);
     LinearLayout layoutparent;
     RelativeLayout rl;
     ScrollView sv;
@@ -35,9 +42,7 @@ public class Equipment extends AppCompatActivity {
     ArrayList<equipmentInfo> eInfo = new ArrayList<>();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference tableuser = database.getReference();
-    Date currentDate = new Date();
-    String dateLong = DateFormat.getDateInstance(DateFormat.MEDIUM).format(currentDate);
-
+     boolean haschild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,27 @@ public class Equipment extends AppCompatActivity {
             tmpbtn2.setVisibility(View.VISIBLE);
 
             sv.addView(addmoreforsupervisor(v));
+
+            tmpbtn2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tableuser.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                            decide(dataSnapshot.child("People").child(login.usname).child(dateLong).hasChild("EquipmentInfo"));
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                }
+            });
         } else {
             // call is from admin"s 2 page
             tmpbtn1.setVisibility(View.INVISIBLE);
@@ -99,7 +125,11 @@ public class Equipment extends AppCompatActivity {
 
                     }
                     else {
-                        Toast.makeText(Equipment.this, "Supervisor has not updated Equipment data ", Toast.LENGTH_SHORT).show();
+                        Toast toast = Toast.makeText(Equipment.this,"Engineer has not updated reading yet " +"\ud83d\ude14"+"\ud83d\ude14", Toast.LENGTH_LONG);
+                        View view = toast.getView();
+                        //To change the Background of Toast
+                        view.setBackgroundColor(Color.parseColor("#bf360c"));
+                        toast.show();
                     }
 
                 }
@@ -117,7 +147,8 @@ public class Equipment extends AppCompatActivity {
 
     }
 
-    public void sendtoAdmin(View v) {
+    public void sendtoAdmin() {
+        wholesiteinfo.equipmentInfoforreportcreation.add(new equipmentInfo(edtxteqipmentType.getText().toString(), edtxtininitialReading.getText().toString(), edtxtfinalReading.getText().toString()));
         eInfo.add(new equipmentInfo(edtxteqipmentType.getText().toString(), edtxtininitialReading.getText().toString(), edtxtfinalReading.getText().toString()));
         tableuser.addValueEventListener(new ValueEventListener() {
             @Override
@@ -134,11 +165,6 @@ public class Equipment extends AppCompatActivity {
 
                 }
 
-//             Here I will display 1 alert box telling once you send data , it won't be changed again for today's date
-//              hence removing Toast.
-//                else {
-//                    Toast.makeText(Equipment.this, "Can't send Equipment data again", Toast.LENGTH_SHORT).show();
-//                }
             }
 
             @Override
@@ -146,8 +172,8 @@ public class Equipment extends AppCompatActivity {
 
             }
         });
-
         finish();
+
     }
 
     public View addmoreforsupervisor(View v) {
@@ -158,6 +184,7 @@ public class Equipment extends AppCompatActivity {
             edtxteqipmentType.setEnabled(false);
             edtxtininitialReading.setEnabled(false);
             edtxtfinalReading.setEnabled(false);
+            wholesiteinfo.equipmentInfoforreportcreation.add(new equipmentInfo(edtxteqipmentType.getText().toString(), edtxtininitialReading.getText().toString(), edtxtfinalReading.getText().toString()));
             eInfo.add(new equipmentInfo(edtxteqipmentType.getText().toString(), edtxtininitialReading.getText().toString(), edtxtfinalReading.getText().toString()));
 
         }
@@ -246,4 +273,61 @@ public class Equipment extends AppCompatActivity {
 
 
     }
+
+    private void youhavealreadysentdata() {
+        try {
+            new AlertDialog.Builder(this, R.style.CustomAlertTheme)
+                    .setTitle("Alert"+"\u2705"+"\u2705")
+                    .setMessage(" You have already sent today's vehicle reading.")
+                    .show();
+        }
+        catch (WindowManager.BadTokenException e)
+        {
+//        Added because if I delete data from firebase then
+//        it unexpectedly terminated my application.
+//        Now onwards If I delete previous day's info then app
+//        don't get terminated.
+        }
+
+    }
+    private void dialogBox()
+    {
+        try {
+            new AlertDialog.Builder(this, R.style.CustomVerifyTheme)
+                    .setTitle("Verification")
+                    .setMessage("This will be treated as final reading.You won't be able to change it later."+"\ud83d\udc48")
+                    .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sendtoAdmin();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
+        }
+        catch (WindowManager.BadTokenException e)
+        {
+//        Added because if I delete data from firebase then
+//        it unexpectedly terminated my application.
+//        Now onwards If I delete previous day's info then app
+//        don't get terminated.
+        }
+    }
+    private void decide(boolean haschd)
+    {
+        if (haschd)
+        {
+            youhavealreadysentdata();
+        }
+        else
+        {
+            dialogBox();
+        }
+    }
+
 }

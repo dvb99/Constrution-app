@@ -20,4 +20,23 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
+    <style name="CustomVerifyTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!--buttons color-->
+        <item name="colorAccent">@android:color/white</item>
+        <!--title and message color-->
+        <item name="android:textColorPrimary">@android:color/holo_green_light</item>
+        <!--dialog background-->
+        <item name="android:windowBackground">@drawable/edittext_theme</item>
+    </style>
+
+
+    <style name="CustomAlertTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+
+        <!--title and message color-->
+        <item name="android:textColorPrimary">@android:color/holo_red_dark</item>
+        <!--dialog background-->
+        <item name="android:windowBackground">@color/green_200</item>
+    </style>
+
+
 </resources>

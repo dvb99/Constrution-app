@@ -23,9 +23,9 @@
             android:layout_marginBottom="4dp"
             android:layout_marginRight="4dp"
             android:layout_marginEnd="4dp"
-            android:background="@color/cyan_100"
+            android:background="@drawable/textview_theme"
             android:textStyle="bold"
-            android:textColor="@color/lime_900"
+            android:textColor="@color/grey_white_1000"
             android:padding="4dp"
             android:onClick="addmoreforsupervisor"/>
         <Button
@@ -41,11 +41,10 @@
             android:layout_marginBottom="4dp"
             android:layout_marginRight="4dp"
             android:layout_marginEnd="4dp"
-            android:background="@color/cyan_100"
+            android:background="@drawable/textview_theme"
             android:textStyle="bold"
-            android:textColor="@color/lime_900"
-            android:padding="4dp"
-            android:onClick="sendtoAdmin"/>
+            android:textColor="@color/grey_white_1000"
+            android:padding="4dp" />
 
     </RelativeLayout>
 

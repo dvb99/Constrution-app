@@ -1,9 +1,13 @@
 package com.example.admin.constructionsite;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -23,7 +27,7 @@ import java.util.Date;
 public class Requirement extends AppCompatActivity {
 
     Date currentDate = new Date();
-    //    Date tomorrow = new Date(currentDate.getTime() + (1000 * 60 * 60 * 24));
+//    Date tomorrow = new Date(currentDate.getTime() + (1000 * 60 * 60 * 24));
 //    String dateLong = DateFormat.getDateInstance(DateFormat.MEDIUM).format(tomorrow);
     String dateLong = DateFormat.getDateInstance(DateFormat.MEDIUM).format(currentDate);
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -39,50 +43,17 @@ public class Requirement extends AppCompatActivity {
         setContentView(R.layout.communication);
         LinearLayout ll = findViewById(R.id.todoLL);
         edttxt = findViewById(R.id.chattype);
-        btncommunicate=findViewById(R.id.btnchatsend);
+        btncommunicate = findViewById(R.id.btnchatsend);
         txtview = findViewById(R.id.chatshow);
 
         toadmin = getIntent().getStringExtra("anyrequirement");
-        if(toadmin.equals("4"))
-        {
-            //call is from supervisor activity
-            ll.setVisibility(View.VISIBLE);
+        if (toadmin.equals("4")) {
             getSupportActionBar().setTitle("To " + "admin");
 
-            btncommunicate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            //call is from supervisor activity
+            ll.setVisibility(View.VISIBLE);
 
-                    tableuser.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                            if (null == dataSnapshot.child("People").child(login.usname).child(dateLong).child("Today's Requirement").getValue()) {
-                                tableuser.child("People").child(login.usname).child(dateLong).child("Today's Requirement").setValue(edttxt.getText().toString());
-                                Toast.makeText(Requirement.this, "Please send these materials", Toast.LENGTH_SHORT).show();
-
-                            }
-//                  I will display 1 alert box telling once you send data , it won't be changed again for today's date.
-//                hence removing Toast.
-//                   else
-//                   {
-//                       Toast.makeText(Labor.this, "Can't send Labor Count again", Toast.LENGTH_SHORT).show();
-//                   }
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-                    finish();
-                }
-
-
-            });
-
-            // below code added because after sending com.example.admin.constructionsite.requirement to admin
+            // below code added because after sending requirement to admin
             // supervisor can see what are the things he has asked to admin do for that day.
             tableuser.child("People").child(login.usname).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -103,12 +74,31 @@ public class Requirement extends AppCompatActivity {
                 }
             });
 
+            btncommunicate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-        }
-        else
-        {
+                    String temp = txtview.getText().toString();
+
+                    if (temp.length() == 0) {
+                        if (edttxt.getText().toString().length() == 0)
+                            dialogBox("No requirement today");
+                        else
+                            dialogBox("Typed order ");
+                    } else {
+                        //You have already sent data;
+                        youhavealreadysentdata();
+                    }
+
+
+                }
+
+
+            });
+
+        } else {
             //call is from admin's second page
-            getSupportActionBar().setTitle("From" + toadmin);
+            getSupportActionBar().setTitle("From " + toadmin);
 
             tableuser.child("People").child(toadmin).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -119,7 +109,7 @@ public class Requirement extends AppCompatActivity {
 
 
                     } catch (NullPointerException e) {
-                        Toast.makeText(Requirement.this, "No requirement from "+toadmin+" today", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Requirement.this, "No requirement from " + toadmin + " today", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -134,5 +124,72 @@ public class Requirement extends AppCompatActivity {
         }
 
 
+    }
+
+    private void send() {
+        tableuser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (null == dataSnapshot.child("People").child(login.usname).child(dateLong).child("Today's Requirement").getValue()) {
+                    wholesiteinfo.tdrequirementfromengineer=edttxt.getText().toString();
+                    tableuser.child("People").child(login.usname).child(dateLong).child("Today's Requirement").setValue(edttxt.getText().toString());
+                    Toast toast = Toast.makeText(Requirement.this, "Please send these materials "+"\ud83d\ude4f"+"\ud83d\ude4f", Toast.LENGTH_LONG);
+                    View view = toast.getView();
+                    //To change the Background of Toast
+                    view.setBackgroundColor(Color.parseColor("#558b2f"));
+                    toast.show();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        finish();
+
+
+    }
+
+    private void youhavealreadysentdata() {
+        try {
+            new AlertDialog.Builder(this, R.style.CustomAlertTheme)
+                    .setTitle("Alert"+"\u2705"+"\u2705")
+                    .setMessage(" You have already sent today's requirement.")
+                    .show();
+        } catch (WindowManager.BadTokenException e) {
+//        Added because if I delete data from firebase then
+//        it unexpectedly terminated my application.
+//        Now onwards If I delete previous day's info then app
+//        don't get terminated.
+        }
+    }
+
+    private void dialogBox(String s) {
+        try {
+            new AlertDialog.Builder(this, R.style.CustomVerifyTheme)
+                    .setTitle("Verification")
+                    .setMessage(s + " will be treated as final requirement.You won't be able to change it later."+"\ud83d\udc48")
+                    .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            send();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
+        } catch (WindowManager.BadTokenException e) {
+//        Added because if I delete data from firebase then
+//        it unexpectedly terminated my application.
+//        Now onwards If I delete previous day's info then app
+//        don't get terminated.
+        }
     }
 }

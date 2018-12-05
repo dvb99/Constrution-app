@@ -1,9 +1,13 @@
 package com.example.admin.constructionsite;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -24,7 +28,7 @@ public class ToDoList extends AppCompatActivity {
 
 
     Date currentDate = new Date();
-//    Date tomorrow = new Date(currentDate.getTime() + (1000 * 60 * 60 * 24));
+    //    Date tomorrow = new Date(currentDate.getTime() + (1000 * 60 * 60 * 24));
 //    String dateLong = DateFormat.getDateInstance(DateFormat.MEDIUM).format(tomorrow);
     String dateLong = DateFormat.getDateInstance(DateFormat.MEDIUM).format(currentDate);
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -41,7 +45,7 @@ public class ToDoList extends AppCompatActivity {
         setContentView(R.layout.communication);
         LinearLayout ll = findViewById(R.id.todoLL);
         edttxt = findViewById(R.id.chattype);
-        btncommunicate=findViewById(R.id.btnchatsend);
+        btncommunicate = findViewById(R.id.btnchatsend);
         txtview = findViewById(R.id.chatshow);
         tosupervisor = getIntent().getStringExtra("todolist");
         if (tosupervisor.equals("3")) {
@@ -72,38 +76,6 @@ public class ToDoList extends AppCompatActivity {
             ll.setVisibility(View.VISIBLE);
             getSupportActionBar().setTitle("To" + tosupervisor);
 
-            btncommunicate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    tableuser.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                            if (null == dataSnapshot.child("People").child(tosupervisor).child(dateLong).child("Today's Task").getValue()) {
-                                tableuser.child("People").child(tosupervisor).child(dateLong).child("Today's Task").setValue(edttxt.getText().toString());
-                                Toast.makeText(ToDoList.this, "Today's work submitted", Toast.LENGTH_SHORT).show();
-
-                            }
-//                  I will display 1 alert box telling once you send data , it won't be changed again for today's date.
-//                hence removing Toast.
-//                   else
-//                   {
-//                       Toast.makeText(Labor.this, "Can't send Labor Count again", Toast.LENGTH_SHORT).show();
-//                   }
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-                    finish();
-                }
-
-
-            });
             // below code added because after sending task to supervisor
             // admin can see what he has told supervisor to do for that day.
             tableuser.child("People").child(tosupervisor).addValueEventListener(new ValueEventListener() {
@@ -126,8 +98,97 @@ public class ToDoList extends AppCompatActivity {
             });
 
 
+            btncommunicate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    String temp = txtview.getText().toString();
+
+                    if (temp.length() == 0) {
+                        if (edttxt.getText().toString().length() == 0)
+                            dialogBox("No specific task today");
+                        else
+                            dialogBox("Typed task");
+                    } else {
+                        //You have already sent data;
+                        youhavealreadysentdata();
+                    }
+
+
+                }
+
+
+            });
+
+
         }
 
     }
 
+    private void send() {
+
+        tableuser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (null == dataSnapshot.child("People").child(tosupervisor).child(dateLong).child("Today's Task").getValue()) {
+                    wholesiteinfo.taskfromAdmin =edttxt.getText().toString();
+                    tableuser.child("People").child(tosupervisor).child(dateLong).child("Today's Task").setValue(edttxt.getText().toString());
+                    Toast toast = Toast.makeText(ToDoList.this, "Today's work submitted" +("\ud83d\udc4d") + ("\ud83d\udc4d"), Toast.LENGTH_LONG);
+                    View view = toast.getView();
+                    //To change the Background of Toast
+                    view.setBackgroundColor(Color.parseColor("#558b2f"));
+                    toast.show();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        finish();
+
+    }
+
+    private void youhavealreadysentdata() {
+        try {
+            new AlertDialog.Builder(this, R.style.CustomAlertTheme)
+                    .setTitle("Alert"+"\u2705"+"\u2705")
+                    .setMessage(" You have already sent today's work.")
+                    .show();
+        } catch (WindowManager.BadTokenException e) {
+//        Added because if I delete data from firebase then
+//        it unexpectedly terminated my application.
+//        Now onwards If I delete previous day's info then app
+//        don't get terminated.
+        }
+    }
+
+    private void dialogBox(String s) {
+        try {
+            new AlertDialog.Builder(this, R.style.CustomVerifyTheme)
+                    .setTitle("Verification")
+                    .setMessage(s + " will be treated as final work.You won't be able to change it later."+"\ud83d\udc48")
+                    .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            send();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
+        } catch (WindowManager.BadTokenException e) {
+//        Added because if I delete data from firebase then
+//        it unexpectedly terminated my application.
+//        Now onwards If I delete previous day's info then app
+//        don't get terminated.
+        }
+    }
 }
