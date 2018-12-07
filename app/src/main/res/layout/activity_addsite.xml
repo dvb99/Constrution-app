@@ -88,16 +88,16 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/nameofsupervisor"/>
+            android:text="@string/nameofEngineer"/>
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:hint="@string/hint_to_set_supervisor_username"
+            android:hint="@string/hint_to_set_engineer_username"
             android:layout_weight="1"
             android:gravity="center"
             android:inputType="text"
-            android:id="@+id/Supervisorofsite"
+            android:id="@+id/Engineerofsite"
             />
 
     </LinearLayout>
@@ -112,16 +112,16 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/setsupervisorPassword"/>
+            android:text="@string/setEngineerPassword"/>
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:hint="@string/hint_to_set_supervisor_password"
+            android:hint="@string/hint_to_set_engineer_password"
             android:layout_weight="1"
             android:gravity="center"
             android:inputType="text"
-            android:id="@+id/Supervisorpassword"
+            android:id="@+id/Engineerpassword"
             />
 
     </LinearLayout>
@@ -131,7 +131,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/createnewsite"
+        android:textColor="@color/indigo_500"
         android:onClick="createobj"
+        android:background="@drawable/edittext_theme"
         android:gravity="center"/>
 
 

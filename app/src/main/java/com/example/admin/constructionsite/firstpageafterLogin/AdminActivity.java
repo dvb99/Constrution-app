@@ -41,7 +41,7 @@ public class AdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_specificforadminnow);
 
-        final ArrayList<Card> cardTile = new ArrayList<Card>();
+        final ArrayList<Card> cardTile = new ArrayList<>();
         cardTile.add(new Card("Pipeline", R.drawable.pipelinecopy, Color.parseColor("#fde0dc")));
         cardTile.add(new Card("Watertank", R.drawable.watertankconstructioncopy, Color.parseColor("#a6baff")));
         cardTile.add(new Card("Roadpavement", R.drawable.roadpavementcopy, Color.parseColor("#42bd41")));
@@ -56,10 +56,10 @@ public class AdminActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
                 Card card = (Card)adapterView.getItemAtPosition(position);
-                final ArrayList<SiteObject> pipeline = new ArrayList<SiteObject>();
-                final ArrayList<SiteObject> watertank = new ArrayList<SiteObject>();
-                final ArrayList<SiteObject> roadpavement = new ArrayList<SiteObject>();
-                final ArrayList<SiteObject> buildingconstru = new ArrayList<SiteObject>();
+                final ArrayList<SiteObject> pipeline = new ArrayList<>();
+                final ArrayList<SiteObject> watertank = new ArrayList<>();
+                final ArrayList<SiteObject> roadpavement = new ArrayList<>();
+                final ArrayList<SiteObject> buildingconstru = new ArrayList<>();
                 //Toast are sucking my life , hence removing
 
 
@@ -193,7 +193,7 @@ public class AdminActivity extends AppCompatActivity {
                         dl.closeDrawers();
                         break;
                     //Toast.makeText(AdminActivity.this, "SITE ADDED", Toast.LENGTH_SHORT).show();
-                    case R.id.deletesite:
+                    case R.id.deleteEngineer:
                         Toast.makeText(AdminActivity.this, "SITE DELETED", Toast.LENGTH_SHORT).show();
                         // Close the drawer as soon as possible
                         dl.closeDrawers();

@@ -31,7 +31,7 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
     final DatabaseReference tableuserCS = databaseforConstructionSite.getReference();
 
     FirebaseDatabase databaseforUser = FirebaseDatabase.getInstance();
-    final DatabaseReference tableuserUs = databaseforUser.getReference("User").child("Supervisor");
+    final DatabaseReference tableuserUs = databaseforUser.getReference("User").child("Engineer");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +51,8 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
     {
         final EditText t2 = findViewById(R.id.Nameofsite);
         final EditText t3 = findViewById(R.id.Areaofsite);
-        final EditText t4 = findViewById(R.id.Supervisorofsite);
-        final EditText forsupervisorpassword = findViewById(R.id.Supervisorpassword);
+        final EditText t4 = findViewById(R.id.Engineerofsite);
+        final EditText forengineerpassword = findViewById(R.id.Engineerpassword);
 
         tableuserCS.addChildEventListener(new ChildEventListener() {
             @Override
@@ -87,9 +87,9 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
         tableuserUs.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User us = new User(t4.getText().toString(), forsupervisorpassword.getText().toString());
+                User us = new User(t4.getText().toString(), forengineerpassword.getText().toString());
                 tableuserUs.child(t4.getText().toString()).setValue(us);
-                Toast.makeText(AddSite.this, "Supervisor Added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddSite.this, "Engineer Added", Toast.LENGTH_SHORT).show();
 
             }
 

@@ -1,6 +1,8 @@
 package com.example.admin.constructionsite;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -127,12 +129,15 @@ public class Requirement extends AppCompatActivity {
     }
 
     private void send() {
+        SharedPreferences sharedPre =getSharedPreferences("wholesiteinfo", Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPre.edit();
         tableuser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (null == dataSnapshot.child("People").child(login.usname).child(dateLong).child("Today's Requirement").getValue()) {
-                    wholesiteinfo.tdrequirementfromengineer=edttxt.getText().toString();
+                    editor.putString("tdrequirementfromengineer",edttxt.getText().toString());
+                    editor.apply();
                     tableuser.child("People").child(login.usname).child(dateLong).child("Today's Requirement").setValue(edttxt.getText().toString());
                     Toast toast = Toast.makeText(Requirement.this, "Please send these materials "+"\ud83d\ude4f"+"\ud83d\ude4f", Toast.LENGTH_LONG);
                     View view = toast.getView();

@@ -9,6 +9,7 @@
 
     <EditText
         android:id="@+id/username"
+        android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginEnd="16dp"
@@ -57,11 +58,11 @@
             android:text="@string/admin" />
 
         <RadioButton
-            android:id="@+id/supervisor"
+            android:id="@+id/engineer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/supervisor" />
+            android:text="@string/engineer" />
     </RadioGroup>
 
 

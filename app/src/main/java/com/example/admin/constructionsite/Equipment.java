@@ -1,9 +1,11 @@
 package com.example.admin.constructionsite;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -148,8 +151,15 @@ public class Equipment extends AppCompatActivity {
     }
 
     public void sendtoAdmin() {
-        wholesiteinfo.equipmentInfoforreportcreation.add(new equipmentInfo(edtxteqipmentType.getText().toString(), edtxtininitialReading.getText().toString(), edtxtfinalReading.getText().toString()));
         eInfo.add(new equipmentInfo(edtxteqipmentType.getText().toString(), edtxtininitialReading.getText().toString(), edtxtfinalReading.getText().toString()));
+
+        SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this.getApplicationContext());
+        SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(eInfo);
+        prefsEditor.putString("MyObject", json);
+        prefsEditor.apply();
         tableuser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -184,7 +194,6 @@ public class Equipment extends AppCompatActivity {
             edtxteqipmentType.setEnabled(false);
             edtxtininitialReading.setEnabled(false);
             edtxtfinalReading.setEnabled(false);
-            wholesiteinfo.equipmentInfoforreportcreation.add(new equipmentInfo(edtxteqipmentType.getText().toString(), edtxtininitialReading.getText().toString(), edtxtfinalReading.getText().toString()));
             eInfo.add(new equipmentInfo(edtxteqipmentType.getText().toString(), edtxtininitialReading.getText().toString(), edtxtfinalReading.getText().toString()));
 
         }

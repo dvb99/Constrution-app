@@ -1,6 +1,8 @@
 package com.example.admin.constructionsite;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -141,6 +143,8 @@ public class Labor extends AppCompatActivity  {
 
     private void send ()
     {
+        SharedPreferences sharedPre =getSharedPreferences("wholesiteinfo", Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPre.edit();
         tableuser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -148,7 +152,8 @@ public class Labor extends AppCompatActivity  {
                 if(null==dataSnapshot.child("People").child(login.usname).child(dateLong).child("LaborCount").getValue()) {
                     EditText edit_text =  findViewById(R.id.manpowerused);
                     tableuser.child("People").child(login.usname).child(dateLong).child("LaborCount").setValue(edit_text.getText().toString());
-                    wholesiteinfo.cnt = edit_text.getText().toString();
+                    editor.putString("cnt",edit_text.getText().toString());
+                    editor.apply();
                     Toast toast = Toast.makeText(Labor.this, "Sent Labor count Successfully" +("\ud83d\udc4d") + ("\ud83d\udc4d"), Toast.LENGTH_LONG);
                     View view = toast.getView();
                     //To change the Background of Toast

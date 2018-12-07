@@ -9,11 +9,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/login_button"
+            android:id="@+id/sitereport_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -35,9 +36,12 @@
             android:layout_marginTop="4dp"
             android:text="@string/reporttitle"
             android:textColorHighlight="@color/pink_200"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_gravity="left"
+            />
 
         <EditText
+            android:id="@+id/ent_rpt_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -59,19 +63,22 @@
             android:layout_marginTop="2dp"
             android:text="@string/reportdiscription"
             android:textColorHighlight="@color/pink_200"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_gravity="left"
+            />
 
         <EditText
+            android:id="@+id/ent_rpt_description"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-        android:gravity="start"
             android:layout_marginTop="2dp"
+            android:gravity="start"
             android:hint="@string/hint_for_report_discription"
-        android:maxLines="8"
             android:inputType="textMultiLine"
+            android:maxLines="8"
             android:textSize="18sp" />
 
         <TextView
@@ -83,9 +90,12 @@
             android:layout_marginTop="2dp"
             android:text="@string/areaofsite"
             android:textColorHighlight="@color/pink_200"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_gravity="left"
+            />
 
         <EditText
+            android:id="@+id/ent_rpt_sitelocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -101,26 +111,113 @@
             android:id="@+id/sitereportimage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="center"
+            android:layout_margin="4dp"
             android:adjustViewBounds="true"
-            android:layout_margin="4dp"/>
+            android:scaleType="center" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/constructiontype" />
+
+            <Spinner
+                android:id="@+id/simpleSpinner_in_sitereport"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+
+        <TableLayout
+            android:id="@+id/tl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:stretchColumns="*"
+            tools:context=".sitereport">
+
+            <TableRow
+                android:id="@+id/tr_header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/table_row_bg"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/sinceprevious"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_cell_bg"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:text="@string/snc_previous" />
+
+                <TextView
+                    android:id="@+id/tv_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_cell_bg"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:text="@string/uptodate" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tr_item_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/table_row_bg"
+                android:padding="5dp">
+
+                <EditText
+                    android:id="@+id/_item_sinceprevious"
+                    android:inputType="text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_cell_bg"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:hint=""/>
+
+                <EditText
+                    android:id="@+id/item_uptodate"
+                    android:inputType="text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_cell_bg"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:gravity="center"
+                    android:hint=" "/>
+            </TableRow>
+        </TableLayout>
+
+
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
-
             <com.nightonke.boommenu.BoomMenuButton
                 android:id="@+id/bmb"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_alignParentBottom="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 app:bmb_buttonEnum="ham"
-                app:bmb_buttonPlaceEnum="buttonPlace_ham_4"
-                app:bmb_piecePlaceEnum="piecePlace_ham_4" />
+                app:bmb_buttonPlaceEnum="buttonPlace_ham_3"
+                app:bmb_piecePlaceEnum="piecePlace_ham_3" />
 
         </RelativeLayout>
 

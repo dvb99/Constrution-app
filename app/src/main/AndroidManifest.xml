@@ -21,7 +21,7 @@
             android:label="@string/admin"/>
         <activity
             android:name=".firstpageafterLogin.SupervisorActivity"
-            android:label="@string/supervisor"/>
+            android:label="@string/engineer" />
         <activity android:name=".Login.login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,6 +52,7 @@
         <activity android:name=".Labor" />
         <activity
             android:name=".sitereport"
+            android:configChanges="keyboard|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".Equipment"/>
         <activity android:name=".ToDoList"/>
@@ -67,7 +68,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path"/>
         </provider>
-    </application>
+         </application>
 
 
 </manifest>
