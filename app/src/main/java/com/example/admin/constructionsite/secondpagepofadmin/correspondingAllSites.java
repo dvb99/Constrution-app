@@ -1,20 +1,35 @@
 package com.example.admin.constructionsite.secondpagepofadmin;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.admin.constructionsite.Equipment;
 import com.example.admin.constructionsite.Labor;
 import com.example.admin.constructionsite.R;
 import com.example.admin.constructionsite.Requirement;
 import com.example.admin.constructionsite.ToDoList;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class correspondingAllSites extends AppCompatActivity implements
         siteadapter.customButtonListener {
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference tableuser = database.getReference();
+
+    Date currentDate = new Date();
+    String dateLong = DateFormat.getDateInstance(DateFormat.MEDIUM).format(currentDate);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +77,30 @@ public class correspondingAllSites extends AppCompatActivity implements
                     intent.putExtra("anyrequirement", supervisorName);
                     startActivity(intent);
                     break;
+                }
+                case 5:
+                {
+
+                    tableuser.child("uploads").child("People").child(supervisorName).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            try {
+                                //Opening the upload file in browser using the upload url
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setData(Uri.parse(dataSnapshot.child(dateLong).child("Report").getValue().toString()));
+                                startActivity(intent);
+
+                            } catch (NullPointerException e) {
+                                Toast.makeText(correspondingAllSites.this, "Can't open file", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
 
             }

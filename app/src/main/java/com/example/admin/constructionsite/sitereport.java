@@ -1,6 +1,7 @@
 package com.example.admin.constructionsite;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +15,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -29,6 +32,17 @@ import android.widget.TableLayout;
 import android.widget.Toast;
 
 import com.example.admin.constructionsite.Login.login;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.itextpdf.text.BaseColor;
@@ -81,6 +95,11 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
     private static final int IMAGE_REQUEST = 1;
     LinkedHashMap<String, String> additiontoreport = new LinkedHashMap<>();
     private String selected;
+    //the firebase objects for storage and database
+    StorageReference mStorageReference;
+    DatabaseReference mDatabaseReference;
+    //this is the pic pdf code used in file chooser
+    final static int PICK_PDF_CODE = 2342;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +168,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
                                         }
                                     }
+                                    break;
                                 }
 
 //                                case 2: {
@@ -156,7 +176,8 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 //                                }
                                 case 2:
                                     //Send to admin
-
+                                    getPDF();
+                                    break;
                             }
 
                         }
@@ -164,6 +185,9 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
             bmb.addBuilder(builder);
         }
+        //getting firebase objects
+        mStorageReference = FirebaseStorage.getInstance().getReference();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_PATH_UPLOADS);
 
 
     }
@@ -171,12 +195,12 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
     public void setdata() {
         imageresourceid.add(R.drawable.ic_add_a_photo_pink_a400_24dp);
         imageresourceid.add(R.drawable.report);
-      //  imageresourceid.add(R.drawable.ic_picture_as_pdf_light_green_a700_24dp);
+        //  imageresourceid.add(R.drawable.ic_picture_as_pdf_light_green_a700_24dp);
         imageresourceid.add(R.drawable.ic_send_purple_a200_24dp);
         stringresourceid.add("Take today's progress photo");
         stringresourceid.add("Create a report");
         //I will add functionality of viewing report in updates like 1.1
-     //   stringresourceid.add("View report");
+        //   stringresourceid.add("View report");
         stringresourceid.add("Send to Admin");
     }
 
@@ -249,6 +273,16 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                 imageView.setImageBitmap(btmap);
             }
         }
+        //when the user choses the file
+        if (requestCode == PICK_PDF_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            //if a file is selected
+            if (data.getData() != null) {
+                //uploading the file
+                uploadFile(data.getData());
+            } else {
+                Toast.makeText(this, "No file chosen", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void createPDF() throws FileNotFoundException, DocumentException {
@@ -256,7 +290,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
         Document doc = new Document();
         doc.setPageSize(PageSize.A3);
-        doc.setMargins(2,0,2,2);
+        doc.setMargins(2, 0, 2, 2);
 
         String pdfName = "/";
         pdfName = pdfName + login.usname + dateLong;
@@ -280,7 +314,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             preface.setAlignment(Element.ALIGN_CENTER);
             doc.add(preface);
 
-            Paragraph date = new Paragraph("\n"+"                " + dateLong + "\n\n", fontdate);
+            Paragraph date = new Paragraph("\n" + "                " + dateLong + "\n\n", fontdate);
             date.setAlignment(Element.ALIGN_LEFT);
             doc.add(date);
 
@@ -312,7 +346,6 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             ArrayList<equipmentInfo> equipmentInfoArrayList = gson.fromJson(json, type);
 
 
-
             PdfPTable table = new PdfPTable(2); // 2 columns.
             float[] columnWidths = {1f, 2f};
             try {
@@ -330,7 +363,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             cell1.setPaddingBottom(5);
             cell1.setPaddingLeft(5);
 
-            PdfPCell cell2 = new PdfPCell(new Paragraph("\n" , fontcontent));
+            PdfPCell cell2 = new PdfPCell(new Paragraph("\n", fontcontent));
             cell2.setVerticalAlignment(Element.ALIGN_CENTER);
             cell2.setHorizontalAlignment(Element.ALIGN_MIDDLE);
             cell2.setBorder(Rectangle.ALIGN_BOTTOM);
@@ -340,15 +373,15 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
 
             PdfPTable nestedTableHeader = new PdfPTable(3);
-            float[] columnWidthsinnested = {1f, 1.5f,1.5f};
+            float[] columnWidthsinnested = {1f, 1.5f, 1.5f};
             try {
                 nestedTableHeader.setWidths(columnWidthsinnested);
             } catch (DocumentException e) {
                 Toast.makeText(this, "column document exception", Toast.LENGTH_SHORT).show();
             }
-            nestedTableHeader.addCell(new Paragraph("Vehicle",fontcontent));
-            nestedTableHeader.addCell(new Paragraph("Initial Reading",fontcontent));
-            nestedTableHeader.addCell(new Paragraph("Final Reading",fontcontent));
+            nestedTableHeader.addCell(new Paragraph("Vehicle", fontcontent));
+            nestedTableHeader.addCell(new Paragraph("Initial Reading", fontcontent));
+            nestedTableHeader.addCell(new Paragraph("Final Reading", fontcontent));
             nestedTableHeader.setPaddingTop(2);
             cell2.addElement(nestedTableHeader);
 
@@ -360,9 +393,9 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                 } catch (DocumentException e) {
                     Toast.makeText(this, "column document exception", Toast.LENGTH_SHORT).show();
                 }
-                nestedTable.addCell(new Paragraph(obj.getEquipmentWithNumberplate(),fontcontent));
-                nestedTable.addCell(new Paragraph(obj.getInitialReading(),fontcontent));
-                nestedTable.addCell(new Paragraph(obj.getFinalReading(),fontcontent));
+                nestedTable.addCell(new Paragraph(obj.getEquipmentWithNumberplate(), fontcontent));
+                nestedTable.addCell(new Paragraph(obj.getInitialReading(), fontcontent));
+                nestedTable.addCell(new Paragraph(obj.getFinalReading(), fontcontent));
                 nestedTable.setPaddingTop(2);
                 cell2.addElement(nestedTable);
             }
@@ -403,7 +436,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             Toast.makeText(sitereport.this, "Please give access for storage", Toast.LENGTH_SHORT).show();
             //  e.printStackTrace();
         } catch (DocumentException e1) {
-            Toast.makeText(sitereport.this, "" + e1, Toast.LENGTH_SHORT).show();
+            Toast.makeText(sitereport.this, "Document Exception" + e1, Toast.LENGTH_SHORT).show();
             e1.printStackTrace();
         }
     }
@@ -486,7 +519,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
     }
 
     private PdfPTable addtoreport(HashMap<String, String> additiontoreport) {
-        int i=0;
+        int i = 0;
         PdfPTable table = new PdfPTable(2); // 2 columns.
         float[] columnWidths = {1f, 2f};
         try {
@@ -514,7 +547,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             cell2.setBorder(Rectangle.ALIGN_BOTTOM);
             cell2.setPaddingBottom(5);
             cell2.setPaddingLeft(5);
-            if (i==0){
+            if (i == 0) {
                 cell1.setBorder(Rectangle.ALIGN_TOP);
                 cell2.setBorder(Rectangle.ALIGN_TOP);
                 cell1.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -586,5 +619,94 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             rect.setUseVariableBorders(true); // the full width will be visible
             canvas.rectangle(rect);
         }
+    }
+
+    public class Constants {
+        static final String STORAGE_PATH_UPLOADS = "uploads/";
+        static final String DATABASE_PATH_UPLOADS = "uploads";
+    }
+
+    //this function will get the pdf from the storage
+    private void getPDF() {
+        //for greater than lolipop versions we need the permissions asked on runtime
+        //so if the permission is not available user will go to the screen to allow storage permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package:" + getPackageName()));
+            startActivity(intent);
+            return;
+        }
+
+        //creating an intent for file chooser
+        Intent intent = new Intent();
+        intent.setType("application/pdf");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_PDF_CODE);
+    }
+
+    private void uploadFile(Uri data) {
+        //displaying a progress dialog while upload is going on
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading");
+        progressDialog.show();
+      //  final StorageReference sRef = mStorageReference.child(Constants.STORAGE_PATH_UPLOADS + System.currentTimeMillis() + ".pdf");
+        final StorageReference sRef = mStorageReference.child(Constants.STORAGE_PATH_UPLOADS + login.usname+dateLong + ".pdf");
+
+
+        sRef.putFile(data).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+                return sRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    progressDialog.dismiss();
+                    Uri downloadUri = task.getResult();
+                    String temp = downloadUri.toString();
+                   // Toast.makeText(getApplicationContext(), downloadUri + "", Toast.LENGTH_LONG).show();
+
+                    mDatabaseReference.child("People").child(login.usname).child(dateLong).child("Report").setValue(temp);
+
+                } else {
+                    Toast.makeText(sitereport.this, "upload failed: " , Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        sRef.putFile(data)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @SuppressWarnings("VisibleForTests")
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @SuppressWarnings("VisibleForTests")
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        //calculating progress percentage
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                        //displaying percentage in progress dialog
+                        progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+
+                    }
+                });
+
     }
 }
