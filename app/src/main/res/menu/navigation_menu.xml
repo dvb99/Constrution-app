@@ -6,7 +6,7 @@
         android:title="@string/addsite"/>
     <item android:id="@+id/deleteEngineer"
         android:icon="@drawable/ic_delete_red_a700_24dp"
-        android:title="@string/deletesite"/>
+        android:title="@string/deleteEngineer"/>
     <item android:id="@+id/locate"
         android:icon="@drawable/ic_location_on_cyan_a700_24dp"
         android:title="@string/locate"/>

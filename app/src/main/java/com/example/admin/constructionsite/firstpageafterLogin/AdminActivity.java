@@ -2,6 +2,7 @@ package com.example.admin.constructionsite.firstpageafterLogin;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -15,6 +16,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.example.admin.constructionsite.AddSite;
+import com.example.admin.constructionsite.EngineerDeletePage;
 import com.example.admin.constructionsite.R;
 import com.example.admin.constructionsite.secondpagepofadmin.SiteObject;
 import com.example.admin.constructionsite.secondpagepofadmin.correspondingAllSites;
@@ -35,6 +37,8 @@ public class AdminActivity extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     final DatabaseReference tableuser = database.getReference("ConstructionSite");
+    final DatabaseReference engdelete = database.getReference("User");
+    final ArrayList<String> engineernames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,12 +198,39 @@ public class AdminActivity extends AppCompatActivity {
                         break;
                     //Toast.makeText(AdminActivity.this, "SITE ADDED", Toast.LENGTH_SHORT).show();
                     case R.id.deleteEngineer:
-                        Toast.makeText(AdminActivity.this, "SITE DELETED", Toast.LENGTH_SHORT).show();
+
+                        engdelete.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                //this 1 below line surpassed the problem (1st time opening of pipeline sites after a site has been created form create area) beautifully.
+                                engineernames.clear();
+                                for (DataSnapshot ds : dataSnapshot.child("Engineer").getChildren()) {
+
+                                        engineernames.add(ds.getKey());
+
+                                }
+                                Intent intent = new Intent(AdminActivity.this, EngineerDeletePage.class);
+                                intent.putExtra("listofengineer", engineernames);
+                                startActivity(intent);
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
                         // Close the drawer as soon as possible
                         dl.closeDrawers();
                         break;
                     case R.id.locate:
-                        Toast.makeText(AdminActivity.this, "LOCATING USER", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse("http://www.tmyf.biz/SiteLogin.aspx?ReturnUrl=%2fprohome.aspx"));
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            startActivity(intent);
+                        }
+                        Toast.makeText(AdminActivity.this, "Locating Vehicle", Toast.LENGTH_SHORT).show();
                         // Close the drawer as soon as possible
                         dl.closeDrawers();
                         break;

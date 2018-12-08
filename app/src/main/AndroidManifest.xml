@@ -68,7 +68,17 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path"/>
         </provider>
-         </application>
+
+        <activity android:name=".EngineerDeletePage"
+            android:label="@string/engineer"
+            android:parentActivityName=".firstpageafterLogin.AdminActivity">
+
+        <!-- Parent activity meta-data to support 4.0 and lower -->
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity" />
+        </activity>
+    </application>
 
 
 </manifest>
