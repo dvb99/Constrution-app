@@ -10,5 +10,8 @@
     <item android:id="@+id/locate"
         android:icon="@drawable/ic_location_on_cyan_a700_24dp"
         android:title="@string/locate"/>
+    <item android:id="@+id/addMember"
+        android:icon="@drawable/ic_supervisor_account_black_24dp"
+        android:title="@string/addMember"/>
 
 </menu>

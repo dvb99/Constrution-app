@@ -57,6 +57,15 @@
         <activity android:name=".Equipment"/>
         <activity android:name=".ToDoList"/>
         <activity android:name=".Requirement"/>
+        <activity android:name=".Add_Member"
+            android:label="@string/addMember"
+            android:parentActivityName=".firstpageafterLogin.AdminActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity" />
+        </activity>
 
 
         <provider

@@ -16,6 +16,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.example.admin.constructionsite.AddSite;
+import com.example.admin.constructionsite.Add_Member;
 import com.example.admin.constructionsite.EngineerDeletePage;
 import com.example.admin.constructionsite.R;
 import com.example.admin.constructionsite.secondpagepofadmin.SiteObject;
@@ -234,6 +235,11 @@ public class AdminActivity extends AppCompatActivity {
                         // Close the drawer as soon as possible
                         dl.closeDrawers();
                         break;
+                    case R.id.addMember:
+                        startActivity(new Intent(AdminActivity.this, Add_Member.class));
+
+                        break;
+
 //                    default:
 //                        return true;
                 }

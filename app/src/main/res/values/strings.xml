@@ -12,6 +12,7 @@
     <string name="navigation_drawer_open">Drawer Open</string>
     <string name="navigation_drawer_close">Drawer Closed</string>
     <string name="addsite">Add Site</string>
+    <string name="addMember">Add Member</string>
     <string name="deleteEngineer">Delete Engineer</string>
     <string name="locate">Locate</string>
     <string name="constructiontype">ConstructionType</string>
