@@ -24,7 +24,10 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
     String selected;
 
     String[] siteTypes = {"Pipeline", "Watertank", "Roadpavement", "Buildingconstru"};
-    int construtionPhoto[] = {R.drawable.pipelinecopy, R.drawable.watertankconstructioncopy, R.drawable.roadpavementcopy, R.drawable.buildingconstructioncopy};
+    String construtionPhoto[] = {"https://firebasestorage.googleapis.com/v0/b/construtionapp.appspot.com/o/AdminImages%2Fpipelinecopy.png?alt=media&token=afdef9cd-d9e7-4cd6-a09c-1b439d04f685"
+            , "https://firebasestorage.googleapis.com/v0/b/construtionapp.appspot.com/o/AdminImages%2Fwatertankconstructioncopy.jpg?alt=media&token=a5aedfd0-f4a5-4fad-8a8f-57cf7f0e73fa",
+            "https://firebasestorage.googleapis.com/v0/b/construtionapp.appspot.com/o/AdminImages%2Froadpavementcopy.jpg?alt=media&token=7b80c529-debc-40f5-9577-6dda7e60ee8d",
+            "https://firebasestorage.googleapis.com/v0/b/construtionapp.appspot.com/o/AdminImages%2Fbuildingconstructioncopy.jpg?alt=media&token=e2a815d0-2db6-4faf-9e05-c06133b1a160"};
 
 
     FirebaseDatabase databaseforConstructionSite = FirebaseDatabase.getInstance();

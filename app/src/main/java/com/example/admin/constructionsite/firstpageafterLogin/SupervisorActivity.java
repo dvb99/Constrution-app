@@ -25,11 +25,11 @@ public class SupervisorActivity extends AppCompatActivity {
         setContentView(R.layout.afterlogin_thislayout_specific_for_supervisor);
 
         ArrayList<Card> cardTile = new ArrayList<>();
-        cardTile.add(new Card("Labor", R.drawable.laborcopy, Color.parseColor("#fde0dc")));
-        cardTile.add(new Card("Equipment", R.drawable.equipmentcopy, Color.parseColor("#a6baff")));
-        cardTile.add(new Card("Tasks", R.drawable.taskcopy, Color.parseColor("#42bd41")));
-        cardTile.add(new Card("Requirement", R.drawable.requirementcopy, Color.parseColor("#fdd835")));
-        cardTile.add(new Card("Report", R.drawable.reportcardcopy, Color.parseColor("#90a4ae")));
+        cardTile.add(new Card("Labor","https://firebasestorage.googleapis.com/v0/b/construtionapp.appspot.com/o/EngineerImages%2Flaborcopy.jpg?alt=media&token=6aedda2c-a5d5-4f91-abbe-5f8222672cd8", Color.parseColor("#fde0dc")));
+        cardTile.add(new Card("Equipment","https://firebasestorage.googleapis.com/v0/b/construtionapp.appspot.com/o/EngineerImages%2Fequipmentcopy.jpg?alt=media&token=69e12378-02db-4cdc-afe3-66d29fb5cb2f", Color.parseColor("#a6baff")));
+        cardTile.add(new Card("Tasks", "https://firebasestorage.googleapis.com/v0/b/construtionapp.appspot.com/o/EngineerImages%2Ftaskcopy.png?alt=media&token=cf022efb-fb89-4683-bf4f-00276d4e0685", Color.parseColor("#42bd41")));
+        cardTile.add(new Card("Requirement", "https://firebasestorage.googleapis.com/v0/b/construtionapp.appspot.com/o/EngineerImages%2Frequirementcopy.jpg?alt=media&token=7af46c58-ebad-44f1-a4be-4ecc108cf505", Color.parseColor("#fdd835")));
+        cardTile.add(new Card("Report", "https://firebasestorage.googleapis.com/v0/b/construtionapp.appspot.com/o/EngineerImages%2Freportcardcopy.jpg?alt=media&token=111748ba-5877-4f6a-b337-e6e7ec7ffd8f", Color.parseColor("#90a4ae")));
         firstpageadapter adapter = new firstpageadapter(this, cardTile);
         GridView gridView = findViewById(R.id.firstopening);
         gridView.setAdapter(adapter);

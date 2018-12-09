@@ -8,13 +8,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CustomSpinnerAdapter extends BaseAdapter {
-    Context context;
-    int constructionimages[];
-    String[] sitetyp;
-    LayoutInflater inflter;
+import com.squareup.picasso.Picasso;
 
-    public CustomSpinnerAdapter(Context applicationContext, int[] constructionimages, String[] sitetyp) {
+public class CustomSpinnerAdapter extends BaseAdapter {
+    private Context context;
+    private String constructionimages[];
+    private String[] sitetyp;
+    private LayoutInflater inflter;
+
+    public CustomSpinnerAdapter(Context applicationContext, String[] constructionimages, String[] sitetyp) {
         this.context = applicationContext;
         this.constructionimages = constructionimages;
         this.sitetyp = sitetyp;
@@ -45,7 +47,7 @@ public class CustomSpinnerAdapter extends BaseAdapter {
         }
         ImageView icon =  listItemView.findViewById(R.id.imageView);
         TextView names =  listItemView.findViewById(R.id.textView);
-        icon.setImageResource(constructionimages[position]);
+        Picasso.get().load(constructionimages[position]).into(icon);
         names.setText(sitetyp[position]);
         return listItemView;
     }

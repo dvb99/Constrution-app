@@ -47,10 +47,10 @@ public class AdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_specificforadminnow);
 
         final ArrayList<Card> cardTile = new ArrayList<>();
-        cardTile.add(new Card("Pipeline", R.drawable.pipelinecopy, Color.parseColor("#fde0dc")));
-        cardTile.add(new Card("Watertank", R.drawable.watertankconstructioncopy, Color.parseColor("#a6baff")));
-        cardTile.add(new Card("Roadpavement", R.drawable.roadpavementcopy, Color.parseColor("#42bd41")));
-        cardTile.add(new Card("Buildingconstru", R.drawable.buildingconstructioncopy, Color.parseColor("#fdd835")));
+        cardTile.add(new Card("Pipeline", "https://firebasestorage.googleapis.com/v0/b/construtionapp.appspot.com/o/AdminImages%2Fpipelinecopy.png?alt=media&token=afdef9cd-d9e7-4cd6-a09c-1b439d04f685", Color.parseColor("#fde0dc")));
+        cardTile.add(new Card("Watertank", "https://firebasestorage.googleapis.com/v0/b/construtionapp.appspot.com/o/AdminImages%2Fwatertankconstructioncopy.jpg?alt=media&token=a5aedfd0-f4a5-4fad-8a8f-57cf7f0e73fa", Color.parseColor("#a6baff")));
+        cardTile.add(new Card("Roadpavement", "https://firebasestorage.googleapis.com/v0/b/construtionapp.appspot.com/o/AdminImages%2Froadpavementcopy.jpg?alt=media&token=7b80c529-debc-40f5-9577-6dda7e60ee8d", Color.parseColor("#42bd41")));
+        cardTile.add(new Card("Buildingconstru", "https://firebasestorage.googleapis.com/v0/b/construtionapp.appspot.com/o/AdminImages%2Fbuildingconstructioncopy.jpg?alt=media&token=e2a815d0-2db6-4faf-9e05-c06133b1a160", Color.parseColor("#fdd835")));
         firstpageadapter adapter = new firstpageadapter(this, cardTile);
         GridView gridView = findViewById(R.id.firstopening);
         gridView.setAdapter(adapter);

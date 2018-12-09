@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.admin.constructionsite.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -40,7 +41,7 @@ public class firstpageadapter extends ArrayAdapter<Card> {
         cardtextview.setText(currentcard.getCdtitle());
 
         ImageView imageView = cardview.findViewById(R.id.imgforcard);
-        imageView.setImageResource(currentcard.getCdimageid());
+        Picasso.get().load(currentcard.getUrl()).into(imageView);
 
 
         // Set the theme color for the list item
