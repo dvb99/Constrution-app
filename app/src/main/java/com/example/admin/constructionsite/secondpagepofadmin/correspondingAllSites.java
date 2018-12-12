@@ -91,7 +91,7 @@ public class correspondingAllSites extends AppCompatActivity implements
                                 startActivity(intent);
 
                             } catch (NullPointerException e) {
-                                Toast.makeText(correspondingAllSites.this, "Can't open file", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(correspondingAllSites.this, "File has not uploaded yet by Engineer", Toast.LENGTH_SHORT).show();
                             }
                         }
 

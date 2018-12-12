@@ -165,8 +165,16 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                                             Toast.makeText(sitereport.this, "File not found I am in case 2", Toast.LENGTH_SHORT).show();
                                         } catch (DocumentException e) {
                                             Toast.makeText(sitereport.this, "Document Exception I am in case 2", Toast.LENGTH_SHORT).show();
-
+                                            }
+                                        catch (NullPointerException npe)
+                                        {
+                                            Toast.makeText(sitereport.this, "Please upload equipment data first", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                            Intent intent = new Intent(sitereport.this, Equipment.class);
+                                            intent.putExtra("forequip", "2");
+                                            startActivity(intent);
                                         }
+
                                     }
                                     break;
                                 }
