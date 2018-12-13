@@ -42,6 +42,23 @@ public class login extends AppCompatActivity {
         // Figure out if the user has checked supervisor RadioButton
         engineerradiobutton = findViewById(R.id.engineer);
 
+        adminradiobutton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    adminradiobutton.setChecked(true);
+                    engineerradiobutton.setChecked(false);
+
+            }
+        });
+        engineerradiobutton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    engineerradiobutton.setChecked(true);
+                    adminradiobutton.setChecked(false);
+
+            }
+        });
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference tableuser = database.getReference("User");
@@ -112,7 +129,7 @@ public class login extends AppCompatActivity {
                 }
             }
         });
-        getSupportActionBar().setTitle("LogIn");
+
 
     }
 }

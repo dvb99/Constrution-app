@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">SVJ</string>
 
-    <string name="username_hint"><font size="18">Username</font></string>
-    <string name="password_hint"><font size="18">Password</font></string>
-    <string name="login"><font size="22">Log In</font></string>
+    <string name="username_hint"><font size="13">username</font></string>
+    <string name="password_hint"><font size="13">password</font></string>
+    <string name="login"><font size="16">Log In</font></string>
 
     <string name="title_activity_onetimeopening">onetimeopening</string>
     <string name="admin">Admin</string>

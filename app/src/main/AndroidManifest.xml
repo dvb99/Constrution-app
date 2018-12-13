@@ -22,7 +22,8 @@
         <activity
             android:name=".firstpageafterLogin.SupervisorActivity"
             android:label="@string/engineer" />
-        <activity android:name=".Login.login">
+        <activity android:name=".Login.login"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
