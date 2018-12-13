@@ -22,7 +22,8 @@
         <activity
             android:name=".firstpageafterLogin.SupervisorActivity"
             android:label="@string/engineer" />
-        <activity android:name=".Login.login">
+        <activity android:name=".Login.login"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,6 +58,7 @@
         <activity android:name=".Equipment"/>
         <activity android:name=".ToDoList"/>
         <activity android:name=".Requirement"/>
+        <activity android:name=".SignUp"/>
         <activity android:name=".Add_Member"
             android:label="@string/addMember"
             android:parentActivityName=".firstpageafterLogin.AdminActivity">

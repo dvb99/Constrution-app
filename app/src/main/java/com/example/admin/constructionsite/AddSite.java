@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.admin.constructionsite.Login.User;
 import com.example.admin.constructionsite.secondpagepofadmin.SiteObject;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -87,8 +86,8 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
         tableuserUs.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User us = new User(t4.getText().toString(), forengineerpassword.getText().toString());
-                tableuserUs.child(t4.getText().toString()).setValue(us);
+             //   User us = new User(t4.getText().toString(), forengineerpassword.getText().toString());
+              //  tableuserUs.child(t4.getText().toString()).setValue(us);
                 Toast.makeText(AddSite.this, "Engineer Added", Toast.LENGTH_SHORT).show();
 
             }

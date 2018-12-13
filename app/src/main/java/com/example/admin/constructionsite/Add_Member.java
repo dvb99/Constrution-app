@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.example.admin.constructionsite.Login.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,7 +54,7 @@ public class Add_Member extends AppCompatActivity {
                     passwordforaddMember.startAnimation(shake);
                 }
                 else if(adminradiobutton.isChecked()){
-                    final User us = new User(usernameforaddMember.getText().toString(), passwordforaddMember.getText().toString());
+                 //   final User us = new User(usernameforaddMember.getText().toString(), passwordforaddMember.getText().toString());
 
                     //I found the method which add ups only once
                     // Now I am not sucked for toast messages
@@ -66,7 +65,7 @@ public class Add_Member extends AppCompatActivity {
                             if(dataSnapshot.child("Admin").hasChild(usernameforaddMember.getText().toString().trim()))
                                 Toast.makeText(Add_Member.this, "This name Admin already exists", Toast.LENGTH_SHORT).show();
                             else {
-                                tableuseraddMember.child("Admin").child(usernameforaddMember.getText().toString()).setValue(us);
+                              //  tableuseraddMember.child("Admin").child(usernameforaddMember.getText().toString()).setValue(us);
                                 finish();
                             }
                         }
@@ -98,14 +97,14 @@ public class Add_Member extends AppCompatActivity {
 //                    });
                 }
                 else if(engineerradiobutton.isChecked()){
-                    final  User us = new User(usernameforaddMember.getText().toString(), passwordforaddMember.getText().toString());
+                   // final  User us = new User(usernameforaddMember.getText().toString(), passwordforaddMember.getText().toString());
                     tableuseraddMember.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.child("Engineer").hasChild(usernameforaddMember.getText().toString().trim()))
                                 Toast.makeText(Add_Member.this, "This name Engineer already exists", Toast.LENGTH_SHORT).show();
                             else {
-                                tableuseraddMember.child("Engineer").child(usernameforaddMember.getText().toString()).setValue(us);
+                              //  tableuseraddMember.child("Engineer").child(usernameforaddMember.getText().toString()).setValue(us);
                                 finish();
                             }
                         }

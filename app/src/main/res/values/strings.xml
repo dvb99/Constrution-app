@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">SVJ</string>
 
-    <string name="username_hint"><font size="18">Username</font></string>
-    <string name="password_hint"><font size="18">Password</font></string>
-    <string name="login"><font size="22">Log In</font></string>
+    <string name="username_hint"><font size="13">username</font></string>
+    <string name="password_hint"><font size="13">password</font></string>
+    <string name="login"><font size="16">Log In</font></string>
+    <string name="builders_registration"><font size="16">Builder\'s Registration</font></string>
 
     <string name="title_activity_onetimeopening">onetimeopening</string>
     <string name="admin">Admin</string>
@@ -43,6 +44,19 @@
     <string name="hint_to_add_final_reading"><font size="15">Enter final reading</font></string>
     <string name="snc_previous"><font size="15">Since Previous</font></string>
     <string name="uptodate"><font size="15">UpToDate</font></string>
+
+
+    <string name="enterprise_name">Enterprise name</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="phone">phone</string>
+    <string name="register"><font size="16">Register</font></string>
+    <string name="app_global_name">Construe</string>
+    <string name="already_member"><font size="16">Already a member? Log In</font></string>
+    <string name="input_error_email_invalid">enter a valid email</string>
+    <string name="input_error_password_length">password should be atleast 6 characters long</string>
+    <string name="input_error_phone_invalid">enter a valid phone number</string>
+    <string name="registration_success">Registered Successfully</string>
 
 
 </resources>

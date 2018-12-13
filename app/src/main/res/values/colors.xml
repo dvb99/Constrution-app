@@ -6,4 +6,7 @@
     <color name="transparent_bg">#2affffff</color>
 
     <color name="black_overlay">#66000000</color>
+    <color name="colorText">#dddddd</color>
+    <color name="colorHint">#959595</color>
+    <color name="colorButtonTransparent">#be050505</color>
 </resources>

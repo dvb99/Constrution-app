@@ -97,7 +97,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
     private String selected;
     //the firebase objects for storage and database
     StorageReference mStorageReference;
-    DatabaseReference mDatabaseReference;
+    DatabaseReference mDatabaseReference,equipmentdata;
     //this is the pic pdf code used in file chooser
     final static int PICK_PDF_CODE = 2342;
 
@@ -134,6 +134,12 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         sitelocation = findViewById(R.id.ent_rpt_sitelocation);
         sinceprevious = findViewById(R.id._item_sinceprevious);
         uptodate = findViewById(R.id.item_uptodate);
+
+        //getting firebase objects
+        mStorageReference = FirebaseStorage.getInstance().getReference();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_PATH_UPLOADS);
+        equipmentdata = FirebaseDatabase.getInstance().getReference("User");
+
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 0);
@@ -175,6 +181,17 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 //                                    //View report
 //                                }
                                 case 2:
+//                                    equipmentdata.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                        @Override
+//                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                            if(dataSnapshot.child(login.usname).child(dateLong).hasChild())
+//                                        }
+//
+//                                        @Override
+//                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                        }
+//                                    });
                                     //Send to admin
                                     getPDF();
                                     break;
@@ -185,9 +202,6 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
             bmb.addBuilder(builder);
         }
-        //getting firebase objects
-        mStorageReference = FirebaseStorage.getInstance().getReference();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_PATH_UPLOADS);
 
 
     }

@@ -38,5 +38,8 @@
         <item name="android:windowBackground">@color/green_200</item>
     </style>
 
+    <style name="TextAppearance.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/grey_white_1000</item>
+    </style>
 
 </resources>
