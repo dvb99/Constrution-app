@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -23,7 +24,10 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -304,8 +308,11 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         if (requestCode == IMAGE_REQUEST) {
             if (resultCode == RESULT_OK) {
 
-                Bitmap btmap = BitmapFactory.decodeFile(currentImagePath);
-                imageView.setImageBitmap(btmap);
+//                Bitmap btmap = BitmapFactory.decodeFile(currentImagePath);
+//                imageView.setImageBitmap(btmap);
+                String screensize[] = getScreenResolution(this).split(",");
+                imageView.setImageBitmap(
+                        decodeSampledBitmapFromResource(getResources(), currentImagePath, Integer.parseInt(screensize[0]), Integer.parseInt(screensize[1])));
             }
         }
         //when the user choses the file
@@ -761,5 +768,63 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                     }
                 });
 
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, String resId,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(resId, options);
+
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(resId, options);
+
+    }
+
+    private static String getScreenResolution(Context context)
+    {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        int width = metrics.widthPixels;
+        int height = metrics.heightPixels;
+
+        return  width + "," + height ;
+    }
+
+    @Override
+    protected void onDestroy() {
+        imageFile.delete();
+        super.onDestroy();
     }
 }
