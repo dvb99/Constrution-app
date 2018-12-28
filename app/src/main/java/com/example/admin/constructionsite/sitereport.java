@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -215,7 +214,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 //                                }
                                 case 2:
                                     //Send to admin
-                                    getPDF();
+                                    uploadFile();
                                     break;
                             }
 
@@ -315,16 +314,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                         decodeSampledBitmapFromResource(getResources(), currentImagePath, Integer.parseInt(screensize[0]), Integer.parseInt(screensize[1])));
             }
         }
-        //when the user choses the file
-        if (requestCode == PICK_PDF_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            //if a file is selected
-            if (data.getData() != null) {
-                //uploading the file
-                uploadFile(data.getData());
-            } else {
-                Toast.makeText(this, "No file chosen", Toast.LENGTH_SHORT).show();
-            }
-        }
+
     }
 
     public void createPDF() throws FileNotFoundException, DocumentException {
@@ -625,14 +615,17 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
     public boolean variouscheck() {
         if (rpttitle.getText().toString().length() == 0) {
+            rpttitle.requestFocus();
             Animation shake = AnimationUtils.loadAnimation(sitereport.this, R.anim.shake);
             rpttitle.startAnimation(shake);
             return false;
         } else if (rptdescription.getText().toString().length() == 0) {
+            rptdescription.requestFocus();
             Animation shake = AnimationUtils.loadAnimation(sitereport.this, R.anim.shake);
             rptdescription.startAnimation(shake);
             return false;
         } else if (sitelocation.getText().toString().length() == 0) {
+            sitelocation.requestFocus();
             Animation shake = AnimationUtils.loadAnimation(sitereport.this, R.anim.shake);
             sitelocation.startAnimation(shake);
             return false;
@@ -641,10 +634,12 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             return false;
         } else if (selected.equals("Pipeline")) {
             if (sinceprevious.getText().toString().length() == 0) {
+                sinceprevious.requestFocus();
                 Animation shake = AnimationUtils.loadAnimation(sitereport.this, R.anim.shake);
                 sinceprevious.startAnimation(shake);
                 return false;
             } else if (uptodate.getText().toString().length() == 0) {
+                uptodate.requestFocus();
                 Animation shake = AnimationUtils.loadAnimation(sitereport.this, R.anim.shake);
                 uptodate.startAnimation(shake);
                 return false;
@@ -686,27 +681,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         static final String DATABASE_PATH_UPLOADS = "uploads";
     }
 
-    //this function will get the pdf from the storage
-    private void getPDF() {
-        //for greater than lolipop versions we need the permissions asked on runtime
-        //so if the permission is not available user will go to the screen to allow storage permission
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.parse("package:" + getPackageName()));
-            startActivity(intent);
-            return;
-        }
-
-        //creating an intent for file chooser
-        Intent intent = new Intent();
-        intent.setType("application/pdf");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_PDF_CODE);
-    }
-
-    private void uploadFile(Uri data) {
+    private void uploadFile() {
         //displaying a progress dialog while upload is going on
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading");
@@ -714,59 +689,66 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
       //  final StorageReference sRef = mStorageReference.child(Constants.STORAGE_PATH_UPLOADS + System.currentTimeMillis() + ".pdf");
         final StorageReference sRef = mStorageReference.child(Constants.STORAGE_PATH_UPLOADS + login.usname+dateLong + ".pdf");
 
-
-        sRef.putFile(data).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (!task.isSuccessful()) {
-                    throw task.getException();
+        try {
+            sRef.putFile(Uri.fromFile(fl)).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+                    return sRef.getDownloadUrl();
                 }
-                return sRef.getDownloadUrl();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-                    progressDialog.dismiss();
-                    Uri downloadUri = task.getResult();
-                    String temp = downloadUri.toString();
-                   // Toast.makeText(getApplicationContext(), downloadUri + "", Toast.LENGTH_LONG).show();
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        progressDialog.dismiss();
+                        Uri downloadUri = task.getResult();
+                        String temp = downloadUri.toString();
+                        // Toast.makeText(getApplicationContext(), downloadUri + "", Toast.LENGTH_LONG).show();
 
-                    mDatabaseReference.child("People").child(login.usname).child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(dateLong).child("Report").setValue(temp);
+                        mDatabaseReference.child("People").child(login.usname).child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(dateLong).child("Report").setValue(temp);
 
-                } else {
-                    Toast.makeText(sitereport.this, "upload failed: " , Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(sitereport.this, "upload failed: ", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
 
 
-        sRef.putFile(data)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @SuppressWarnings("VisibleForTests")
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            sRef.putFile(Uri.fromFile(fl))
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @SuppressWarnings("VisibleForTests")
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
 
-                    }
-                })
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @SuppressWarnings("VisibleForTests")
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        //calculating progress percentage
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @SuppressWarnings("VisibleForTests")
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            //calculating progress percentage
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                        //displaying percentage in progress dialog
-                        progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                            //displaying percentage in progress dialog
+                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
 
-                    }
-                });
+                        }
+                    });
+        }
+        catch (NullPointerException npe)
+        {
+            Toast.makeText(this, "Create report first and then send to admin", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
+
+        }
 
     }
 
@@ -824,7 +806,8 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
     @Override
     protected void onDestroy() {
-        imageFile.delete();
+        if(!(imageFile==null))
+            imageFile.delete();
         super.onDestroy();
     }
 }
