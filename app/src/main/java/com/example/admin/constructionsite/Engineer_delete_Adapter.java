@@ -26,7 +26,7 @@ public class Engineer_delete_Adapter extends ArrayAdapter<String> {
                     R.layout.list_item_engi_delete, parent, false);
         }
 
-        TextView nameofengi = (TextView) listItemView.findViewById(R.id.textView2);
+        TextView nameofengi =  listItemView.findViewById(R.id.textView2);
 
         nameofengi.setText(getItem(position));
         return listItemView;

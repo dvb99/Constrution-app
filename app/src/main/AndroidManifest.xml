@@ -18,10 +18,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".firstpageafterLogin.AdminActivity"
-            android:label="@string/admin"/>
+            android:label="@string/admin"
+            android:launchMode="singleTask"
+            />
         <activity
             android:name=".firstpageafterLogin.SupervisorActivity"
-            android:label="@string/engineer" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".Login.login"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
             <intent-filter>
@@ -42,7 +44,6 @@
         </activity>
         <activity
             android:name=".AddSite"
-            android:label="@string/createnewsite"
             android:parentActivityName=".firstpageafterLogin.AdminActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -81,6 +82,7 @@
 
         <activity android:name=".EngineerDeletePage"
             android:label="@string/engineer"
+            android:launchMode="singleTask"
             android:parentActivityName=".firstpageafterLogin.AdminActivity">
 
         <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -88,6 +90,9 @@
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity" />
         </activity>
+        <activity android:name=".engineerassignedCity" />
+        <activity android:name=".eachSiteInEngineer" />
+
     </application>
 
 

@@ -13,8 +13,8 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.admin.constructionsite.R;
+import com.example.admin.constructionsite.engineerassignedCity;
 import com.example.admin.constructionsite.firstpageafterLogin.AdminActivity;
-import com.example.admin.constructionsite.firstpageafterLogin.SupervisorActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -83,8 +83,8 @@ public class login extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                             if (adminradiobutton.isChecked()) {
-                                if (dataSnapshot.child("Admin").hasChild(username.getText().toString().trim())) {
-                                    if (dataSnapshot.child("Admin").child(username.getText().toString()).child("password").getValue().equals(password.getText().toString().trim())) {
+                                if (dataSnapshot.child("Admin").hasChild(username.getText().toString().trim().toLowerCase())) {
+                                    if (dataSnapshot.child("Admin").child(username.getText().toString().toLowerCase()).child("password").getValue().equals(password.getText().toString().trim())) {
                                         // Toast.makeText(login.this, "Welcome Admin", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(login.this, AdminActivity.class);
                                         startActivity(intent);
@@ -101,12 +101,12 @@ public class login extends AppCompatActivity {
                             }
                             if (engineerradiobutton.isChecked()) {
 
-                                usname = username.getText().toString();
+                                usname = username.getText().toString().toLowerCase();
 
-                                if (dataSnapshot.child("Engineer").hasChild(username.getText().toString())) {
-                                    if (dataSnapshot.child("Engineer").child(username.getText().toString()).child("password").getValue().equals(password.getText().toString())) {
+                                if (dataSnapshot.child("Engineer").hasChild(username.getText().toString().toLowerCase())) {
+                                    if (dataSnapshot.child("Engineer").child(username.getText().toString().toLowerCase()).child("password").getValue().equals(password.getText().toString())) {
                                         Toast.makeText(login.this, "Welcome Engineer", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(login.this, SupervisorActivity.class);
+                                        Intent intent = new Intent(login.this, engineerassignedCity.class);
                                         startActivity(intent);
                                         finish();
                                     } else {

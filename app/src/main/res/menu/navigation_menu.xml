@@ -4,9 +4,9 @@
     <item android:id="@+id/addsite"
         android:icon="@drawable/ic_add_circle_outline_indigo_300_24dp"
         android:title="@string/addsite"/>
-    <item android:id="@+id/deleteEngineer"
-        android:icon="@drawable/ic_delete_red_a700_24dp"
-        android:title="@string/deleteEngineer"/>
+    <item android:id="@+id/Engineers"
+        android:icon="@drawable/man_on_site"
+        android:title="@string/Engineers"/>
     <item android:id="@+id/locate"
         android:icon="@drawable/ic_location_on_cyan_a700_24dp"
         android:title="@string/locate"/>

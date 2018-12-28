@@ -20,6 +20,7 @@ public class siteadapter extends ArrayAdapter<SiteObject> {
 
 
     customButtonListener customListner;
+    public static String area,Nameofsite,supervisorName;
 
     public interface customButtonListener {
          void onButtonClickListner(int position,String supervisorName);
@@ -31,7 +32,7 @@ public class siteadapter extends ArrayAdapter<SiteObject> {
 
 
     private Context context;
-    private ArrayList<SiteObject> data = new ArrayList<SiteObject>();
+    private ArrayList<SiteObject> data = new ArrayList<>();
 
     public siteadapter(Context context, ArrayList<SiteObject> dataItem) {
         super(context, R.layout.list_itemofsecondpage, dataItem);
@@ -56,7 +57,7 @@ public class siteadapter extends ArrayAdapter<SiteObject> {
 
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            convertView = inflater.inflate(R.layout.list_itemofsecondpage, null);
+            convertView = inflater.inflate(R.layout.list_itemofsecondpage,parent, false);
 
             viewHolder = new ViewHolder();
             viewHolder.namofsitTextView =  convertView
@@ -104,8 +105,9 @@ public class siteadapter extends ArrayAdapter<SiteObject> {
                 //the value is from 1 to buttonCount - 1(buttonCount if aebIsSelectionMode=true)
 
                 if (customListner != null) {
-
-                    String supervisorName =currentWord.getSupervisorName();
+                    area =currentWord.getArea();
+                    Nameofsite =currentWord.getNameOfSite();
+                    supervisorName =currentWord.getSupervisorName();
 
                     customListner.onButtonClickListner(index,supervisorName);
                 }

@@ -2,17 +2,16 @@ package com.example.admin.constructionsite;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.admin.constructionsite.Login.User;
-import com.example.admin.constructionsite.secondpagepofadmin.SiteObject;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,17 +20,23 @@ import com.google.firebase.database.ValueEventListener;
 
 public class AddSite extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    String selected;
+    String selected,temp;
 
     String[] siteTypes = {"Pipeline", "Watertank", "Roadpavement", "Buildingconstru"};
     int construtionPhoto[] = {R.drawable.pipelinecopy, R.drawable.watertankconstructioncopy, R.drawable.roadpavementcopy, R.drawable.buildingconstructioncopy};
 
+    EditText t2,t3,t4;
+    Button btn;
 
     FirebaseDatabase databaseforConstructionSite = FirebaseDatabase.getInstance();
     final DatabaseReference tableuserCS = databaseforConstructionSite.getReference();
 
     FirebaseDatabase databaseforUser = FirebaseDatabase.getInstance();
     final DatabaseReference tableuserUs = databaseforUser.getReference("User").child("Engineer");
+
+    FirebaseDatabase databaseforPeople = FirebaseDatabase.getInstance();
+    final DatabaseReference tableuserPpl = databaseforPeople.getReference("People");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,52 +50,52 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
         CustomSpinnerAdapter customSpinnerAdapter = new CustomSpinnerAdapter(getApplicationContext(), construtionPhoto, siteTypes);
         spin.setAdapter(customSpinnerAdapter);
 
+        t2 = findViewById(R.id.Nameofsite);
+        t3 = findViewById(R.id.Areaofsite);
+        t4 = findViewById(R.id.Engineerofsite);
+        btn=findViewById(R.id.two_functionbutton);
+        temp =  getIntent().getStringExtra("engineeradd");
+        if(temp.equals("-1"))
+        {
+          //call is from navigation drawer add site
+            getSupportActionBar().setTitle(R.string.addsite);
+
+        }
+        else
+        {
+            // call is from navigation drawer assign site
+            t4.setText(temp);
+            t4.setEnabled(false);
+            btn.setText("assign");
+            getSupportActionBar().setTitle("assign site ");
+
+
+        }
+
     }
 
     public void createobj(View v)
     {
-        final EditText t2 = findViewById(R.id.Nameofsite);
-        final EditText t3 = findViewById(R.id.Areaofsite);
-        final EditText t4 = findViewById(R.id.Engineerofsite);
-        final EditText forengineerpassword = findViewById(R.id.Engineerpassword);
-
-        tableuserCS.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                SiteObject sb = new SiteObject(t2.getText().toString(), t3.getText().toString(), t4.getText().toString());
-                tableuserCS.child("ConstructionSite").child(selected).child(t4.getText().toString()).setValue(sb);
-                }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                SiteObject sb = new SiteObject(t2.getText().toString(), t3.getText().toString(), t4.getText().toString());
-                tableuserCS.child("ConstructionSite").child(selected).child(t4.getText().toString()).setValue(sb);
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                Toast.makeText(AddSite.this, "Failed to Add site", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        tableuserUs.addValueEventListener(new ValueEventListener() {
+        tableuserUs.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User us = new User(t4.getText().toString(), forengineerpassword.getText().toString());
-                tableuserUs.child(t4.getText().toString()).setValue(us);
-                Toast.makeText(AddSite.this, "Engineer Added", Toast.LENGTH_SHORT).show();
 
+                if(dataSnapshot.hasChild(t4.getText().toString().toLowerCase()))
+                {
+                    tableuserCS.child("ConstructionSite").child(selected).child(t3.getText().toString().toLowerCase()).child(t2.getText().toString().toLowerCase()).child(t4.getText().toString().toLowerCase()).setValue("");
+
+                    tableuserPpl.child(t4.getText().toString().toLowerCase()).child(t3.getText().toString().toLowerCase()).child(t2.getText().toString().toLowerCase()).setValue("");
+
+                    Toast.makeText(AddSite.this, "Site ADDED", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                else
+                {
+                    Animation shake = AnimationUtils.loadAnimation(AddSite.this, R.anim.shake);
+                    t4.startAnimation(shake);
+                    Toast.makeText(AddSite.this, "Please add this engineer first", Toast.LENGTH_SHORT).show();
+
+                }
             }
 
             @Override
@@ -98,8 +103,6 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
             }
         });
 
-        Toast.makeText(AddSite.this, "Site ADDED", Toast.LENGTH_SHORT).show();
-        finish();
     }
 
     //Performing action onItemSelected selected

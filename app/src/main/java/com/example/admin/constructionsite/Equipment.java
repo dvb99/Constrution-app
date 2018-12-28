@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.constructionsite.Login.login;
+import com.example.admin.constructionsite.secondpagepofadmin.siteadapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -75,11 +76,19 @@ public class Equipment extends AppCompatActivity {
             tmpbtn2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    tableuser.addValueEventListener(new ValueEventListener() {
+                    tableuser.child("People").child(login.usname).child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                            decide(dataSnapshot.child("People").child(login.usname).child(dateLong).hasChild("EquipmentInfo"));
+                            if (dataSnapshot.child(dateLong).hasChild("EquipmentInfo"))
+                            {
+                                youhavealreadysentdata();
+                            }
+                            else
+                            {
+                                dialogBox();
+                            }
+
 
                         }
 
@@ -97,25 +106,25 @@ public class Equipment extends AppCompatActivity {
             tmpbtn1.setVisibility(View.INVISIBLE);
             tmpbtn2.setVisibility(View.INVISIBLE);
             getSupportActionBar().setTitle(supervisor_name);
-            tableuser.addValueEventListener(new ValueEventListener() {
+            tableuser.child("People").child(supervisor_name).child(siteadapter.area).child(siteadapter.Nameofsite).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.child("People").child(supervisor_name).child(dateLong).child("EquipmentInfo").getChildrenCount() > 0) {
+                    if (dataSnapshot.child(dateLong).child("EquipmentInfo").getChildrenCount() > 0) {
 
-                        for (int k = 0; k < dataSnapshot.child("People").child(supervisor_name).child(dateLong).child("EquipmentInfo").getChildrenCount(); k++) {
+                        for (int k = 0; k < dataSnapshot.child(dateLong).child("EquipmentInfo").getChildrenCount(); k++) {
 
 
                             LinearLayout lL = (LinearLayout) getChild();
-                            String eqptype = dataSnapshot.child("People").child(supervisor_name).child(dateLong).child("EquipmentInfo").child(k + 1 + "").child("equipmentWithNumberplate").getValue().toString();
+                            String eqptype = dataSnapshot.child(dateLong).child("EquipmentInfo").child(k + 1 + "").child("equipmentWithNumberplate").getValue().toString();
                             edtxteqipmentType.setText(eqptype);
                             edtxteqipmentType.setEnabled(false);
 
 
-                            String inireading = dataSnapshot.child("People").child(supervisor_name).child(dateLong).child("EquipmentInfo").child(k + 1 + "").child("initialReading").getValue().toString();
+                            String inireading = dataSnapshot.child(dateLong).child("EquipmentInfo").child(k + 1 + "").child("initialReading").getValue().toString();
                             edtxtininitialReading.setText(inireading);
                             edtxtininitialReading.setEnabled(false);
 
-                            String finreading = dataSnapshot.child("People").child(supervisor_name).child(dateLong).child("EquipmentInfo").child(k + 1 + "").child("finalReading").getValue().toString();
+                            String finreading = dataSnapshot.child(dateLong).child("EquipmentInfo").child(k + 1 + "").child("finalReading").getValue().toString();
                             edtxtfinalReading.setText(finreading);
                             edtxtfinalReading.setEnabled(false);
 
@@ -128,11 +137,8 @@ public class Equipment extends AppCompatActivity {
 
                     }
                     else {
-                        Toast toast = Toast.makeText(Equipment.this,"Engineer has not updated reading yet " +"\ud83d\ude14"+"\ud83d\ude14", Toast.LENGTH_LONG);
-                        View view = toast.getView();
-                        //To change the Background of Toast
-                        view.setBackgroundColor(Color.parseColor("#bf360c"));
-                        toast.show();
+                         Toast.makeText(Equipment.this,"Engineer has not updated reading yet " +"\ud83d\ude14"+"\ud83d\ude14", Toast.LENGTH_SHORT).show();
+
                     }
 
                 }
@@ -160,15 +166,15 @@ public class Equipment extends AppCompatActivity {
         String json = gson.toJson(eInfo);
         prefsEditor.putString("MyObject", json);
         prefsEditor.apply();
-        tableuser.addValueEventListener(new ValueEventListener() {
+        tableuser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (!dataSnapshot.child("People").child(login.usname).child(dateLong).hasChild("EquipmentInfo")) {
+                if (!dataSnapshot.child("People").child(login.usname).child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(dateLong).hasChild("EquipmentInfo")) {
 
                     for (int k = 0; k < eInfo.size(); k++) {
 
-                        tableuser.child("People").child(login.usname).child(dateLong).child("EquipmentInfo").child(k + 1 + "").setValue(eInfo.get(k));
+                        tableuser.child("People").child(login.usname).child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(dateLong).child("EquipmentInfo").child(k + 1 + "").setValue(eInfo.get(k));
 
                     }
                     Toast.makeText(Equipment.this, "Sent equipment data", Toast.LENGTH_SHORT).show();
@@ -327,16 +333,6 @@ public class Equipment extends AppCompatActivity {
 //        don't get terminated.
         }
     }
-    private void decide(boolean haschd)
-    {
-        if (haschd)
-        {
-            youhavealreadysentdata();
-        }
-        else
-        {
-            dialogBox();
-        }
-    }
+
 
 }

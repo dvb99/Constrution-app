@@ -21,6 +21,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -100,6 +102,9 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
     DatabaseReference mDatabaseReference;
     //this is the pic pdf code used in file chooser
     final static int PICK_PDF_CODE = 2342;
+    File imageFile,fl;
+    SharedPreferences sharedp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +140,35 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         sinceprevious = findViewById(R.id._item_sinceprevious);
         uptodate = findViewById(R.id.item_uptodate);
 
+        sharedp = getSharedPreferences("uptodate", Context.MODE_PRIVATE);
+        sinceprevious.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Integer integer =  sharedp.getInt("today", 0);
+                try {
+                    uptodate.setText(integer+Integer.parseInt(sinceprevious.getText().toString())+"");
+
+                }
+                catch (NumberFormatException NFE)
+                {
+                    uptodate.setText(integer+0+"");
+
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 0);
         }
@@ -166,14 +200,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                                         } catch (DocumentException e) {
                                             Toast.makeText(sitereport.this, "Document Exception I am in case 2", Toast.LENGTH_SHORT).show();
                                             }
-                                        catch (NullPointerException npe)
-                                        {
-                                            Toast.makeText(sitereport.this, "Please upload equipment data first", Toast.LENGTH_SHORT).show();
-                                            finish();
-                                            Intent intent = new Intent(sitereport.this, Equipment.class);
-                                            intent.putExtra("forequip", "2");
-                                            startActivity(intent);
-                                        }
+
 
                                     }
                                     break;
@@ -195,7 +222,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         }
         //getting firebase objects
         mStorageReference = FirebaseStorage.getInstance().getReference();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_PATH_UPLOADS);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
 
     }
@@ -301,13 +328,13 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         doc.setMargins(2, 0, 2, 2);
 
         String pdfName = "/";
-        pdfName = pdfName + login.usname + dateLong;
+        pdfName = pdfName +engineerassignedCity.selectedcity+"_"+eachSiteInEngineer.selectedsite+"_"+sitelocation.getText().toString()+ dateLong;
         pdfName = pdfName + ".pdf";
 
 
         String outpath = Environment.getExternalStorageDirectory() + pdfName;
         try {
-
+            fl=new File(outpath);
             PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(outpath));
             YellowBorder event = new YellowBorder();
             writer.setPageEvent(event);
@@ -329,9 +356,21 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             additiontoreport.put("Name Of Engineer", login.usname);
             additiontoreport.put("Report Title", rpttitle.getText().toString());
             additiontoreport.put("Report Description", rptdescription.getText().toString());
-            additiontoreport.put("Site Location", sitelocation.getText().toString());
+            additiontoreport.put("Site Location", engineerassignedCity.selectedcity+"->"+eachSiteInEngineer.selectedsite+"->"+sitelocation.getText().toString());
             if (selected.equals("Pipeline")) {
                 additiontoreport.put("Since Previous", sinceprevious.getText().toString());
+                SharedPreferences.Editor editor = sharedp.edit();
+                try {
+                    editor.putInt("today",sharedp.getInt("today", 0)+ Integer.parseInt(sinceprevious.getText().toString()));
+
+                }
+                catch (NumberFormatException NFE)
+                {
+                    editor.putInt("today", 0);
+                }
+                finally {
+                    editor.apply();
+                }
                 additiontoreport.put("UpToDate", uptodate.getText().toString());
 
             }
@@ -411,15 +450,8 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
             table.addCell(cell1);
             table.addCell(cell2);
+            doc.add(table);
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            PdfPCell cell3 = new PdfPCell(new Paragraph("\n" + "Today's Progress Photo", fontcontent));
-            cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell1.setBorder(Rectangle.ALIGN_BOTTOM);
-            cell1.setBorder(Rectangle.ALIGN_RIGHT);
-            cell1.setPaddingBottom(5);
-            cell1.setPaddingLeft(5);
 
             Image image = null;
             try {
@@ -427,17 +459,17 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             } catch (IOException e) {
                 Toast.makeText(this, "Failed to add image to pdf", Toast.LENGTH_SHORT).show();
             }
+            PdfPTable table2 = new PdfPTable(1); // 1 columns.
+
             PdfPCell cell4 = new PdfPCell(image, true);
 
-            table.addCell(cell3);
-            table.addCell(cell4);
+
+            table2.addCell(cell4);
 
 //            Image image1 = Image.getInstance("watermark.png");
 //            document.add(image1);
 
-            doc.add(table);
-            doc.close();
-
+            doc.add(table2);
             Toast.makeText(sitereport.this, "success", Toast.LENGTH_SHORT).show();
 
         } catch (FileNotFoundException e) {
@@ -446,6 +478,19 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         } catch (DocumentException e1) {
             Toast.makeText(sitereport.this, "Document Exception" + e1, Toast.LENGTH_SHORT).show();
             e1.printStackTrace();
+        }
+        catch (NullPointerException npe)
+        {
+            fl.delete();
+            Toast.makeText(sitereport.this, "Please upload equipment data first", Toast.LENGTH_SHORT).show();
+            finish();
+            Intent intent = new Intent(sitereport.this, Equipment.class);
+            intent.putExtra("forequip", "2");
+            startActivity(intent);
+        }
+        finally {
+            doc.close();
+            imageFile.delete();
         }
     }
 
@@ -484,7 +529,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         String imageName = "jpg_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
-        File imageFile = File.createTempFile(imageName, ".jpg", storageDir);
+        imageFile = File.createTempFile(imageName, ".jpg", storageDir);
         currentImagePath = imageFile.getAbsolutePath();
         return imageFile;
     }
@@ -680,7 +725,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                     String temp = downloadUri.toString();
                    // Toast.makeText(getApplicationContext(), downloadUri + "", Toast.LENGTH_LONG).show();
 
-                    mDatabaseReference.child("People").child(login.usname).child(dateLong).child("Report").setValue(temp);
+                    mDatabaseReference.child("People").child(login.usname).child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(dateLong).child("Report").setValue(temp);
 
                 } else {
                     Toast.makeText(sitereport.this, "upload failed: " , Toast.LENGTH_SHORT).show();

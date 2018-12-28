@@ -39,16 +39,16 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/nameofsite"/>
+            android:text="@string/areaofsite"/>
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:hint="@string/hint_to_add_name_of_site"
+            android:hint="@string/hint_to_add_area_of_site"
             android:inputType="text"
             android:layout_weight="1"
             android:gravity="center"
-            android:id="@+id/Nameofsite"
+            android:id="@+id/Areaofsite"
             />
 
     </LinearLayout>
@@ -64,16 +64,16 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/areaofsite"/>
+            android:text="@string/nameofsite"/>
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:hint="@string/hint_to_add_area_of_site"
+            android:hint="@string/hint_to_add_name_of_site"
             android:inputType="text"
             android:layout_weight="1"
             android:gravity="center"
-            android:id="@+id/Areaofsite"
+            android:id="@+id/Nameofsite"
             />
 
     </LinearLayout>
@@ -93,7 +93,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:hint="@string/hint_to_set_engineer_username"
+            android:hint="@string/hint_to_set_engineer_for_this_site"
             android:layout_weight="1"
             android:gravity="center"
             android:inputType="text"
@@ -102,31 +102,11 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/setEngineerPassword"/>
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:hint="@string/hint_to_set_engineer_password"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:inputType="text"
-            android:id="@+id/Engineerpassword"
-            />
 
-    </LinearLayout>
 
     <Button
+        android:id="@+id/two_functionbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

@@ -3,7 +3,6 @@ package com.example.admin.constructionsite;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.constructionsite.Login.login;
+import com.example.admin.constructionsite.secondpagepofadmin.siteadapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -57,7 +57,7 @@ public class Requirement extends AppCompatActivity {
 
             // below code added because after sending requirement to admin
             // supervisor can see what are the things he has asked to admin do for that day.
-            tableuser.child("People").child(login.usname).addValueEventListener(new ValueEventListener() {
+            tableuser.child("People").child(login.usname).child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
@@ -102,7 +102,7 @@ public class Requirement extends AppCompatActivity {
             //call is from admin's second page
             getSupportActionBar().setTitle("From " + toadmin);
 
-            tableuser.child("People").child(toadmin).addValueEventListener(new ValueEventListener() {
+            tableuser.child("People").child(toadmin).child(siteadapter.area).child(siteadapter.Nameofsite).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
@@ -131,19 +131,16 @@ public class Requirement extends AppCompatActivity {
     private void send() {
         SharedPreferences sharedPre =getSharedPreferences("wholesiteinfo", Context.MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPre.edit();
-        tableuser.addValueEventListener(new ValueEventListener() {
+        tableuser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (null == dataSnapshot.child("People").child(login.usname).child(dateLong).child("Today's Requirement").getValue()) {
+                if (null == dataSnapshot.child("People").child(login.usname).child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(dateLong).child("Today's Requirement").getValue()) {
                     editor.putString("tdrequirementfromengineer",edttxt.getText().toString());
                     editor.apply();
-                    tableuser.child("People").child(login.usname).child(dateLong).child("Today's Requirement").setValue(edttxt.getText().toString());
-                    Toast toast = Toast.makeText(Requirement.this, "Please send these materials "+"\ud83d\ude4f"+"\ud83d\ude4f", Toast.LENGTH_LONG);
-                    View view = toast.getView();
-                    //To change the Background of Toast
-                    view.setBackgroundColor(Color.parseColor("#558b2f"));
-                    toast.show();
+                    tableuser.child("People").child(login.usname).child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(dateLong).child("Today's Requirement").setValue(edttxt.getText().toString());
+                    Toast.makeText(Requirement.this, "Please send these materials "+"\ud83d\ude4f"+"\ud83d\ude4f", Toast.LENGTH_SHORT).show();
+
                 }
 
             }

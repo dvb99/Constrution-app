@@ -36,6 +36,8 @@ public class correspondingAllSites extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.floodedwithsite);
         ArrayList<SiteObject> siteList = (ArrayList<SiteObject>) getIntent().getSerializableExtra("showThisKindOfSites");
+        String title = getIntent().getStringExtra("category");
+        getSupportActionBar().setTitle(title);
 
         siteadapter adapter = new siteadapter(this, siteList);
         ListView listView = findViewById(R.id.list);
@@ -81,7 +83,7 @@ public class correspondingAllSites extends AppCompatActivity implements
                 case 5:
                 {
 
-                    tableuser.child("uploads").child("People").child(supervisorName).addValueEventListener(new ValueEventListener() {
+                    tableuser.child("People").child(supervisorName).child(siteadapter.area).child(siteadapter.Nameofsite).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             try {

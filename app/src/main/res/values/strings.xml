@@ -13,7 +13,7 @@
     <string name="navigation_drawer_close">Drawer Closed</string>
     <string name="addsite">Add Site</string>
     <string name="addMember">Add Member</string>
-    <string name="deleteEngineer">Delete Engineer</string>
+    <string name="Engineers">Engineers</string>
     <string name="locate">Locate</string>
     <string name="constructiontype">ConstructionType</string>
     <string name="nameofsite">Site Name</string>
@@ -24,7 +24,7 @@
     <string name="todaysmanpower">Manpower used today</string>
     <string name="sendtoAdmin">Send To Admin</string>
     <string name="numofPeople"><font size="15">People</font></string>
-    <string name="hint_to_set_engineer_username"><font size="15">set username for engineer</font></string>
+    <string name="hint_to_set_engineer_for_this_site"><font size="15">engineer for this site</font></string>
     <string name="hint_to_set_engineer_password"><font size="15">set password for engineer</font></string>
     <string name="hint_to_add_name_of_site"><font size="15">Enter Name Of Site</font></string>
     <string name="hint_to_add_area_of_site"><font size="15">Enter Area Of Site</font></string>

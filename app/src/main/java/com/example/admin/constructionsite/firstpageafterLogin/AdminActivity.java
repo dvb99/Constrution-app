@@ -75,13 +75,15 @@ public class AdminActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 //this 1 below line surpassed the problem (1st time opening of pipeline sites after a site has been created form create area) beautifully.
                                 pipeline.clear();
-                                for (DataSnapshot ds : dataSnapshot.child("Pipeline").getChildren()) {
-                                    if (ds.child("area").getValue(String.class) != null && ds.child("nameOfSite").getValue(String.class) != null && ds.child("supervisorName").getValue(String.class) != null) {
-                                        pipeline.add(new SiteObject(ds.child("area").getValue(String.class), ds.child("nameOfSite").getValue(String.class), ds.child("supervisorName").getValue(String.class)));
-                                    }
-                                }
+                                for (DataSnapshot dscity : dataSnapshot.child("Pipeline").getChildren())
+                                    for (DataSnapshot dsname : dscity.getChildren())
+                                        for (DataSnapshot dsengi : dsname.getChildren())
+                                            pipeline.add(new SiteObject(dsname.getKey(),dscity.getKey(),dsengi.getKey()));
+
+
                                 Intent intent = new Intent(AdminActivity.this, correspondingAllSites.class);
                                 intent.putExtra("showThisKindOfSites", pipeline);
+                                intent.putExtra("category", "Pipeline");
                                 startActivity(intent);
 
                             }
@@ -100,13 +102,16 @@ public class AdminActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 //this 1 below line surpassed the problem (1st time opening of watertank sites after a site has been created form create area) beautifully.
                                 watertank.clear();
-                                for (DataSnapshot ds : dataSnapshot.child("Watertank").getChildren()) {
-                                    if (ds.child("area").getValue(String.class) != null && ds.child("nameOfSite").getValue(String.class) != null && ds.child("supervisorName").getValue(String.class) != null) {
-                                        watertank.add(new SiteObject(ds.child("area").getValue(String.class), ds.child("nameOfSite").getValue(String.class), ds.child("supervisorName").getValue(String.class)));
-                                    }
-                                }
+                                for (DataSnapshot dscity : dataSnapshot.child("Watertank").getChildren())
+                                    for (DataSnapshot dsname : dscity.getChildren())
+                                        for (DataSnapshot dsengi : dsname.getChildren())
+                                            watertank.add(new SiteObject(dsname.getKey(),dscity.getKey(),dsengi.getKey()));
+
+
+
                                 Intent intent = new Intent(AdminActivity.this, correspondingAllSites.class);
                                 intent.putExtra("showThisKindOfSites", watertank);
+                                intent.putExtra("category", "Watertank");
                                 startActivity(intent);
 
                             }
@@ -125,13 +130,16 @@ public class AdminActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 //this 1 below line surpassed the problem (1st time opening roadpavement sites after a site has been created form create area) beautifully.
                                 roadpavement.clear();
-                                for (DataSnapshot ds : dataSnapshot.child("Roadpavement").getChildren()) {
-                                    if (ds.child("area").getValue(String.class) != null && ds.child("nameOfSite").getValue(String.class) != null && ds.child("supervisorName").getValue(String.class) != null) {
-                                        roadpavement.add(new SiteObject(ds.child("area").getValue(String.class), ds.child("nameOfSite").getValue(String.class), ds.child("supervisorName").getValue(String.class)));
-                                    }
-                                }
+                                for (DataSnapshot dscity : dataSnapshot.child("Roadpavement").getChildren())
+                                    for (DataSnapshot dsname : dscity.getChildren())
+                                        for (DataSnapshot dsengi : dsname.getChildren())
+                                            roadpavement.add(new SiteObject(dsname.getKey(),dscity.getKey(),dsengi.getKey()));
+
+
+
                                 Intent intent = new Intent(AdminActivity.this, correspondingAllSites.class);
                                 intent.putExtra("showThisKindOfSites", roadpavement);
+                                intent.putExtra("category", "Roadpavement");
                                 startActivity(intent);
 
                             }
@@ -150,13 +158,16 @@ public class AdminActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 //this 1 below line surpassed the problem (1st time opening of buildingconstru sites after a site has been created form create area) beautifully.
                                 buildingconstru.clear();
-                                for (DataSnapshot ds : dataSnapshot.child("Buildingconstru").getChildren()) {
-                                    if (ds.child("area").getValue(String.class) != null && ds.child("nameOfSite").getValue(String.class) != null && ds.child("supervisorName").getValue(String.class) != null) {
-                                        buildingconstru.add(new SiteObject(ds.child("area").getValue(String.class), ds.child("nameOfSite").getValue(String.class), ds.child("supervisorName").getValue(String.class)));
-                                    }
-                                }
+
+                                for (DataSnapshot dscity : dataSnapshot.child("Buildingconstru").getChildren())
+                                    for (DataSnapshot dsname : dscity.getChildren())
+                                        for (DataSnapshot dsengi : dsname.getChildren())
+                                            buildingconstru.add(new SiteObject(dsname.getKey(),dscity.getKey(),dsengi.getKey()));
+
+
                                 Intent intent = new Intent(AdminActivity.this, correspondingAllSites.class);
                                 intent.putExtra("showThisKindOfSites", buildingconstru);
+                                intent.putExtra("category", "Buildingconstruction");
                                 startActivity(intent);
 
                             }
@@ -193,12 +204,14 @@ public class AdminActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.addsite:
-                        startActivity(new Intent(AdminActivity.this, AddSite.class));
+                        Intent intent0 = new Intent(AdminActivity.this, AddSite.class);
+                        intent0.putExtra("engineeradd", "-1");
+                        startActivity(intent0);
                         // Close the drawer as soon as possible
                         dl.closeDrawers();
                         break;
                     //Toast.makeText(AdminActivity.this, "SITE ADDED", Toast.LENGTH_SHORT).show();
-                    case R.id.deleteEngineer:
+                    case R.id.Engineers:
 
                         engdelete.addValueEventListener(new ValueEventListener() {
                             @Override

@@ -3,7 +3,6 @@ package com.example.admin.constructionsite;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.constructionsite.Login.login;
+import com.example.admin.constructionsite.secondpagepofadmin.siteadapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,7 +53,7 @@ public class Labor extends AppCompatActivity  {
 
             //Supervisor will see what he has sent as today's
             //Labor count
-            tableuser.child("People").child(login.usname).addValueEventListener(new ValueEventListener() {
+            tableuser.child("People").child(login.usname).child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
@@ -109,7 +109,7 @@ public class Labor extends AppCompatActivity  {
             // so that each list Item will show particular day and it's correspondind Worker count.
 
 
-            tableuser.child("People").child(supervisor_name).addValueEventListener(new ValueEventListener() {
+            tableuser.child("People").child(supervisor_name).child(siteadapter.area).child(siteadapter.Nameofsite).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
@@ -119,11 +119,8 @@ public class Labor extends AppCompatActivity  {
                         manpower.setText(today_labor_count);
 
                     } catch (NullPointerException e) {
-                        Toast toast = Toast.makeText(Labor.this,"Engineer has not updated count yet " +"\ud83d\ude14"+"\ud83d\ude14", Toast.LENGTH_LONG);
-                        View view = toast.getView();
-                        //To change the Background of Toast
-                        view.setBackgroundColor(Color.parseColor("#bf360c"));
-                        toast.show();
+                        Toast.makeText(Labor.this,"Engineer has not updated count yet " +"\ud83d\ude14"+"\ud83d\ude14", Toast.LENGTH_SHORT).show();
+
                     } finally {
                         manpower.setEnabled(false);
                     }
@@ -145,20 +142,17 @@ public class Labor extends AppCompatActivity  {
     {
         SharedPreferences sharedPre =getSharedPreferences("wholesiteinfo", Context.MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPre.edit();
-        tableuser.addValueEventListener(new ValueEventListener() {
+        tableuser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if(null==dataSnapshot.child("People").child(login.usname).child(dateLong).child("LaborCount").getValue()) {
+                if(null==dataSnapshot.child("People").child(login.usname).child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(dateLong).child("LaborCount").getValue()) {
                     EditText edit_text =  findViewById(R.id.manpowerused);
-                    tableuser.child("People").child(login.usname).child(dateLong).child("LaborCount").setValue(edit_text.getText().toString());
+                    tableuser.child("People").child(login.usname).child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(dateLong).child("LaborCount").setValue(edit_text.getText().toString());
                     editor.putString("cnt",edit_text.getText().toString());
                     editor.apply();
-                    Toast toast = Toast.makeText(Labor.this, "Sent Labor count Successfully" +("\ud83d\udc4d") + ("\ud83d\udc4d"), Toast.LENGTH_LONG);
-                    View view = toast.getView();
-                    //To change the Background of Toast
-                    view.setBackgroundColor(Color.parseColor("#558b2f"));
-                    toast.show();
+                    Toast.makeText(Labor.this, "Sent Labor count Successfully" +("\ud83d\udc4d") + ("\ud83d\udc4d"), Toast.LENGTH_SHORT).show();
+
 
                 }
 

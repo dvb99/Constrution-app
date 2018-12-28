@@ -37,7 +37,7 @@
             android:text="@string/reporttitle"
             android:textColorHighlight="@color/pink_200"
             android:textStyle="bold"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             />
 
         <EditText
@@ -64,7 +64,7 @@
             android:text="@string/reportdiscription"
             android:textColorHighlight="@color/pink_200"
             android:textStyle="bold"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             />
 
         <EditText
@@ -91,7 +91,7 @@
             android:text="@string/areaofsite"
             android:textColorHighlight="@color/pink_200"
             android:textStyle="bold"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             />
 
         <EditText
@@ -113,7 +113,8 @@
             android:layout_height="match_parent"
             android:layout_margin="4dp"
             android:adjustViewBounds="true"
-            android:scaleType="center" />
+            android:scaleType="center"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -181,7 +182,7 @@
 
                 <EditText
                     android:id="@+id/_item_sinceprevious"
-                    android:inputType="text"
+                    android:inputType="numberDecimal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/table_cell_bg"
@@ -191,7 +192,7 @@
 
                 <EditText
                     android:id="@+id/item_uptodate"
-                    android:inputType="text"
+                    android:inputType="numberDecimal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/table_cell_bg"
