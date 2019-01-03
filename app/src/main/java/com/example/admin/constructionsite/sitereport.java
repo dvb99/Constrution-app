@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,11 +18,14 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -32,8 +36,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.admin.constructionsite.Login.login;
@@ -77,9 +84,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 
 public class sitereport extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -90,9 +97,17 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
     String[] siteTypes = {"Pipeline", "Watertank", "Roadpavement", "Buildingconstru"};
     int construtionPhoto[] = {R.drawable.pipelinecopy, R.drawable.watertankconstructioncopy, R.drawable.roadpavementcopy, R.drawable.buildingconstructioncopy};
 
+    String[] materialtype = {"Pipes", "Fitting"};
+    String materialselected;
+    String[] Pipes = {"DI", "HDPE", "PVC"};
+    String[] Fitting = {"Coupler", "Tee"};
+    String specificmaterial;
+    String temp1,temp2;
+
     BoomMenuButton bmb;
+    FloatingActionButton fab;
     private ImageView imageView;
-    private EditText rpttitle, rptdescription, sitelocation, sinceprevious, uptodate;
+    private EditText rptdescription, sitelocation,diameter, today;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 111;
     ArrayList<Integer> imageresourceid;
     ArrayList<String> stringresourceid;
@@ -105,8 +120,15 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
     DatabaseReference mDatabaseReference;
     //this is the pic pdf code used in file chooser
     final static int PICK_PDF_CODE = 2342;
-    File imageFile,fl;
+    File imageFile, fl;
     SharedPreferences sharedp;
+    TableLayout tl;
+    private int j;
+    ArrayList<workInfo> wkinfo = new ArrayList<>();
+    private TextView uptodate;
+    private TextView labelmt;
+    private TextView labelsp_mt;
+    private ArrayList<equipmentInfo> equipmentInfoArrayList ;
 
 
     @Override
@@ -116,12 +138,73 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
         //Getting the instance of Spinner and applying OnItemSelectedListener on it
         Spinner spin = findViewById(R.id.simpleSpinner_in_sitereport);
-        spin.setOnItemSelectedListener(this);
 
         CustomSpinnerAdapter customSpinnerAdapter = new CustomSpinnerAdapter(getApplicationContext(), construtionPhoto, siteTypes);
         spin.setAdapter(customSpinnerAdapter);
+        spin.setOnItemSelectedListener(this);
+
+
+        //Getting the instance of Spinner for Material and applying OnItemSelectedListener on it
+        final Spinner material = findViewById(R.id.simpleSpinner_material);
+        CustomSpinnerAdapter materialAdapter = new CustomSpinnerAdapter(getApplicationContext(), materialtype);
+        material.setAdapter(materialAdapter);
+        material.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                materialselected = materialtype[position];
+                TextView txtspecificmaterial = findViewById(R.id.specificmaterial);
+                txtspecificmaterial.setText(materialselected);
+
+                //Getting the instance of Spinner for specific Material and applying OnItemSelectedListener on it
+                final Spinner spin_specificmaterial = findViewById(R.id.simpleSpinner_specificmaterial);
+
+                switch (materialselected) {
+
+                    case "Pipes": {
+                        CustomSpinnerAdapter pipematerialAdapter = new CustomSpinnerAdapter(getApplicationContext(), Pipes);
+                        spin_specificmaterial.setAdapter(pipematerialAdapter);
+                        spin_specificmaterial.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                specificmaterial = Pipes[position];
+
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+                        break;
+                    }
+
+                    case "Fitting":
+                        CustomSpinnerAdapter fittingmaterialAdapter = new CustomSpinnerAdapter(getApplicationContext(), Fitting);
+                        spin_specificmaterial.setAdapter(fittingmaterialAdapter);
+                        spin_specificmaterial.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                specificmaterial = Fitting[position];
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         bmb = (BoomMenuButton) findViewById(R.id.bmb);
+        fab = findViewById(R.id.floatingActionButton);
         imageresourceid = new ArrayList<>();
         stringresourceid = new ArrayList<>();
         setdata();
@@ -137,44 +220,20 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         }
 
         imageView = (ImageView) findViewById(R.id.sitereportimage);
-        rpttitle = findViewById(R.id.ent_rpt_title);
         rptdescription = findViewById(R.id.ent_rpt_description);
         sitelocation = findViewById(R.id.ent_rpt_sitelocation);
-        sinceprevious = findViewById(R.id._item_sinceprevious);
-        uptodate = findViewById(R.id.item_uptodate);
+        tl = (TableLayout) findViewById(R.id.tl);
 
         sharedp = getSharedPreferences("uptodate", Context.MODE_PRIVATE);
-        sinceprevious.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Integer integer =  sharedp.getInt("today", 0);
-                try {
-                    uptodate.setText(integer+Integer.parseInt(sinceprevious.getText().toString())+"");
-
-                }
-                catch (NumberFormatException NFE)
-                {
-                    uptodate.setText(integer+0+"");
-
-                }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 0);
         }
+
+       final SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this.getApplicationContext());
+
 
         for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
             HamButton.Builder builder = new HamButton.Builder()
@@ -194,16 +253,21 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                                 case 1: {
                                     //Create report i.e create pdf
                                     //call createPDF(v)
+                                    final Gson gson = new Gson();
+                                    final String json = appSharedPrefs.getString("MyObject", "");
+
+                                    final Type type = new TypeToken<List<equipmentInfo>>() {
+                                    }.getType();
+                                    equipmentInfoArrayList = gson.fromJson(json, type);
 
                                     if (variouscheck()) {
                                         try {
                                             createPDF();
                                         } catch (FileNotFoundException e) {
-                                            Toast.makeText(sitereport.this, "File not found I am in case 2", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(sitereport.this, "File not found ", Toast.LENGTH_SHORT).show();
                                         } catch (DocumentException e) {
-                                            Toast.makeText(sitereport.this, "Document Exception I am in case 2", Toast.LENGTH_SHORT).show();
-                                            }
-
+                                            Toast.makeText(sitereport.this, "Document Exception ", Toast.LENGTH_SHORT).show();
+                                        }
 
                                     }
                                     break;
@@ -325,13 +389,13 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         doc.setMargins(2, 0, 2, 2);
 
         String pdfName = "/";
-        pdfName = pdfName +engineerassignedCity.selectedcity+"_"+eachSiteInEngineer.selectedsite+"_"+sitelocation.getText().toString()+ dateLong;
+        pdfName = pdfName + engineerassignedCity.selectedcity + "_" + eachSiteInEngineer.selectedsite + "_" + sitelocation.getText().toString() + dateLong;
         pdfName = pdfName + ".pdf";
 
 
         String outpath = Environment.getExternalStorageDirectory() + pdfName;
         try {
-            fl=new File(outpath);
+            fl = new File(outpath);
             PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(outpath));
             YellowBorder event = new YellowBorder();
             writer.setPageEvent(event);
@@ -350,55 +414,125 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             date.setAlignment(Element.ALIGN_LEFT);
             doc.add(date);
 
-            additiontoreport.put("Name Of Engineer", login.usname);
-            additiontoreport.put("Report Title", rpttitle.getText().toString());
-            additiontoreport.put("Report Description", rptdescription.getText().toString());
-            additiontoreport.put("Site Location", engineerassignedCity.selectedcity+"->"+eachSiteInEngineer.selectedsite+"->"+sitelocation.getText().toString());
-            if (selected.equals("Pipeline")) {
-                additiontoreport.put("Since Previous", sinceprevious.getText().toString());
-                SharedPreferences.Editor editor = sharedp.edit();
-                try {
-                    editor.putInt("today",sharedp.getInt("today", 0)+ Integer.parseInt(sinceprevious.getText().toString()));
+            doc.add(addtoreport("Name Of Engineer", login.usname));
 
-                }
-                catch (NumberFormatException NFE)
-                {
-                    editor.putInt("today", 0);
-                }
-                finally {
-                    editor.apply();
-                }
-                additiontoreport.put("UpToDate", uptodate.getText().toString());
+            doc.add(addtoreport("Report Description", rptdescription.getText().toString()));
 
-            }
-            SharedPreferences sharedPre = getSharedPreferences("wholesiteinfo", Context.MODE_PRIVATE);
-
-            additiontoreport.put("Labor Count", sharedPre.getString("cnt", ""));
-            additiontoreport.put("Task From Admin", sharedPre.getString("taskfromAdmin", ""));
-            additiontoreport.put("Requirement From Engineer", sharedPre.getString("tdrequirementfromengineer", ""));
-
-            doc.add(addtoreport(additiontoreport));
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-            SharedPreferences appSharedPrefs = PreferenceManager
-                    .getDefaultSharedPreferences(this.getApplicationContext());
-            Gson gson = new Gson();
-            String json = appSharedPrefs.getString("MyObject", "");
-
-            Type type = new TypeToken<List<equipmentInfo>>() {
-            }.getType();
-            ArrayList<equipmentInfo> equipmentInfoArrayList = gson.fromJson(json, type);
-
-
-            PdfPTable table = new PdfPTable(2); // 2 columns.
+            Font fontcontent = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.NORMAL);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            PdfPTable table1 = new PdfPTable(2); // 2 columns. //table
             float[] columnWidths = {1f, 2f};
             try {
-                table.setWidths(columnWidths);
+                table1.setWidths(columnWidths);
             } catch (DocumentException e) {
                 Toast.makeText(this, "column document exception", Toast.LENGTH_SHORT).show();
             }
-            Font fontcontent = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.NORMAL);
 
+            if (selected.equals("Pipeline")) {
+                SharedPreferences.Editor editor = sharedp.edit();
+                try {
+                    editor.putInt(temp1 + temp2 + diameter.getText().toString(), sharedp.getInt(temp1 + temp2 + diameter.getText(), 0) + Integer.parseInt(today.getText().toString()));
+
+                } catch (NumberFormatException NFE) {
+                    editor.putInt(temp1+ temp2 + diameter.getText().toString(), sharedp.getInt(temp1 + temp2 + diameter.getText(), 0));
+                }
+
+                finally
+                 {
+                    editor.apply();
+                }
+
+//             Table of MaterialInfo
+                PdfPCell cell_descr = new PdfPCell(new Paragraph("\n" + "WorkInformation", fontcontent));//21
+                cell_descr.setVerticalAlignment(Element.ALIGN_CENTER);
+                cell_descr.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell_descr.setBorder(Rectangle.ALIGN_BOTTOM);
+                cell_descr.setBorder(Rectangle.ALIGN_RIGHT);
+                cell_descr.setPaddingBottom(5);
+                cell_descr.setPaddingLeft(5);
+                cell_descr.setBorder(Rectangle.ALIGN_TOP);
+                cell_descr.setBackgroundColor(BaseColor.LIGHT_GRAY);
+
+                PdfPTable innertable = new PdfPTable(1);
+                PdfPTable descri_TableHeader = new PdfPTable(5);//innertable
+                float[] descri_nested = {1f, 1f, 1f, 1f, 1f};
+                try {
+                    descri_TableHeader.setWidths(descri_nested);
+                } catch (DocumentException e) {
+                    Toast.makeText(this, "column document exception", Toast.LENGTH_SHORT).show();
+                }
+                descri_TableHeader.addCell(new Paragraph("Material", fontcontent));
+                descri_TableHeader.addCell(new Paragraph("Type", fontcontent));
+                descri_TableHeader.addCell(new Paragraph("Diameter", fontcontent));
+                descri_TableHeader.addCell(new Paragraph("Today", fontcontent));
+                descri_TableHeader.addCell(new Paragraph("UpToDate", fontcontent));
+
+
+                descri_TableHeader.setPaddingTop(4);
+                innertable.addCell(descri_TableHeader);
+                try {
+                    wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
+                            , Integer.parseInt(today.getText().toString()),
+                            uptodate.getText().toString()));
+                }
+                catch (NumberFormatException nfe)
+                {
+
+                    today.setText(0+"");
+                    wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
+                            , 0,
+                            uptodate.getText().toString()));
+                }
+                ListIterator listIterator = wkinfo.listIterator();
+                while (listIterator.hasNext()) {
+                    workInfo temp = (workInfo) listIterator.next();
+                    PdfPTable nestedTable = new PdfPTable(5);
+                    try {
+                        nestedTable.setWidths(descri_nested);
+                    } catch (DocumentException e) {
+                        Toast.makeText(this, "column document exception", Toast.LENGTH_SHORT).show();
+                    }
+
+                    nestedTable.addCell(new Paragraph(temp.getMaterial(), fontcontent));
+                    nestedTable.addCell(new Paragraph(temp.getMaterial_type(), fontcontent));
+                    nestedTable.addCell(new Paragraph(temp.getDiameter() + " mm", fontcontent));
+                    if(temp.getMaterial().equals("Pipes")) {
+                        nestedTable.addCell(new Paragraph(temp.getToday() + " Mtr", fontcontent));
+                        nestedTable.addCell(new Paragraph(temp.getUptodate() + "Mtr", fontcontent));
+                    }
+                    else{
+                        nestedTable.addCell(new Paragraph(temp.getToday() + "", fontcontent));
+                        nestedTable.addCell(new Paragraph(temp.getUptodate() + "", fontcontent));
+
+                    }
+                    innertable.addCell(nestedTable);
+                }
+                table1.addCell(cell_descr);
+                table1.addCell(innertable);
+                doc.add(table1);
+
+            }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            SharedPreferences sharedPre = getSharedPreferences("wholesiteinfo", Context.MODE_PRIVATE);
+
+            doc.add(addtoreport("Labor Count", sharedPre.getString("cnt", "")));
+            doc.add(addtoreport("Task From Admin", sharedPre.getString("taskfromAdmin", "")));
+            doc.add(addtoreport("Requirement From Engineer", sharedPre.getString("tdrequirementfromengineer", "")));
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            // Table of vehilce info
+            PdfPTable innertable1 = new PdfPTable(1);
+
+            PdfPTable table2 = new PdfPTable(2); // 2 columns.
+            float[] columnWidths2 = {1f, 2f};
+            try {
+                table2.setWidths(columnWidths2);
+            } catch (DocumentException e) {
+                Toast.makeText(this, "column document exception", Toast.LENGTH_SHORT).show();
+            }
             PdfPCell cell1 = new PdfPCell(new Paragraph("\n" + "Vehicle Info", fontcontent));
             cell1.setVerticalAlignment(Element.ALIGN_CENTER);
             cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -406,14 +540,8 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             cell1.setBorder(Rectangle.ALIGN_RIGHT);
             cell1.setPaddingBottom(5);
             cell1.setPaddingLeft(5);
-
-            PdfPCell cell2 = new PdfPCell(new Paragraph("\n", fontcontent));
-            cell2.setVerticalAlignment(Element.ALIGN_CENTER);
-            cell2.setHorizontalAlignment(Element.ALIGN_MIDDLE);
-            cell2.setBorder(Rectangle.ALIGN_BOTTOM);
-            cell2.setPaddingBottom(5);
-            cell2.setPaddingTop(5);
-            cell2.setPaddingLeft(5);
+            cell1.setBorder(Rectangle.ALIGN_TOP);
+            cell1.setBackgroundColor(BaseColor.LIGHT_GRAY);
 
 
             PdfPTable nestedTableHeader = new PdfPTable(3);
@@ -427,7 +555,8 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             nestedTableHeader.addCell(new Paragraph("Initial Reading", fontcontent));
             nestedTableHeader.addCell(new Paragraph("Final Reading", fontcontent));
             nestedTableHeader.setPaddingTop(2);
-            cell2.addElement(nestedTableHeader);
+            innertable1.addCell(nestedTableHeader);
+
 
             for (equipmentInfo obj : equipmentInfoArrayList)
             {
@@ -441,14 +570,15 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                 nestedTable.addCell(new Paragraph(obj.getInitialReading(), fontcontent));
                 nestedTable.addCell(new Paragraph(obj.getFinalReading(), fontcontent));
                 nestedTable.setPaddingTop(2);
-                cell2.addElement(nestedTable);
+                innertable1.addCell(nestedTable);
             }
 
+            table2.addCell(cell1);
+            table2.addCell(innertable1);
+            doc.add(table2);
 
-            table.addCell(cell1);
-            table.addCell(cell2);
-            doc.add(table);
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
+
 
             Image image = null;
             try {
@@ -456,17 +586,17 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             } catch (IOException e) {
                 Toast.makeText(this, "Failed to add image to pdf", Toast.LENGTH_SHORT).show();
             }
-            PdfPTable table2 = new PdfPTable(1); // 1 columns.
+            PdfPTable table3 = new PdfPTable(1); // 1 columns.
 
             PdfPCell cell4 = new PdfPCell(image, true);
 
 
-            table2.addCell(cell4);
+            table3.addCell(cell4);
 
 //            Image image1 = Image.getInstance("watermark.png");
 //            document.add(image1);
 
-            doc.add(table2);
+            doc.add(table3);
             Toast.makeText(sitereport.this, "success", Toast.LENGTH_SHORT).show();
 
         } catch (FileNotFoundException e) {
@@ -476,26 +606,20 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             Toast.makeText(sitereport.this, "Document Exception" + e1, Toast.LENGTH_SHORT).show();
             e1.printStackTrace();
         }
-        catch (NullPointerException npe)
-        {
-            fl.delete();
-            Toast.makeText(sitereport.this, "Please upload equipment data first", Toast.LENGTH_SHORT).show();
-            finish();
-            Intent intent = new Intent(sitereport.this, Equipment.class);
-            intent.putExtra("forequip", "2");
-            startActivity(intent);
-        }
         finally {
             doc.close();
             imageFile.delete();
+            imageView.setImageDrawable(null);
+            diameter=null;
+            tl.removeAllViewsInLayout();
+            j = 0;
+            wkinfo.clear();
         }
     }
 
-    public void captureImage()
-    {
+    public void captureImage() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(cameraIntent.resolveActivity(getPackageManager())!=null)
-        {
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
             File imageFile = null;
             try {
                 imageFile = getimagefile();
@@ -504,15 +628,12 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
             }
 
-            if (imageFile!=null)
-            {
+            if (imageFile != null) {
                 Uri imageUri = FileProvider.getUriForFile(this, "com.example.android.fileprovider", imageFile);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 try {
                     startActivityForResult(cameraIntent, IMAGE_REQUEST);
-                }
-                catch (java.lang.SecurityException SE)
-                {
+                } catch (java.lang.SecurityException SE) {
                     Toast.makeText(this, "Provide access for camera", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -520,8 +641,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
     }
 
-    private File getimagefile()throws IOException
-    {
+    private File getimagefile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageName = "jpg_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -536,26 +656,21 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
         selected = siteTypes[position];
-        TableLayout tbl = findViewById(R.id.tl);
+        LinearLayout ll1 = findViewById(R.id.ll1);
+        LinearLayout ll2 = findViewById(R.id.ll2);
         switch (position) {
             case 0: {
-                tbl.setVisibility(View.VISIBLE);
+                fab.setVisibility(View.VISIBLE);
+                tl.setVisibility(View.VISIBLE);
+                ll1.setVisibility(View.VISIBLE);
+                ll2.setVisibility(View.VISIBLE);
                 break;
             }
-            case 1: {
-                tbl.setVisibility(View.INVISIBLE);
-                break;
-
-            }
-            case 2: {
-                tbl.setVisibility(View.INVISIBLE);
-                break;
-
-            }
-            case 3: {
-                tbl.setVisibility(View.INVISIBLE);
-                break;
-
+            default: {
+                fab.setVisibility(View.INVISIBLE);
+                tl.setVisibility(View.INVISIBLE);
+                ll1.setVisibility(View.INVISIBLE);
+                ll2.setVisibility(View.INVISIBLE);
             }
 
         }
@@ -568,8 +683,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         //  Auto-generated method stub
     }
 
-    private PdfPTable addtoreport(HashMap<String, String> additiontoreport) {
-        int i = 0;
+    private PdfPTable addtoreport(String s1, String s2) {
         PdfPTable table = new PdfPTable(2); // 2 columns.
         float[] columnWidths = {1f, 2f};
         try {
@@ -577,12 +691,11 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         } catch (DocumentException e) {
             Toast.makeText(this, "column document exception", Toast.LENGTH_SHORT).show();
         }
-        for (HashMap.Entry<String, String> entry : additiontoreport.entrySet()) {
 
             Font fontleft = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.NORMAL);
             Font fontright = new Font(Font.FontFamily.TIMES_ROMAN, 19, Font.BOLD);
 
-            PdfPCell cell1 = new PdfPCell(new Paragraph("\n" + entry.getKey(), fontleft));
+            PdfPCell cell1 = new PdfPCell(new Paragraph("\n" + s1, fontleft));
             cell1.setVerticalAlignment(Element.ALIGN_CENTER);
             cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell1.setBorder(Rectangle.ALIGN_BOTTOM);
@@ -591,63 +704,70 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             cell1.setPaddingLeft(5);
 
 
-            PdfPCell cell2 = new PdfPCell(new Paragraph("\n" + entry.getValue(), fontright));
+            PdfPCell cell2 = new PdfPCell(new Paragraph("\n" + s2, fontright));
             cell2.setVerticalAlignment(Element.ALIGN_CENTER);
             cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell2.setBorder(Rectangle.ALIGN_BOTTOM);
             cell2.setPaddingBottom(5);
             cell2.setPaddingLeft(5);
-            if (i == 0) {
-                cell1.setBorder(Rectangle.ALIGN_TOP);
-                cell2.setBorder(Rectangle.ALIGN_TOP);
-                cell1.setBackgroundColor(BaseColor.LIGHT_GRAY);
-                cell2.setBackgroundColor(BaseColor.CYAN);
-                i++;
-            }
+
+            cell1.setBorder(Rectangle.ALIGN_TOP);
+            cell2.setBorder(Rectangle.ALIGN_TOP);
+            cell1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            cell2.setBackgroundColor(BaseColor.CYAN);
+
+
 
             table.addCell(cell1);
             table.addCell(cell2);
 
-        }
+
         return table;
 
     }
 
     public boolean variouscheck() {
-        if (rpttitle.getText().toString().length() == 0) {
-            rpttitle.requestFocus();
-            Animation shake = AnimationUtils.loadAnimation(sitereport.this, R.anim.shake);
-            rpttitle.startAnimation(shake);
-            return false;
-        } else if (rptdescription.getText().toString().length() == 0) {
-            rptdescription.requestFocus();
-            Animation shake = AnimationUtils.loadAnimation(sitereport.this, R.anim.shake);
-            rptdescription.startAnimation(shake);
-            return false;
-        } else if (sitelocation.getText().toString().length() == 0) {
+        if (sitelocation.getText().toString().length() == 0) {
             sitelocation.requestFocus();
             Animation shake = AnimationUtils.loadAnimation(sitereport.this, R.anim.shake);
             sitelocation.startAnimation(shake);
             return false;
+        }
+         else if (rptdescription.getText().toString().length() == 0) {
+            rptdescription.requestFocus();
+            Animation shake = AnimationUtils.loadAnimation(sitereport.this, R.anim.shake);
+            rptdescription.startAnimation(shake);
+            return false;
         } else if (imageView.getDrawable() == null) {
             Toast.makeText(sitereport.this, "Please take today's progress photo", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (selected.equals("Pipeline")) {
-            if (sinceprevious.getText().toString().length() == 0) {
-                sinceprevious.requestFocus();
-                Animation shake = AnimationUtils.loadAnimation(sitereport.this, R.anim.shake);
-                sinceprevious.startAnimation(shake);
-                return false;
-            } else if (uptodate.getText().toString().length() == 0) {
-                uptodate.requestFocus();
-                Animation shake = AnimationUtils.loadAnimation(sitereport.this, R.anim.shake);
-                uptodate.startAnimation(shake);
-                return false;
-            }
+        }else if(equipmentInfoArrayList==null)
+        {
+            Toast.makeText(sitereport.this, "Please upload equipment data first", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(sitereport.this, Equipment.class);
+            intent.putExtra("forequip", "2");
+            startActivity(intent);
+            return false;
         }
+        else if(diameter==null)
+        {
+            fab.requestFocus();
+            Animation shake = AnimationUtils.loadAnimation(sitereport.this, R.anim.shake);
+            fab.startAnimation(shake);
+            return false;
+        }
+//        else if(equipmentInfoArrayList==null){
+//            Toast.makeText(sitereport.this, "Please upload equipment data first", Toast.LENGTH_SHORT).show();
+//            finish();
+//            Intent intent = new Intent(sitereport.this, Equipment.class);
+//            intent.putExtra("forequip", "2");
+//            startActivity(intent);
+//            return false;
+//        }
 
         return true;
     }
+
 
 //    public class Background extends PdfPageEventHelper {
 //        @Override
@@ -685,9 +805,10 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         //displaying a progress dialog while upload is going on
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.show();
-      //  final StorageReference sRef = mStorageReference.child(Constants.STORAGE_PATH_UPLOADS + System.currentTimeMillis() + ".pdf");
-        final StorageReference sRef = mStorageReference.child(Constants.STORAGE_PATH_UPLOADS + login.usname+dateLong + ".pdf");
+        //  final StorageReference sRef = mStorageReference.child(Constants.STORAGE_PATH_UPLOADS + System.currentTimeMillis() + ".pdf");
+        final StorageReference sRef = mStorageReference.child(Constants.STORAGE_PATH_UPLOADS + login.usname + dateLong + ".pdf");
 
         try {
             sRef.putFile(Uri.fromFile(fl)).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -738,13 +859,12 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                             double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
                             //displaying percentage in progress dialog
-                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                            progressDialog.setProgress(((int) progress));
+                            progressDialog.setCanceledOnTouchOutside(false);
 
                         }
                     });
-        }
-        catch (NullPointerException npe)
-        {
+        } catch (NullPointerException npe) {
             Toast.makeText(this, "Create report first and then send to admin", Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
 
@@ -774,6 +894,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
         return inSampleSize;
     }
+
     public static Bitmap decodeSampledBitmapFromResource(Resources res, String resId,
                                                          int reqWidth, int reqHeight) {
 
@@ -792,8 +913,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
     }
 
-    private static String getScreenResolution(Context context)
-    {
+    private static String getScreenResolution(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
@@ -801,13 +921,190 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         int width = metrics.widthPixels;
         int height = metrics.heightPixels;
 
-        return  width + "," + height ;
+        return width + "," + height;
     }
 
     @Override
     protected void onDestroy() {
-        if(!(imageFile==null))
+        if (!(imageFile == null))
             imageFile.delete();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onRestart() {
+
+        super.onRestart();
+    }
+
+    public void gettable(View v) {
+
+        if (j == 0) {
+            j++;
+        } else {
+            diameter.setEnabled(false);
+            today.setEnabled(false);
+            try {
+                wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
+                        , Integer.parseInt(today.getText().toString()),
+                        uptodate.getText().toString()));
+            }
+            catch (NumberFormatException nfe)
+            {
+
+                today.setText(0+"");
+                wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
+                        , 0,
+                        uptodate.getText().toString()));
+            }
+        }
+        addtable(v);
+
+    }
+
+    public void addtable(View view) {
+        TableRow tr_head = new TableRow(this);
+        tr_head.setBackgroundColor(Color.GRAY);
+        tr_head.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.WRAP_CONTENT));
+
+        TextView label_material = new TextView(this);
+        label_material.setText(R.string.material);
+        label_material.setTextColor(Color.WHITE);
+        label_material.setPadding(2, 5, 2, 5);
+        label_material.setGravity(1);
+        tr_head.addView(label_material);// add the column to the table row here
+
+        final TextView label_specific_mt = new TextView(this);
+        label_specific_mt.setText(R.string.type); // set the text for the header
+        label_specific_mt.setTextColor(Color.WHITE); // set the color
+        label_specific_mt.setPadding(2, 5, 2, 5); // set the padding (if required)
+        label_specific_mt.setGravity(1);
+        tr_head.addView(label_specific_mt); // add the column to the table row here
+
+
+        TextView label_diameter = new TextView(this);
+        label_diameter.setText(R.string.diameter); // set the text for the header
+        label_diameter.setTextColor(Color.WHITE); // set the color
+        label_diameter.setPadding(2, 5, 2, 5); // set the padding (if required)
+        label_diameter.setGravity(1);
+        tr_head.addView(label_diameter); // add the column to the table row here
+
+        TextView label_today = new TextView(this);
+        label_today.setText(R.string.today); // set the text for the header
+        label_today.setTextColor(Color.WHITE); // set the color
+        label_today.setPadding(2, 5, 2, 5); // set the padding (if required)
+        label_today.setGravity(1);
+        tr_head.addView(label_today); // add the column to the table row here
+
+        TextView label_update = new TextView(this);
+        label_update.setText(R.string.uptodate); // set the text for the header
+        label_update.setTextColor(Color.WHITE); // set the color
+        label_update.setPadding(2, 5, 2, 5); // set the padding (if required)
+        label_update.setGravity(1);
+        tr_head.addView(label_update); // add the column to the table row here
+
+
+        tl.addView(tr_head, new TableLayout.LayoutParams(
+                TableLayout.LayoutParams.MATCH_PARENT,
+                TableLayout.LayoutParams.WRAP_CONTENT));
+
+        // Create the table row
+        TableRow tr = new TableRow(this);
+        tr.setBackgroundColor(getResources().getColor(R.color.amber_100));
+        tr.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.WRAP_CONTENT));
+
+        //Create five columns to add as table data
+
+
+        labelmt = new TextView(this);
+        labelmt.setText(materialselected);
+        labelmt.setPadding(2, 10, 2, 10);
+        labelmt.setTextColor(getResources().getColor(R.color.pink_400));
+        labelmt.setGravity(1);
+        tr.addView(labelmt);
+
+        labelsp_mt = new TextView(this);
+        labelsp_mt.setText(specificmaterial);
+        labelsp_mt.setPadding(2, 10, 2, 10);
+        labelsp_mt.setTextColor(getResources().getColor(R.color.pink_400));
+        labelsp_mt.setGravity(1);
+        tr.addView(labelsp_mt);
+
+        diameter = new TextInputEditText(this);
+        diameter.setPadding(2, 10, 2, 10);
+        diameter.setTextColor(getResources().getColor(R.color.pink_400));
+        diameter.setGravity(1);
+        diameter.setHint("mm");
+        diameter.setBackground(getResources().getDrawable(R.drawable.table_cell_bg));
+        diameter.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        tr.addView(diameter);
+
+        today = new TextInputEditText(this);
+        today.setPadding(2, 10, 2, 10);
+        today.setTextColor(getResources().getColor(R.color.pink_400));
+        today.setGravity(1);
+        today.setBackground(getResources().getDrawable(R.drawable.table_cell_bg));
+        today.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        tr.addView(today);
+
+
+        uptodate = new TextView(this);
+        uptodate.setPadding(2, 10, 2, 10);
+        uptodate.setTextColor(getResources().getColor(R.color.pink_400));
+        uptodate.setGravity(1);
+        uptodate.setBackgroundColor(getResources().getColor(R.color.transparent_bg));
+        tr.addView(uptodate);
+
+        // finally add this to the table row
+        tl.addView(tr, new TableLayout.LayoutParams(
+                TableLayout.LayoutParams.MATCH_PARENT,
+                TableLayout.LayoutParams.WRAP_CONTENT));
+
+        diameter.requestFocus();
+
+        today.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                temp1=labelmt.getText().toString();
+                temp2=labelsp_mt.getText().toString();
+
+                Integer integer = sharedp.getInt(temp1 + temp2 + diameter.getText().toString(), 0);
+
+                try {
+
+                    uptodate.setText(integer + Integer.parseInt(today.getText().toString()) + "");
+
+
+                } catch (NumberFormatException NFE) {
+                    if(temp1.equals("Pipes")) {
+                        today.setHint("Mtr");
+                        today.setHintTextColor(getResources().getColor(R.color.pink_400));
+                    }
+                  //  today.setText(0+"");
+                    uptodate.setText(integer + "");
+
+                } catch (NullPointerException npe) {
+                    Toast.makeText(sitereport.this, "Select Pipeline as constructiontype", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
     }
 }

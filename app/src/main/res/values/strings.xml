@@ -16,6 +16,9 @@
     <string name="Engineers">Engineers</string>
     <string name="locate">Locate</string>
     <string name="constructiontype">ConstructionType</string>
+    <string name="material">Material</string>
+    <string name="type">Type</string>
+    <string name="diameter">Diameter</string>
     <string name="nameofsite">Site Name</string>
     <string name="areaofsite">Site Location</string>
     <string name="nameofEngineer">Engineer Name</string>
@@ -41,7 +44,7 @@
     <string name="hint_to_add_initial_reading"><font size="15">Enter initial reading</font></string>
     <string name="finalreading"><font size="13">Final Reading</font></string>
     <string name="hint_to_add_final_reading"><font size="15">Enter final reading</font></string>
-    <string name="snc_previous"><font size="15">Since Previous</font></string>
+    <string name="today"><font size="15">Today</font></string>
     <string name="uptodate"><font size="15">UpToDate</font></string>
 
 

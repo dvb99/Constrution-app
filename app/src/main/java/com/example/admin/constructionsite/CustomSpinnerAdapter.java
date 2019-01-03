@@ -9,10 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class CustomSpinnerAdapter extends BaseAdapter {
-    Context context;
-    int constructionimages[];
-    String[] sitetyp;
-    LayoutInflater inflter;
+    private Context context;
+    private int constructionimages[];
+    private String[] sitetyp;
+    private LayoutInflater inflter;
 
     public CustomSpinnerAdapter(Context applicationContext, int[] constructionimages, String[] sitetyp) {
         this.context = applicationContext;
@@ -21,9 +21,16 @@ public class CustomSpinnerAdapter extends BaseAdapter {
         inflter = (LayoutInflater.from(applicationContext));
     }
 
+    public CustomSpinnerAdapter(Context context, String[] sitetyp) {
+        this.context = context;
+        this.sitetyp = sitetyp;
+        inflter = (LayoutInflater.from(context));
+
+    }
+
     @Override
     public int getCount() {
-        return constructionimages.length;
+        return sitetyp.length;
     }
 
     @Override
@@ -41,11 +48,12 @@ public class CustomSpinnerAdapter extends BaseAdapter {
         // Check if an existing view is being reused, otherwise inflate the view
         View listItemView = convertView;
         if (listItemView == null) {
-            listItemView = inflter.inflate(R.layout.custom_spinner_items,  null);
+            listItemView = inflter.inflate(R.layout.custom_spinner_items,  parent,false);
         }
         ImageView icon =  listItemView.findViewById(R.id.imageView);
         TextView names =  listItemView.findViewById(R.id.textView);
-        icon.setImageResource(constructionimages[position]);
+        if(constructionimages!=null)
+            icon.setImageResource(constructionimages[position]);
         names.setText(sitetyp[position]);
         return listItemView;
     }
