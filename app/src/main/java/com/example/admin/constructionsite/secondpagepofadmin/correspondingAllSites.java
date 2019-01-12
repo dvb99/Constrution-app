@@ -51,21 +51,21 @@ public class correspondingAllSites extends AppCompatActivity implements
         public void onButtonClickListner(int index,String supervisorName) {
             switch (index)
             {
-                case 1:
+                case 0:
                 {
                     Intent intent = new Intent(correspondingAllSites.this, Labor.class);
                 intent.putExtra("forlabor", supervisorName);
                 startActivity(intent);
                 break;
                 }
-                case 2:
+                case 1:
                 {
                     Intent intent = new Intent(correspondingAllSites.this, Equipment.class);
                     intent.putExtra("forequip", supervisorName);
                     startActivity(intent);
                     break;
                 }
-                case 3:
+                case 2:
                 {
                     Intent intent = new Intent(correspondingAllSites.this, ToDoList.class);
                     intent.putExtra("todolist", supervisorName);
@@ -73,14 +73,14 @@ public class correspondingAllSites extends AppCompatActivity implements
                     break;
                 }
 
-                case 4:
+                case 3:
                 {
                     Intent intent = new Intent(correspondingAllSites.this, Requirement.class);
                     intent.putExtra("anyrequirement", supervisorName);
                     startActivity(intent);
                     break;
                 }
-                case 5:
+                case 4:
                 {
 
                     tableuser.child("People").child(supervisorName).child(siteadapter.area).child(siteadapter.Nameofsite).addListenerForSingleValueEvent(new ValueEventListener() {

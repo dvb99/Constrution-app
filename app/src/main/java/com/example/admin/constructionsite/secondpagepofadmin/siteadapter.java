@@ -9,18 +9,19 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.admin.constructionsite.R;
-import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
-import com.fangxu.allangleexpandablebutton.ButtonData;
-import com.fangxu.allangleexpandablebutton.ButtonEventListener;
+import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
+import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
+import com.nightonke.boommenu.BoomMenuButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class siteadapter extends ArrayAdapter<SiteObject> {
 
 
     customButtonListener customListner;
     public static String area,Nameofsite,supervisorName;
+    private ArrayList<Integer> imageresourceid=new ArrayList<>();
+    private ArrayList<String> stringresourceid=new ArrayList<>();
 
     public interface customButtonListener {
          void onButtonClickListner(int position,String supervisorName);
@@ -46,7 +47,7 @@ public class siteadapter extends ArrayAdapter<SiteObject> {
         TextView namofsitTextView;
         TextView areTextView;
         TextView supTextView;
-        AllAngleExpandableButton button;
+        BoomMenuButton button;
     }
 
 
@@ -67,7 +68,7 @@ public class siteadapter extends ArrayAdapter<SiteObject> {
             viewHolder.supTextView =  convertView
                     .findViewById(R.id.supername);
 
-            viewHolder.button = (AllAngleExpandableButton) convertView
+            viewHolder.button = (BoomMenuButton) convertView
                     .findViewById(R.id.button_expandable);
             convertView.setTag(viewHolder);
 
@@ -91,47 +92,33 @@ public class siteadapter extends ArrayAdapter<SiteObject> {
 
         viewHolder.supTextView.setText(currentWord.getSupervisorName());
 
-        final List<ButtonData> buttonDatas = new ArrayList<>();
-        int[] drawable = {R.drawable.more,R.drawable.laboricon,R.drawable.equipment,R.drawable.todo,R.drawable.requirement,R.drawable.report};
-        for (int i = 0; i < drawable.length; i++) {
-            ButtonData buttonData = ButtonData.buildIconButton(context, drawable[i], 0);
-            buttonDatas.add(buttonData);
+        setdata();
+
+        for (int i = 0; i < viewHolder.button.getPiecePlaceEnum().pieceNumber(); i++) {
+            TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
+                    .normalImageRes(imageresourceid.get(i))
+                    .normalText(stringresourceid.get(i))
+                    .textSize(18)
+                    .listener(new OnBMClickListener() {
+                        @Override
+                        public void onBoomButtonClick(int index) {
+                            if (customListner != null) {
+                                area =currentWord.getArea();
+                                Nameofsite =currentWord.getNameOfSite();
+                                supervisorName =currentWord.getSupervisorName();
+
+                                customListner.onButtonClickListner(index,supervisorName);
+                            }
+
+                        }
+                    });
+
+            viewHolder.button.addBuilder(builder);
         }
-        viewHolder.button.setButtonDatas(buttonDatas);
-        viewHolder.button.setButtonEventListener(new ButtonEventListener() {
-            @Override
-            public void onButtonClicked(int index) {
-                //do whatever you want,the param index is counted from startAngle to endAngle,
-                //the value is from 1 to buttonCount - 1(buttonCount if aebIsSelectionMode=true)
-
-                if (customListner != null) {
-                    area =currentWord.getArea();
-                    Nameofsite =currentWord.getNameOfSite();
-                    supervisorName =currentWord.getSupervisorName();
-
-                    customListner.onButtonClickListner(index,supervisorName);
-                }
-
-            }
-
-            @Override
-            public void onExpand() {
-
-            }
-
-            @Override
-            public void onCollapse() {
-
-            }
-        });
 
 
 
-
-
-
-
-
+//      I will add here another animation.
         setTvZoomInOutAnimation(viewHolder.areTextView);
         setTvZoomInOutAnimation(viewHolder.supTextView);
 
@@ -162,5 +149,20 @@ public class siteadapter extends ArrayAdapter<SiteObject> {
         //animator.setRepeatCount(ValueAnimator.INFINITE);  // Use this line for infinite animations
         animator.setRepeatCount(0);
         animator.start();
+    }
+
+    public void setdata() {
+        imageresourceid.add(R.drawable.laboricon);
+        imageresourceid.add(R.drawable.equipment);
+        imageresourceid.add(R.drawable.todo);
+        imageresourceid.add(R.drawable.requirement);
+        imageresourceid.add(R.drawable.report);
+        //imageresourceid.add(R.drawable.store);
+        stringresourceid.add("Manpower Used Today");
+        stringresourceid.add("Equipment Info");
+        stringresourceid.add("Task To Engineer");
+        stringresourceid.add("Requirement From Engineer");
+        stringresourceid.add("Today's Report");
+       // stringresourceid.add("Stock");
     }
 }

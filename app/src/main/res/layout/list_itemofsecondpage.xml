@@ -59,40 +59,19 @@
     </LinearLayout>
 
 
-    <com.fangxu.allangleexpandablebutton.AllAngleExpandableButton
-        android:id="@+id/button_expandable"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0"
-        android:layout_marginTop="80dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:aebAnimDurationMillis="175"
-        app:aebButtonElevation="4dp"
-        app:aebButtonGapDp="60dp"
-        app:aebEndAngleDegree="180"
-        app:aebIsSelectionMode="false"
-        app:aebMainButtonRotateAnimDurationMillis="250"
-        app:aebMainButtonRotateDegree="0"
-        app:aebMainButtonSizeDp="40dp"
-        app:aebMainButtonTextColor="#ffff5656"
-        app:aebMainButtonTextSizeSp="20dp"
-        app:aebMaskBackgroundColor="@color/transparent_bg"
-        app:aebRippleColor="@color/lime_A200"
-        app:aebRippleEffect="true"
-        app:aebStartAngleDegree="80"
-        app:aebSubButtonSizeDp="40dp"
-        app:aebSubButtonTextColor="#ff0000ff"
-        app:aebSubButtonTextSizeSp="18dp"
-        app:aebBlurBackground="false"
-        app:aebBlurRadius="10"/>
-
-
-
-
-
-
+        <com.nightonke.boommenu.BoomMenuButton
+            android:id="@+id/button_expandable"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_gravity="top"
+            app:bmb_buttonEnum="textOutsideCircle"
+            app:bmb_piecePlaceEnum="piecePlace_dot_5_3"
+            app:bmb_buttonPlaceEnum="buttonPlace_sc_5_3"/>
 
 </LinearLayout>
