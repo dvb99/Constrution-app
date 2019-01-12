@@ -12,7 +12,9 @@ import com.example.admin.constructionsite.Equipment;
 import com.example.admin.constructionsite.Labor;
 import com.example.admin.constructionsite.R;
 import com.example.admin.constructionsite.Requirement;
+import com.example.admin.constructionsite.Table;
 import com.example.admin.constructionsite.ToDoList;
+import com.example.admin.constructionsite.workInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -83,7 +85,7 @@ public class correspondingAllSites extends AppCompatActivity implements
                 case 4:
                 {
 
-                    tableuser.child("People").child(supervisorName).child(siteadapter.area).child(siteadapter.Nameofsite).addListenerForSingleValueEvent(new ValueEventListener() {
+                    tableuser.child("People").child(supervisorName).child(siteadapter.Nameofsite).child(siteadapter.area).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             try {
@@ -95,6 +97,36 @@ public class correspondingAllSites extends AppCompatActivity implements
                             } catch (NullPointerException e) {
                                 Toast.makeText(correspondingAllSites.this, "File has not uploaded yet by Engineer", Toast.LENGTH_SHORT).show();
                             }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                    break;
+                }
+                case 5:
+                {
+                    final ArrayList<workInfo> wk=new ArrayList<>();
+
+                    tableuser.child("People").child(supervisorName).child(siteadapter.Nameofsite).child(siteadapter.area).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            wk.clear();
+                            if(dataSnapshot.child(dateLong).child("Material").hasChildren()) {
+                                for (DataSnapshot ds : dataSnapshot.child(dateLong).child("Material").getChildren()) {
+                                    wk.add(ds.getValue(workInfo.class));
+                                }
+                                Intent intent = new Intent(correspondingAllSites.this, Table.class);
+                                intent.putExtra("Tbl", wk);
+                                startActivity(intent);
+
+                            }
+                            else {
+                                Toast.makeText(correspondingAllSites.this, "Not uploaded yet by Engineer", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
 
                         @Override

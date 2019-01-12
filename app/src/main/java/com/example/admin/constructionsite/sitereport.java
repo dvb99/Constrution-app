@@ -915,6 +915,13 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                             }
                             mDatabaseReference.child("ConstructionSite").child("Pipeline").child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(login.usname).child("Pipes").setValue(pipesmtr + "");
                             mDatabaseReference.child("ConstructionSite").child("Pipeline").child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(login.usname).child("Fitting").setValue(fittingcount + "");
+
+                            int p = 1;
+                            for (workInfo obj : wk) {
+                                mDatabaseReference.child("People").child(login.usname).child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(dateLong).child("Material").child(p + "").setValue(obj);
+                                p++;
+                            }
+
                         }
                         Uri downloadUri = task.getResult();
                         String temp = downloadUri.toString();

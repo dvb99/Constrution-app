@@ -71,7 +71,7 @@
             android:layout_marginRight="4dp"
             android:layout_gravity="top"
             app:bmb_buttonEnum="textOutsideCircle"
-            app:bmb_piecePlaceEnum="piecePlace_dot_5_3"
-            app:bmb_buttonPlaceEnum="buttonPlace_sc_5_3"/>
+            app:bmb_piecePlaceEnum="piecePlace_dot_6_5"
+            app:bmb_buttonPlaceEnum="buttonPlace_sc_6_5"/>
 
 </LinearLayout>

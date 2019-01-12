@@ -157,12 +157,12 @@ public class siteadapter extends ArrayAdapter<SiteObject> {
         imageresourceid.add(R.drawable.todo);
         imageresourceid.add(R.drawable.requirement);
         imageresourceid.add(R.drawable.report);
-        //imageresourceid.add(R.drawable.store);
+        imageresourceid.add(R.drawable.ic_store);
         stringresourceid.add("Manpower Used Today");
         stringresourceid.add("Equipment Info");
         stringresourceid.add("Task To Engineer");
         stringresourceid.add("Requirement From Engineer");
         stringresourceid.add("Today's Report");
-       // stringresourceid.add("Stock");
+        stringresourceid.add("Material Used");
     }
 }

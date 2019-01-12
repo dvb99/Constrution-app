@@ -1,11 +1,18 @@
 package com.example.admin.constructionsite;
 
-public class workInfo {
+import java.io.Serializable;
+
+public class workInfo implements Serializable{
     private String material;
     private String material_type;
     private String diameter;
     private int today;
     private String uptodate;
+
+    public workInfo()
+    {
+
+    }
 
     public workInfo(String material, String material_type, String diameter, int today, String uptodate) {
 
