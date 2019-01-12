@@ -19,6 +19,7 @@ import com.example.admin.constructionsite.AddSite;
 import com.example.admin.constructionsite.Add_Member;
 import com.example.admin.constructionsite.EngineerDeletePage;
 import com.example.admin.constructionsite.R;
+import com.example.admin.constructionsite.city;
 import com.example.admin.constructionsite.secondpagepofadmin.SiteObject;
 import com.example.admin.constructionsite.secondpagepofadmin.correspondingAllSites;
 import com.google.firebase.database.DataSnapshot;
@@ -61,7 +62,6 @@ public class AdminActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
                 Card card = (Card)adapterView.getItemAtPosition(position);
-                final ArrayList<SiteObject> pipeline = new ArrayList<>();
                 final ArrayList<SiteObject> watertank = new ArrayList<>();
                 final ArrayList<SiteObject> roadpavement = new ArrayList<>();
                 final ArrayList<SiteObject> buildingconstru = new ArrayList<>();
@@ -70,29 +70,9 @@ public class AdminActivity extends AppCompatActivity {
 
                 switch (card.getCdtitle()) {
                     case "Pipeline": {
-                        tableuser.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                //this 1 below line surpassed the problem (1st time opening of pipeline sites after a site has been created form create area) beautifully.
-                                pipeline.clear();
-                                for (DataSnapshot dscity : dataSnapshot.child("Pipeline").getChildren())
-                                    for (DataSnapshot dsname : dscity.getChildren())
-                                        for (DataSnapshot dsengi : dsname.getChildren())
-                                            pipeline.add(new SiteObject(dsname.getKey(),dscity.getKey(),dsengi.getKey()));
-
-
-                                Intent intent = new Intent(AdminActivity.this, correspondingAllSites.class);
-                                intent.putExtra("showThisKindOfSites", pipeline);
-                                intent.putExtra("category", "Pipeline");
-                                startActivity(intent);
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
+                        Intent intent = new Intent(AdminActivity.this, city.class);
+                        intent.putExtra("category", "Pipeline");
+                        startActivity(intent);
                         break;
 
                     }

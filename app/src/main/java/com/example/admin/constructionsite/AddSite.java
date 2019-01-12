@@ -86,7 +86,7 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
 
                     tableuserPpl.child(t4.getText().toString().toLowerCase()).child(t3.getText().toString().toLowerCase()).child(t2.getText().toString().toLowerCase()).setValue("");
 
-                    Toast.makeText(AddSite.this, "Site ADDED", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(AddSite.this, "Site ADDED", Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 else

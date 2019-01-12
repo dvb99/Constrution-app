@@ -102,10 +102,10 @@ public class login extends AppCompatActivity {
                             if (engineerradiobutton.isChecked()) {
 
                                 usname = username.getText().toString().toLowerCase();
-
+                                String temp=username.getText().toString();
                                 if (dataSnapshot.child("Engineer").hasChild(username.getText().toString().toLowerCase())) {
                                     if (dataSnapshot.child("Engineer").child(username.getText().toString().toLowerCase()).child("password").getValue().equals(password.getText().toString())) {
-                                        Toast.makeText(login.this, "Welcome Engineer", Toast.LENGTH_SHORT).show();
+                                      //  Toast.makeText(login.this, "Welcome "+temp, Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(login.this, engineerassignedCity.class);
                                         startActivity(intent);
                                         finish();

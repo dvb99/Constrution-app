@@ -19,7 +19,6 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -83,10 +82,15 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class sitereport extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -113,7 +117,6 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
     ArrayList<String> stringresourceid;
     String currentImagePath;
     private static final int IMAGE_REQUEST = 1;
-    LinkedHashMap<String, String> additiontoreport = new LinkedHashMap<>();
     private String selected;
     //the firebase objects for storage and database
     StorageReference mStorageReference;
@@ -125,10 +128,13 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
     TableLayout tl;
     private int j;
     ArrayList<workInfo> wkinfo = new ArrayList<>();
-    private TextView uptodate;
+    ArrayList<workInfo> wk;
+    ArrayList<String> unique = new ArrayList<>();
+    HashMap<String,Integer> values = new HashMap<>();
+    private EditText uptodate;
     private TextView labelmt;
     private TextView labelsp_mt;
-    private ArrayList<equipmentInfo> equipmentInfoArrayList ;
+    private ArrayList<equipmentInfo> equipmentInfoArrayList;
 
 
     @Override
@@ -415,7 +421,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             doc.add(date);
 
             doc.add(addtoreport("Name Of Engineer", login.usname));
-
+            doc.add(addtoreport("Site Location", engineerassignedCity.selectedcity + "->" + eachSiteInEngineer.selectedsite + "->" + sitelocation.getText().toString()));
             doc.add(addtoreport("Report Description", rptdescription.getText().toString()));
 
             Font fontcontent = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.NORMAL);
@@ -429,21 +435,10 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             }
 
             if (selected.equals("Pipeline")) {
-                SharedPreferences.Editor editor = sharedp.edit();
-                try {
-                    editor.putInt(temp1 + temp2 + diameter.getText().toString(), sharedp.getInt(temp1 + temp2 + diameter.getText(), 0) + Integer.parseInt(today.getText().toString()));
+                doc.add(new Paragraph("\n"+"\n"));
 
-                } catch (NumberFormatException NFE) {
-                    editor.putInt(temp1+ temp2 + diameter.getText().toString(), sharedp.getInt(temp1 + temp2 + diameter.getText(), 0));
-                }
-
-                finally
-                 {
-                    editor.apply();
-                }
-
-//             Table of MaterialInfo
-                PdfPCell cell_descr = new PdfPCell(new Paragraph("\n" + "WorkInformation", fontcontent));//21
+//             Table of TodayMaterialInfo
+                PdfPCell cell_descr = new PdfPCell(new Paragraph("\n" + "Today", fontcontent));//21
                 cell_descr.setVerticalAlignment(Element.ALIGN_CENTER);
                 cell_descr.setHorizontalAlignment(Element.ALIGN_CENTER);
                 cell_descr.setBorder(Rectangle.ALIGN_BOTTOM);
@@ -470,18 +465,29 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
                 descri_TableHeader.setPaddingTop(4);
                 innertable.addCell(descri_TableHeader);
-                try {
-                    wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
-                            , Integer.parseInt(today.getText().toString()),
-                            uptodate.getText().toString()));
-                }
-                catch (NumberFormatException nfe)
-                {
+                if (!unique.contains(temp1 +"," + temp2 +","+ diameter.getText().toString())) {
+                    unique.add(temp1 +","+ temp2 +","+ diameter.getText().toString());
+                    try {
+                        wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
+                                , Integer.parseInt(today.getText().toString()),
+                                uptodate.getText().toString()));
+                    } catch (NumberFormatException nfe) {
 
-                    today.setText(0+"");
-                    wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
-                            , 0,
-                            uptodate.getText().toString()));
+                        today.setText(0 + "");
+                        wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
+                                , 0,
+                                uptodate.getText().toString()));
+                    }
+                    try
+                    {
+                        values.put(temp1 +","+ temp2 +","+ diameter.getText().toString(),Integer.parseInt(uptodate.getText().toString()));
+
+                    }
+                    catch (NumberFormatException nfe)
+                    {
+                        values.put(temp1 +","+ temp2 +","+ diameter.getText().toString(),0);
+
+                    }
                 }
                 ListIterator listIterator = wkinfo.listIterator();
                 while (listIterator.hasNext()) {
@@ -510,6 +516,83 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                 table1.addCell(cell_descr);
                 table1.addCell(innertable);
                 doc.add(table1);
+                doc.add(new Paragraph("\n"+"\n"));
+
+                PdfPTable tableuptodate = new PdfPTable(2); // 2 columns. //table
+                try {
+                    tableuptodate.setWidths(columnWidths);
+                } catch (DocumentException e) {
+                    Toast.makeText(this, "column document exception", Toast.LENGTH_SHORT).show();
+                }
+
+                //Table of uptodateMaterialInfo
+                PdfPCell cell_uptodate = new PdfPCell(new Paragraph("\n" + "UpToDate", fontcontent));//21
+                cell_uptodate.setVerticalAlignment(Element.ALIGN_CENTER);
+                cell_uptodate.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell_uptodate.setBorder(Rectangle.ALIGN_BOTTOM);
+                cell_uptodate.setBorder(Rectangle.ALIGN_RIGHT);
+                cell_uptodate.setPaddingBottom(5);
+                cell_uptodate.setPaddingLeft(5);
+                cell_uptodate.setBorder(Rectangle.ALIGN_TOP);
+                cell_uptodate.setBackgroundColor(BaseColor.LIGHT_GRAY);
+
+                PdfPTable innertableuptodate = new PdfPTable(1);
+                PdfPTable descri_TableHeaderuptodate = new PdfPTable(4);//innertable
+                float[] descri_nesteduptodate = {1f, 1f, 1f, 1f};
+                try {
+                    descri_TableHeaderuptodate.setWidths(descri_nesteduptodate);
+                } catch (DocumentException e) {
+                    Toast.makeText(this, "column document exception", Toast.LENGTH_SHORT).show();
+                }
+
+                descri_TableHeaderuptodate.addCell(new Paragraph("Material", fontcontent));
+                descri_TableHeaderuptodate.addCell(new Paragraph("Type", fontcontent));
+                descri_TableHeaderuptodate.addCell(new Paragraph("Diameter", fontcontent));
+                descri_TableHeaderuptodate.addCell(new Paragraph("UpToDate", fontcontent));
+
+                descri_TableHeaderuptodate.setPaddingTop(4);
+                innertableuptodate.addCell(descri_TableHeaderuptodate);
+
+                Map<String, ?> allEntries = sharedp.getAll();
+                TreeMap t= new TreeMap(new Mycomparator());
+                for (TreeMap.Entry<String, ?> entry : allEntries.entrySet()) {
+                    t.put(entry.getKey(),entry.getValue());
+                }
+                Set s1 = t.entrySet();
+                Iterator itr = s1.iterator();
+                while (itr.hasNext())
+                {
+                  Map.Entry m1 = (Map.Entry)itr.next();
+                    String key = (String) m1.getKey();
+                    String content[] = key.split(",");
+
+                    PdfPTable nestedTableuptodate = new PdfPTable(4);
+                    try {
+                        nestedTableuptodate.setWidths(descri_nesteduptodate);
+                    } catch (DocumentException e) {
+                        Toast.makeText(this, "column document exception", Toast.LENGTH_SHORT).show();
+                    }
+                    nestedTableuptodate.addCell(new Paragraph(content[0], fontcontent));
+                    nestedTableuptodate.addCell(new Paragraph(content[1], fontcontent));
+                    try {
+                        nestedTableuptodate.addCell(new Paragraph(content[2] + " mm", fontcontent));
+                    }
+                    catch (ArrayIndexOutOfBoundsException AIOOBExp)
+                    {
+                        nestedTableuptodate.addCell(new Paragraph(0 + " mm", fontcontent));
+
+                    }
+                    if (content[0].equals("Pipes")) {
+                        nestedTableuptodate.addCell(new Paragraph(m1.getValue() + "Mtr", fontcontent));
+                    } else {
+                        nestedTableuptodate.addCell(new Paragraph(m1.getValue() + "", fontcontent));
+                    }
+                    innertableuptodate.addCell(nestedTableuptodate);
+                }
+                tableuptodate.addCell(cell_uptodate);
+                tableuptodate.addCell(innertableuptodate);
+                doc.add(tableuptodate);
+                doc.add(new Paragraph("\n"+"\n"));
 
             }
 
@@ -605,14 +688,19 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         } catch (DocumentException e1) {
             Toast.makeText(sitereport.this, "Document Exception" + e1, Toast.LENGTH_SHORT).show();
             e1.printStackTrace();
-        }
-        finally {
+        } catch (NullPointerException npe) {
+            fab.requestFocus();
+            Animation shake = AnimationUtils.loadAnimation(sitereport.this, R.anim.shake);
+            fab.startAnimation(shake);
+
+        } finally {
             doc.close();
             imageFile.delete();
             imageView.setImageDrawable(null);
             diameter=null;
             tl.removeAllViewsInLayout();
             j = 0;
+            wk = new ArrayList<>(wkinfo);
             wkinfo.clear();
         }
     }
@@ -749,21 +837,6 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             startActivity(intent);
             return false;
         }
-        else if(diameter==null)
-        {
-            fab.requestFocus();
-            Animation shake = AnimationUtils.loadAnimation(sitereport.this, R.anim.shake);
-            fab.startAnimation(shake);
-            return false;
-        }
-//        else if(equipmentInfoArrayList==null){
-//            Toast.makeText(sitereport.this, "Please upload equipment data first", Toast.LENGTH_SHORT).show();
-//            finish();
-//            Intent intent = new Intent(sitereport.this, Equipment.class);
-//            intent.putExtra("forequip", "2");
-//            startActivity(intent);
-//            return false;
-//        }
 
         return true;
     }
@@ -824,6 +897,25 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
                         progressDialog.dismiss();
+                        SharedPreferences.Editor editor = sharedp.edit();
+                        for (String obj : unique) {
+                            editor.putInt(obj, values.get(obj));
+                            editor.apply();
+                        }
+
+                        if (selected.equals("Pipeline")) {
+                            Integer pipesmtr = 0;
+                            Integer fittingcount = 0;
+                            Map<String, ?> allEntries = sharedp.getAll();
+                            for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+                                if (entry.getKey().contains("Pipes"))
+                                    pipesmtr += Integer.parseInt(entry.getValue().toString());
+                                else
+                                    fittingcount += Integer.parseInt(entry.getValue().toString());
+                            }
+                            mDatabaseReference.child("ConstructionSite").child("Pipeline").child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(login.usname).child("Pipes").setValue(pipesmtr + "");
+                            mDatabaseReference.child("ConstructionSite").child("Pipeline").child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(login.usname).child("Fitting").setValue(fittingcount + "");
+                        }
                         Uri downloadUri = task.getResult();
                         String temp = downloadUri.toString();
                         // Toast.makeText(getApplicationContext(), downloadUri + "", Toast.LENGTH_LONG).show();
@@ -832,6 +924,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
                     } else {
                         Toast.makeText(sitereport.this, "upload failed: ", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     }
                 }
             });
@@ -860,6 +953,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
                             //displaying percentage in progress dialog
                             progressDialog.setProgress(((int) progress));
+                            progressDialog.incrementProgressBy(10);
                             progressDialog.setCanceledOnTouchOutside(false);
 
                         }
@@ -931,11 +1025,6 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         super.onDestroy();
     }
 
-    @Override
-    protected void onRestart() {
-
-        super.onRestart();
-    }
 
     public void gettable(View v) {
 
@@ -944,18 +1033,30 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         } else {
             diameter.setEnabled(false);
             today.setEnabled(false);
-            try {
-                wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
-                        , Integer.parseInt(today.getText().toString()),
-                        uptodate.getText().toString()));
-            }
-            catch (NumberFormatException nfe)
-            {
+            uptodate.setEnabled(false);
+            if (!unique.contains(temp1 +","+ temp2 +","+ diameter.getText().toString())) {
+                unique.add(temp1 +","+ temp2 +","+ diameter.getText().toString());
+                try {
+                    wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
+                            , Integer.parseInt(today.getText().toString()),
+                            uptodate.getText().toString()));
 
-                today.setText(0+"");
-                wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
-                        , 0,
-                        uptodate.getText().toString()));
+                } catch (NumberFormatException nfe) {
+
+                    today.setText(0 + "");
+                    wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
+                            , 0,
+                            uptodate.getText().toString()));
+                }
+                try
+                {
+                    values.put(temp1 +","+ temp2 +","+ diameter.getText().toString(),Integer.parseInt(uptodate.getText().toString()));
+
+                }
+                catch (NumberFormatException nfe)
+                {
+                    values.put(temp1 +","+ temp2 +","+ diameter.getText().toString(),0);
+                }
             }
         }
         addtable(v);
@@ -1034,7 +1135,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         labelsp_mt.setGravity(1);
         tr.addView(labelsp_mt);
 
-        diameter = new TextInputEditText(this);
+        diameter = new EditText(this);
         diameter.setPadding(2, 10, 2, 10);
         diameter.setTextColor(getResources().getColor(R.color.pink_400));
         diameter.setGravity(1);
@@ -1043,7 +1144,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         diameter.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         tr.addView(diameter);
 
-        today = new TextInputEditText(this);
+        today = new EditText(this);
         today.setPadding(2, 10, 2, 10);
         today.setTextColor(getResources().getColor(R.color.pink_400));
         today.setGravity(1);
@@ -1052,11 +1153,12 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         tr.addView(today);
 
 
-        uptodate = new TextView(this);
+        uptodate = new EditText(this);
         uptodate.setPadding(2, 10, 2, 10);
         uptodate.setTextColor(getResources().getColor(R.color.pink_400));
         uptodate.setGravity(1);
         uptodate.setBackgroundColor(getResources().getColor(R.color.transparent_bg));
+        uptodate.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         tr.addView(uptodate);
 
         // finally add this to the table row
@@ -1064,6 +1166,12 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                 TableLayout.LayoutParams.MATCH_PARENT,
                 TableLayout.LayoutParams.WRAP_CONTENT));
 
+
+        // If text not changed then I am getting ArrayIndexOutOfBoundException
+        // Hence I am assigning intially default value as 0
+        temp1=labelmt.getText().toString();
+        temp2=labelsp_mt.getText().toString();
+        diameter.setText("0");
         diameter.requestFocus();
 
         today.addTextChangedListener(new TextWatcher() {
@@ -1075,10 +1183,8 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                temp1=labelmt.getText().toString();
-                temp2=labelsp_mt.getText().toString();
 
-                Integer integer = sharedp.getInt(temp1 + temp2 + diameter.getText().toString(), 0);
+                Integer integer = sharedp.getInt(temp1 +","+ temp2 +","+ diameter.getText().toString(), 0);
 
                 try {
 
@@ -1106,5 +1212,15 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         });
 
 
+    }
+
+    public class Mycomparator implements Comparator
+    {
+        @Override
+        public int compare(Object o1, Object o2) {
+            String s1 = o1.toString();
+            String s2= o2.toString();
+            return s2.compareTo(s1);
+        }
     }
 }

@@ -77,7 +77,7 @@ public class ToDoList extends AppCompatActivity {
 
             // below code added because after sending task to supervisor
             // admin can see what he has told supervisor to do for that day.
-            tableuser.child("People").child(tosupervisor).child(siteadapter.area).child(siteadapter.Nameofsite).addValueEventListener(new ValueEventListener() {
+            tableuser.child("People").child(tosupervisor).child(siteadapter.Nameofsite).child(siteadapter.area).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
@@ -121,7 +121,7 @@ public class ToDoList extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (null == dataSnapshot.child("People").child(tosupervisor).child(siteadapter.area).child(siteadapter.Nameofsite).child(dateLong).child("Today's Task").getValue()) {
+                if (null == dataSnapshot.child("People").child(tosupervisor).child(siteadapter.Nameofsite).child(siteadapter.area).child(dateLong).child("Today's Task").getValue()) {
                      Toast.makeText(ToDoList.this, "Today's work submitted" + ("\ud83d\udc4d") + ("\ud83d\udc4d"), Toast.LENGTH_LONG).show();
                 }
                 else
@@ -131,7 +131,7 @@ public class ToDoList extends AppCompatActivity {
                 }
                     editor.putString("taskfromAdmin", edttxt.getText().toString());
                     editor.apply();
-                    tableuser.child("People").child(tosupervisor).child(siteadapter.area).child(siteadapter.Nameofsite).child(dateLong).child("Today's Task").setValue(edttxt.getText().toString());
+                    tableuser.child("People").child(tosupervisor).child(siteadapter.Nameofsite).child(siteadapter.area).child(dateLong).child("Today's Task").setValue(edttxt.getText().toString());
 
                 }
 
