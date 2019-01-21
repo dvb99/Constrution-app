@@ -80,7 +80,7 @@ public class Equipment extends AppCompatActivity {
             // call is from admin"s 2 page
             tmpbtn1.setVisibility(View.INVISIBLE);
             tmpbtn2.setVisibility(View.INVISIBLE);
-            getSupportActionBar().setTitle(supervisor_name);
+
             tableuser.child("People").child(supervisor_name).child(siteadapter.area).child(siteadapter.Nameofsite).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

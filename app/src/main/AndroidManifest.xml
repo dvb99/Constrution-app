@@ -59,7 +59,8 @@
             android:name=".sitereport"
             android:configChanges="keyboard|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".Equipment" />
+        <activity android:name=".Equipment"
+            android:label="Equipment Info"/>
         <activity android:name=".ToDoList" />
         <activity android:name=".Requirement" />
         <activity

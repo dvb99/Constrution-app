@@ -82,9 +82,38 @@ public class AddSite extends AppCompatActivity implements AdapterView.OnItemSele
 
                 if(dataSnapshot.hasChild(t4.getText().toString().toLowerCase()))
                 {
-                    tableuserCS.child("ConstructionSite").child(selected).child(t3.getText().toString().toLowerCase()).child(t2.getText().toString().toLowerCase()).child(t4.getText().toString().toLowerCase()).setValue("");
+                    tableuserCS.child("ConstructionSite").child(selected).child(t3.getText().toString().toLowerCase()).child(t2.getText().toString().toLowerCase()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(!dataSnapshot.hasChild(t4.getText().toString().toLowerCase()))
+                            {
+                                tableuserCS.child("ConstructionSite").child(selected).child(t3.getText().toString().toLowerCase()).child(t2.getText().toString().toLowerCase()).child(t4.getText().toString().toLowerCase()).setValue("");
+                            }
+                        }
 
-                    tableuserPpl.child(t4.getText().toString().toLowerCase()).child(t3.getText().toString().toLowerCase()).child(t2.getText().toString().toLowerCase()).setValue("");
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    tableuserPpl.child(t4.getText().toString().toLowerCase()).child(t3.getText().toString().toLowerCase()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(!dataSnapshot.hasChild(t2.getText().toString().toLowerCase()))
+                            {
+                                tableuserPpl.child(t4.getText().toString().toLowerCase()).child(t3.getText().toString().toLowerCase()).child(t2.getText().toString().toLowerCase()).setValue("");
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
 
                   //  Toast.makeText(AddSite.this, "Site ADDED", Toast.LENGTH_SHORT).show();
                     finish();
