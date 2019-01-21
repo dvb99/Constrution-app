@@ -102,8 +102,11 @@
         <activity
             android:name=".namewithprogress"
             android:launchMode="singleTask" />
-        <activity android:name=".Table"
-            android:label="Today"/>
+        <activity
+            android:name=".Table"
+            android:label="Today" />
+        <activity android:name=".Uptodate_Table"
+            android:label="UpToDate"/>
     </application>
 
 </manifest>

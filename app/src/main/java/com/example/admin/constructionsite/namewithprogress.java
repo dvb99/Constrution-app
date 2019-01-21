@@ -1,16 +1,12 @@
 package com.example.admin.constructionsite;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.admin.constructionsite.secondpagepofadmin.SiteObject;
-import com.example.admin.constructionsite.secondpagepofadmin.correspondingAllSites;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,12 +14,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class namewithprogress extends AppCompatActivity {
     private ListView listView;
 
-   private ArrayList<info> siteInfo = new ArrayList<>();
-    final ArrayList<SiteObject> pipeline = new ArrayList<>();
+    private ArrayList<info> siteInfo = new ArrayList<>();
+
     private namewithprogressadapter adapter;
 
     FirebaseDatabase databaseforPeople = FirebaseDatabase.getInstance();
@@ -43,32 +40,50 @@ public class namewithprogress extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 siteInfo.clear();
-                pipeline.clear();
-
                 for (DataSnapshot dssite : dataSnapshot.getChildren()) {
+                    ArrayList<SiteObject> pipeline = new ArrayList<>();
+                    HashMap<String, String> PIPE = new HashMap<>();
+                    HashMap<String, String> FIT = new HashMap<>();
+
                     Integer pipesmtr = 0;
                     Integer fittingcount = 0;
-                    for (DataSnapshot individual : dssite.getChildren())
-                    {
-                        try {
-                            pipesmtr = pipesmtr + Integer.parseInt(individual.child("Pipes").getValue().toString());
+                    for (DataSnapshot individual : dssite.getChildren()) {
+                        if (individual.hasChildren()) {
+                            for (DataSnapshot pip : individual.child("Pipes").getChildren()) {
+                                if (PIPE.containsKey(pip.getKey())) {
+                                    Integer integer = Integer.parseInt(PIPE.get(pip.getKey()));
+                                    integer += Integer.parseInt(pip.getValue().toString());
+                                    PIPE.put(pip.getKey(), integer.toString());
+                                } else
+                                    PIPE.put(pip.getKey(), pip.getValue().toString());
 
-                        }
-                        catch (NumberFormatException |NullPointerException n)
-                        {
-                            pipesmtr=pipesmtr+0;
-                        }
-                        try {
-                            fittingcount  = fittingcount  + Integer.parseInt(individual.child("Fitting").getValue().toString());
 
+                                try {
+                                    pipesmtr = pipesmtr + Integer.parseInt(pip.getValue().toString());
+                                } catch (NumberFormatException | NullPointerException n) {
+                                    pipesmtr = pipesmtr + 0;
+                                }
+                            }
+                            for (DataSnapshot fit : individual.child("Fitting").getChildren()) {
+                                if (FIT.containsKey(fit.getKey())) {
+                                    Integer integer = Integer.parseInt(FIT.get(fit.getKey()));
+                                    integer += Integer.parseInt(fit.getValue().toString());
+                                    FIT.put(fit.getKey(), integer.toString());
+                                } else
+                                    FIT.put(fit.getKey(), fit.getValue().toString());
+
+                                try {
+                                    fittingcount = fittingcount + Integer.parseInt(fit.getValue().toString());
+
+                                } catch (NumberFormatException | NullPointerException n) {
+                                    fittingcount = fittingcount + 0;
+                                }
+                            }
                         }
-                        catch (NumberFormatException |NullPointerException n)
-                        {
-                            fittingcount =fittingcount +0;
-                        }
-                        namewithprogress.this.pipeline.add(new SiteObject(cityname,dssite.getKey(),individual.getKey()));
+                        pipeline.add(new SiteObject(cityname, dssite.getKey(), individual.getKey()));
+
                     }
-                    siteInfo.add(new info(dssite.getKey(),pipesmtr,fittingcount));
+                    siteInfo.add(new info(dssite.getKey(), pipesmtr,fittingcount, PIPE, FIT, pipeline));
                 }
                 adapter = new namewithprogressadapter(namewithprogress.this, siteInfo);
                 listView.setAdapter(adapter);
@@ -81,30 +96,25 @@ public class namewithprogress extends AppCompatActivity {
 
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(namewithprogress.this, correspondingAllSites.class);
-                intent.putExtra("showThisKindOfSites", pipeline);
-                intent.putExtra("category", "Pipeline");
-                startActivity(intent);
-            }
-        });
-
-
-
 
     }
-    public class info{
+
+    public class info implements Cloneable {
         String sitename;
         int totalpipeslen;
         int totalfittingcnt;
+        HashMap<String, String> p = new HashMap<>();
+        HashMap<String, String> f = new HashMap<>();
+        ArrayList<SiteObject> pipeline = new ArrayList<>();
 
 
-        public info(String sitename ,int totalpipeslen,int totalfittingcnt) {
+        public info(String sitename, int totalpipeslen, int totalfittingcnt, HashMap<String, String> p, HashMap<String, String> f, ArrayList<SiteObject> pipeline) {
             this.sitename = sitename;
             this.totalpipeslen = totalpipeslen;
             this.totalfittingcnt=totalfittingcnt;
+            this.p = p;
+            this.f = f;
+            this.pipeline = pipeline;
         }
     }
 }

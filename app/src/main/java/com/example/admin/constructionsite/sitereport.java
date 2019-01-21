@@ -504,11 +504,11 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                     nestedTable.addCell(new Paragraph(temp.getDiameter() + " mm", fontcontent));
                     if(temp.getMaterial().equals("Pipes")) {
                         nestedTable.addCell(new Paragraph(temp.getToday() + " Mtr", fontcontent));
-                        nestedTable.addCell(new Paragraph(temp.getUptodate() + "Mtr", fontcontent));
+                        nestedTable.addCell(new Paragraph(temp.getUptodate() + " Mtr", fontcontent));
                     }
                     else{
-                        nestedTable.addCell(new Paragraph(temp.getToday() + "", fontcontent));
-                        nestedTable.addCell(new Paragraph(temp.getUptodate() + "", fontcontent));
+                        nestedTable.addCell(new Paragraph(temp.getToday() + " Qtn", fontcontent));
+                        nestedTable.addCell(new Paragraph(temp.getUptodate() + " Qtn", fontcontent));
 
                     }
                     innertable.addCell(nestedTable);
@@ -583,9 +583,9 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
 
                     }
                     if (content[0].equals("Pipes")) {
-                        nestedTableuptodate.addCell(new Paragraph(m1.getValue() + "Mtr", fontcontent));
+                        nestedTableuptodate.addCell(new Paragraph(m1.getValue() + " Mtr", fontcontent));
                     } else {
-                        nestedTableuptodate.addCell(new Paragraph(m1.getValue() + "", fontcontent));
+                        nestedTableuptodate.addCell(new Paragraph(m1.getValue() + " Qtn", fontcontent));
                     }
                     innertableuptodate.addCell(nestedTableuptodate);
                 }
@@ -841,21 +841,6 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         return true;
     }
 
-
-//    public class Background extends PdfPageEventHelper {
-//        @Override
-//        public void onEndPage(PdfWriter writer, Document document) {
-//            int pagenumber = writer.getPageNumber();
-//            if (pagenumber % 2 == 1 && pagenumber != 1)
-//                return;
-//            PdfContentByte canvas = writer.getDirectContentUnder();
-//            Rectangle rect = document.getPageSize();
-//            canvas.setColorFill(pagenumber < 2 ? BaseColor.YELLOW : BaseColor.DARK_GRAY);
-//            canvas.rectangle(rect.getLeft(), rect.getBottom(), rect.getWidth(), rect.getHeight());
-//            canvas.fill();
-//        }
-//    }
-
     public class YellowBorder extends PdfPageEventHelper {
         @Override
         public void onEndPage(PdfWriter writer, Document document) {
@@ -904,17 +889,17 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                         }
 
                         if (selected.equals("Pipeline")) {
-                            Integer pipesmtr = 0;
-                            Integer fittingcount = 0;
+
                             Map<String, ?> allEntries = sharedp.getAll();
                             for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-                                if (entry.getKey().contains("Pipes"))
-                                    pipesmtr += Integer.parseInt(entry.getValue().toString());
-                                else
-                                    fittingcount += Integer.parseInt(entry.getValue().toString());
+                                if (entry.getKey().contains("Pipes")) {
+                                    mDatabaseReference.child("ConstructionSite").child("Pipeline").child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(login.usname).child("Pipes").child(entry.getKey()).setValue(entry.getValue()+"");
+
+                                }else {
+                                    mDatabaseReference.child("ConstructionSite").child("Pipeline").child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(login.usname).child("Fitting").child(entry.getKey()).setValue(entry.getValue()+"");
+
+                                }
                             }
-                            mDatabaseReference.child("ConstructionSite").child("Pipeline").child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(login.usname).child("Pipes").setValue(pipesmtr + "");
-                            mDatabaseReference.child("ConstructionSite").child("Pipeline").child(engineerassignedCity.selectedcity).child(eachSiteInEngineer.selectedsite).child(login.usname).child("Fitting").setValue(fittingcount + "");
 
                             int p = 1;
                             for (workInfo obj : wk) {

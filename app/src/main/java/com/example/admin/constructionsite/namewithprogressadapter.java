@@ -1,13 +1,19 @@
 package com.example.admin.constructionsite;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.admin.constructionsite.secondpagepofadmin.correspondingAllSites;
 
 import java.util.ArrayList;
 
@@ -16,8 +22,6 @@ public class namewithprogressadapter extends ArrayAdapter<namewithprogress.info>
         super(context, 0, sites);
     }
 
-    private int progressStatuspipes = 0;
-    private int progressStatusfitting = 0;
     private Handler handlerpipes = new Handler();
     private Handler handlerfitting = new Handler();
 
@@ -29,19 +33,19 @@ public class namewithprogressadapter extends ArrayAdapter<namewithprogress.info>
             cardview = LayoutInflater.from(getContext()).inflate(
                     R.layout.area_and_progress, parent, false);
         }
-       final namewithprogress.info obj = getItem(position);
+        final namewithprogress.info obj = getItem(position);
 
-       TextView nameofsite= cardview.findViewById(R.id.textView2);
+        TextView nameofsite= cardview.findViewById(R.id.textView2);
 
-       nameofsite.setText(obj.sitename);
+        nameofsite.setText(obj.sitename);
 
-       //Attribute of corresponding to pipes
-       TextView txtpipes= cardview.findViewById(R.id.txtPipes);
-       txtpipes.setText("Pipes");
+        //Attribute of corresponding to pipes
+        TextView txtpipes= cardview.findViewById(R.id.txtPipes);
+        txtpipes.setText("Pipes");
 
-       final TextView txtprogresspipes= cardview.findViewById(R.id.txtprogresspipes);
+        final TextView txtprogresspipes= cardview.findViewById(R.id.txtprogresspipes);
 
-       final ProgressBar progresspipes = cardview.findViewById(R.id.progressBar1);
+        final ProgressBar progresspipes = cardview.findViewById(R.id.progressBar1);
 
         //Attribute of corresponding to fitting
         TextView txtfitting= cardview.findViewById(R.id.txtfitting);
@@ -58,9 +62,9 @@ public class namewithprogressadapter extends ArrayAdapter<namewithprogress.info>
             @Override
             public void run() {
 
-                while(progressStatuspipes < obj.totalpipeslen){
-                    // Update the progress status
-                    progressStatuspipes +=1;
+                for(int progressStatuspipes = 1;progressStatuspipes <= obj.totalpipeslen; progressStatuspipes++)
+                {
+
 
                     // Try to sleep the thread for 20 milliseconds
                     try{
@@ -70,28 +74,30 @@ public class namewithprogressadapter extends ArrayAdapter<namewithprogress.info>
                     }
 
                     // Update the progress bar
+                    final int finalProgressStatuspipes = progressStatuspipes;
                     handlerpipes.post(new Runnable() {
                         @Override
                         public void run() {
                             progresspipes.setMax(obj.totalpipeslen);
 
-                            progresspipes.setProgress(progressStatuspipes);
+                            progresspipes.setProgress(finalProgressStatuspipes);
                             // Show the progress on TextView
-                            txtprogresspipes.setText(progressStatuspipes +"");
+                            txtprogresspipes.setText(finalProgressStatuspipes +"");
                             // If task execution completed
-                            if(progressStatuspipes == obj.totalpipeslen){
+                            if(finalProgressStatuspipes == obj.totalpipeslen){
                                 // Set a message of completion
-                                txtprogresspipes.setText(obj.totalpipeslen+"Mtr");
+                                txtprogresspipes.setText(obj.totalpipeslen+" Mtr");
 
                             }
+
                         }
                     });
+
                 }
 
 
-                while(progressStatusfitting < obj.totalfittingcnt){
-                    // Update the progress status
-                    progressStatusfitting +=1;
+                for(int progressStatusfitting = 1;progressStatusfitting <= obj.totalfittingcnt ; progressStatusfitting++)
+                {
 
                     // Try to sleep the thread for 20 milliseconds
                     try{
@@ -101,25 +107,65 @@ public class namewithprogressadapter extends ArrayAdapter<namewithprogress.info>
                     }
 
                     // Update the progress bar
+                    final int finalProgressStatusfitting = progressStatusfitting;
                     handlerfitting.post(new Runnable() {
                         @Override
                         public void run() {
                             progressfitting.setMax(obj.totalfittingcnt);
 
-                            progressfitting.setProgress(progressStatusfitting);
+                            progressfitting.setProgress(finalProgressStatusfitting);
                             // Show the progress on TextView
-                            txtprogressfitting.setText(progressStatusfitting +"");
+                            txtprogressfitting.setText(finalProgressStatusfitting +"");
                             // If task execution completed
-                            if(progressStatusfitting == obj.totalfittingcnt){
+                            if(finalProgressStatusfitting == obj.totalfittingcnt){
                                 // Set a message of completion
-                                txtprogressfitting.setText(obj.totalfittingcnt+"");
+                                txtprogressfitting.setText(obj.totalfittingcnt+" Qtn");
 
                             }
                         }
                     });
+
                 }
+
             }
         }).start(); // Start the operation
+
+        LinearLayout llpip = cardview.findViewById(R.id.LLpip);
+
+        llpip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),Uptodate_Table.class);
+                intent.putExtra("UpToDateSummary", obj.p);
+                ContextCompat.startActivity(getContext(),intent, Bundle.EMPTY);
+            }
+        });
+
+
+        LinearLayout llfit = cardview.findViewById(R.id.LLfit);
+        llfit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),Uptodate_Table.class);
+                intent.putExtra("UpToDateSummary", obj.f);
+                ContextCompat.startActivity(getContext(),intent, Bundle.EMPTY);
+
+            }
+        });
+
+
+        nameofsite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), correspondingAllSites.class);
+                intent.putExtra("showThisKindOfSites", obj.pipeline);
+                intent.putExtra("category", "Pipeline");
+                ContextCompat.startActivity(getContext(),intent, Bundle.EMPTY);
+
+            }
+        });
+
+
 
         return cardview;
     }
