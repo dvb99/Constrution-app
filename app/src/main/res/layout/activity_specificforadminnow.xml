@@ -17,7 +17,7 @@
         android:verticalSpacing="7dp"
         android:alignmentMode="alignMargins"
         android:padding="14dp"
-        tools:context="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity">
+        tools:context="com.svjadhavcontractors.firstpageafterLogin.AdminActivity">
 
     </GridView>
 

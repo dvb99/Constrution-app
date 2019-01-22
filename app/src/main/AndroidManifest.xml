@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.admin.constructionsite">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.svjadhavcontractors">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -18,16 +19,17 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".firstpageafterLogin.AdminActivity"
+            android:name="com.svjadhavcontractors.firstpageafterLogin.AdminActivity"
             android:label="@string/admin"
             android:launchMode="singleTask" />
         <activity
-            android:name=".firstpageafterLogin.SupervisorActivity"
+            android:name="com.svjadhavcontractors.firstpageafterLogin.SupervisorActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".Login.login"
+            android:name="com.svjadhavcontractors.Login.login"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,47 +38,47 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".secondpagepofadmin.correspondingAllSites"
+            android:name="com.svjadhavcontractors.secondpagepofadmin.correspondingAllSites"
             android:launchMode="singleTask"
-            android:parentActivityName=".firstpageafterLogin.AdminActivity">
+            android:parentActivityName="com.svjadhavcontractors.firstpageafterLogin.AdminActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity" />
+                android:value="com.svjadhavcontractors.firstpageafterLogin.AdminActivity" />
         </activity>
         <activity
-            android:name=".AddSite"
-            android:parentActivityName=".firstpageafterLogin.AdminActivity">
+            android:name="com.svjadhavcontractors.AddSite"
+            android:parentActivityName="com.svjadhavcontractors.firstpageafterLogin.AdminActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity" />
+                android:value="com.svjadhavcontractors.firstpageafterLogin.AdminActivity" />
         </activity>
-        <activity android:name=".Labor" />
+        <activity android:name="com.svjadhavcontractors.Labor" />
         <activity
-            android:name=".sitereport"
+            android:name="com.svjadhavcontractors.sitereport"
             android:configChanges="keyboard|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".Equipment"
+        <activity android:name="com.svjadhavcontractors.Equipment"
             android:label="Equipment Info"/>
-        <activity android:name=".ToDoList" />
-        <activity android:name=".Requirement" />
+        <activity android:name="com.svjadhavcontractors.ToDoList" />
+        <activity android:name="com.svjadhavcontractors.Requirement" />
         <activity
-            android:name=".Add_Member"
+            android:name="com.svjadhavcontractors.Add_Member"
             android:label="@string/addMember"
-            android:parentActivityName=".firstpageafterLogin.AdminActivity">
+            android:parentActivityName="com.svjadhavcontractors.firstpageafterLogin.AdminActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity" />
+                android:value="com.svjadhavcontractors.firstpageafterLogin.AdminActivity" />
         </activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.example.android.fileprovider"
+            android:authorities="com.svjadhavcontractors.android.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -85,28 +87,28 @@
         </provider>
 
         <activity
-            android:name=".EngineerDeletePage"
+            android:name="com.svjadhavcontractors.EngineerDeletePage"
             android:label="@string/engineer"
             android:launchMode="singleTask"
-            android:parentActivityName=".firstpageafterLogin.AdminActivity">
+            android:parentActivityName="com.svjadhavcontractors.firstpageafterLogin.AdminActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.admin.constructionsite.firstpageafterLogin.AdminActivity" />
+                android:value="com.svjadhavcontractors.firstpageafterLogin.AdminActivity" />
         </activity>
-        <activity android:name=".engineerassignedCity" />
-        <activity android:name=".eachSiteInEngineer" />
+        <activity android:name="com.svjadhavcontractors.engineerassignedCity" />
+        <activity android:name="com.svjadhavcontractors.eachSiteInEngineer" />
         <activity
-            android:name=".city"
+            android:name="com.svjadhavcontractors.city"
             android:launchMode="singleTask" />
         <activity
-            android:name=".namewithprogress"
+            android:name="com.svjadhavcontractors.namewithprogress"
             android:launchMode="singleTask" />
         <activity
-            android:name=".Table"
+            android:name="com.svjadhavcontractors.Table"
             android:label="Today" />
-        <activity android:name=".Uptodate_Table"
+        <activity android:name="com.svjadhavcontractors.Uptodate_Table"
             android:label="UpToDate"/>
     </application>
 
