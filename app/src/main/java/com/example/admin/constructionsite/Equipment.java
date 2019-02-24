@@ -81,7 +81,7 @@ public class Equipment extends AppCompatActivity {
             tmpbtn1.setVisibility(View.INVISIBLE);
             tmpbtn2.setVisibility(View.INVISIBLE);
 
-            tableuser.child("People").child(supervisor_name).child(siteadapter.area).child(siteadapter.Nameofsite).addListenerForSingleValueEvent(new ValueEventListener() {
+            tableuser.child("People").child(supervisor_name).child(siteadapter.Nameofsite).child(siteadapter.area).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.child(dateLong).child("EquipmentInfo").getChildrenCount() > 0) {

@@ -109,7 +109,7 @@ public class Labor extends AppCompatActivity  {
             // so that each list Item will show particular day and it's correspondind Worker count.
 
 
-            tableuser.child("People").child(supervisor_name).child(siteadapter.area).child(siteadapter.Nameofsite).addListenerForSingleValueEvent(new ValueEventListener() {
+            tableuser.child("People").child(supervisor_name).child(siteadapter.Nameofsite).child(siteadapter.area).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {

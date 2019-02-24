@@ -214,7 +214,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
         imageresourceid = new ArrayList<>();
         stringresourceid = new ArrayList<>();
         setdata();
-
+        bmb.clearBuilders();
         try {
             createPdfWrapper();
         } catch (FileNotFoundException e) {

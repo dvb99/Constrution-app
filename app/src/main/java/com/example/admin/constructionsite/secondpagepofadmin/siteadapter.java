@@ -93,7 +93,7 @@ public class siteadapter extends ArrayAdapter<SiteObject> {
         viewHolder.supTextView.setText(currentWord.getSupervisorName());
 
         setdata();
-
+        viewHolder.button.clearBuilders();
         for (int i = 0; i < viewHolder.button.getPiecePlaceEnum().pieceNumber(); i++) {
             TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
                     .normalImageRes(imageresourceid.get(i))
