@@ -8,6 +8,50 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:347229364445:android:19c92c4f6669867d",
+        "android_client_info": {
+          "package_name": "com.example.admin.constructionsite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "347229364445-ugtibnoltrnckcqphq8e5nk1gec28lh8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.admin.constructionsite",
+            "certificate_hash": "8076a1d4aedb7e7c04a872e367435ed2226a1da6"
+          }
+        },
+        {
+          "client_id": "347229364445-8i5nrsk22gpj86fs9jcfprs3nsu0b2qm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp73EUqp4SC4nupz64H3nvA4IYxJJa-Cw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "347229364445-8i5nrsk22gpj86fs9jcfprs3nsu0b2qm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:347229364445:android:a4f4ae291a132813",
         "android_client_info": {
           "package_name": "com.svjadhavcontractors"

@@ -717,7 +717,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             }
 
             if (imageFile != null) {
-                Uri imageUri = FileProvider.getUriForFile(this, "com.example.android.fileprovider", imageFile);
+                Uri imageUri = FileProvider.getUriForFile(this, "com.svjadhavcontractors.android.fileprovider", imageFile);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 try {
                     startActivityForResult(cameraIntent, IMAGE_REQUEST);
