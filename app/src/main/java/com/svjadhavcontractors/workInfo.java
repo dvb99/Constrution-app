@@ -6,7 +6,7 @@ public class workInfo implements Serializable{
     private String material;
     private String material_type;
     private String diameter;
-    private int today;
+    private float today;
     private String uptodate;
 
     public workInfo()
@@ -14,7 +14,7 @@ public class workInfo implements Serializable{
 
     }
 
-    public workInfo(String material, String material_type, String diameter, int today, String uptodate) {
+    public workInfo(String material, String material_type, String diameter, float today, String uptodate) {
 
         this.material = material;
         this.material_type = material_type;
@@ -35,7 +35,7 @@ public class workInfo implements Serializable{
         return diameter;
     }
 
-    public int getToday() {
+    public float getToday() {
         return today;
     }
 

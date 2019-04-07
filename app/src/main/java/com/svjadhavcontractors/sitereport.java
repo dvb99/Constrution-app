@@ -130,7 +130,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
     ArrayList<workInfo> wkinfo = new ArrayList<>();
     ArrayList<workInfo> wk;
     ArrayList<String> unique = new ArrayList<>();
-    HashMap<String,Integer> values = new HashMap<>();
+    HashMap<String,Float> values = new HashMap<>();
     private EditText uptodate;
     private TextView labelmt;
     private TextView labelsp_mt;
@@ -469,23 +469,23 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                     unique.add(temp1 +","+ temp2 +","+ diameter.getText().toString());
                     try {
                         wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
-                                , Integer.parseInt(today.getText().toString()),
+                                , Float.parseFloat(today.getText().toString()),
                                 uptodate.getText().toString()));
                     } catch (NumberFormatException nfe) {
 
-                        today.setText(0 + "");
+                        today.setText(0.0 + "");
                         wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
-                                , 0,
+                                , (float)0,
                                 uptodate.getText().toString()));
                     }
                     try
                     {
-                        values.put(temp1 +","+ temp2 +","+ diameter.getText().toString(),Integer.parseInt(uptodate.getText().toString()));
+                        values.put(temp1 +","+ temp2 +","+ diameter.getText().toString(),Float.parseFloat(uptodate.getText().toString()));
 
                     }
                     catch (NumberFormatException nfe)
                     {
-                        values.put(temp1 +","+ temp2 +","+ diameter.getText().toString(),0);
+                        values.put(temp1 +","+ temp2 +","+ diameter.getText().toString(),(float)0);
 
                     }
                 }
@@ -884,7 +884,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                         progressDialog.dismiss();
                         SharedPreferences.Editor editor = sharedp.edit();
                         for (String obj : unique) {
-                            editor.putInt(obj, values.get(obj));
+                            editor.putFloat(obj, values.get(obj));
                             editor.apply();
                         }
 
@@ -1030,24 +1030,24 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                 unique.add(temp1 +","+ temp2 +","+ diameter.getText().toString());
                 try {
                     wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
-                            , Integer.parseInt(today.getText().toString()),
+                            , Float.parseFloat(today.getText().toString()),
                             uptodate.getText().toString()));
 
                 } catch (NumberFormatException nfe) {
 
-                    today.setText(0 + "");
+                    today.setText(0.0 + "");
                     wkinfo.add(new workInfo(temp1, temp2, diameter.getText().toString()
-                            , 0,
+                            , (float)0,
                             uptodate.getText().toString()));
                 }
                 try
                 {
-                    values.put(temp1 +","+ temp2 +","+ diameter.getText().toString(),Integer.parseInt(uptodate.getText().toString()));
+                    values.put(temp1 +","+ temp2 +","+ diameter.getText().toString(),Float.parseFloat(uptodate.getText().toString()));
 
                 }
                 catch (NumberFormatException nfe)
                 {
-                    values.put(temp1 +","+ temp2 +","+ diameter.getText().toString(),0);
+                    values.put(temp1 +","+ temp2 +","+ diameter.getText().toString(),(float)0);
                 }
             }
         }
@@ -1176,11 +1176,11 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
 
-                Integer integer = sharedp.getInt(temp1 +","+ temp2 +","+ diameter.getText().toString(), 0);
+                Float aFloat = sharedp.getFloat(temp1 +","+ temp2 +","+ diameter.getText().toString(), (float)0);
 
                 try {
 
-                    uptodate.setText(integer + Integer.parseInt(today.getText().toString()) + "");
+                    uptodate.setText(aFloat + aFloat.parseFloat(today.getText().toString()) + "");
 
 
                 } catch (NumberFormatException NFE) {
@@ -1189,7 +1189,7 @@ public class sitereport extends AppCompatActivity implements AdapterView.OnItemS
                         today.setHintTextColor(getResources().getColor(R.color.pink_400));
                     }
                   //  today.setText(0+"");
-                    uptodate.setText(integer + "");
+                    uptodate.setText(aFloat + "");
 
                 } catch (NullPointerException npe) {
                     Toast.makeText(sitereport.this, "Select Pipeline as constructiontype", Toast.LENGTH_SHORT).show();
