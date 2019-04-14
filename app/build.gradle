@@ -9,8 +9,8 @@ android {
         targetSdkVersion 27
         renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
-        versionCode 1
-        versionName "1.2"
+        versionCode 2
+        versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
